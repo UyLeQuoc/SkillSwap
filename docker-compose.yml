@@ -1,0 +1,30 @@
+services:
+  skillswap-db:
+    container_name: skillswap-db
+    image: postgres:13.5
+    restart: always
+    environment:
+      - POSTGRES_DB=skillswap_db
+      - POSTGRES_USER=skillswap_user
+      - POSTGRES_PASSWORD=skillswap_password
+    volumes:
+      - postgres:/var/lib/postgresql/data
+    ports:
+      - '5432:5432'
+
+  redis:
+    container_name: skillswap-redis
+    image: redis:alpine
+    restart: always
+    ports:
+      - '6379:6379'
+
+  redisinsight:
+    container_name: skillswap-redisinsight
+    image: redis/redisinsight:latest
+    restart: always
+    ports:
+      - '6380:5540'
+
+volumes:
+  postgres:

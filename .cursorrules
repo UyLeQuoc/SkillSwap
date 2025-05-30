@@ -1,0 +1,57 @@
+# Project Rules and Patterns
+
+## Code Organization
+- Use TypeScript for all new code
+- Follow monorepo structure with apps/web and apps/api
+- Keep shared code in appropriate directories
+- Maintain clear separation between frontend and backend
+- Use GraphQL Code Generator for type-safe operations
+
+## Development Workflow
+- Use npm for package management
+- Run development servers concurrently
+- Follow Git flow branching strategy
+- Maintain comprehensive documentation
+- Run GraphQL Code Generator after schema changes
+
+## Code Style
+- Use TypeScript strict mode
+- Follow ESLint and Prettier configurations
+- Use meaningful variable and function names
+- Write clear comments for complex logic
+- Use generated GraphQL types and operations
+
+## Testing
+- Write unit tests for critical functionality
+- Use Jest for testing
+- Maintain good test coverage
+- Follow TDD practices where appropriate
+- Test GraphQL operations with generated types
+
+## Documentation
+- Keep Memory Bank up to date
+- Document all major decisions
+- Maintain clear README files
+- Use JSDoc for code documentation
+- Document GraphQL schema changes
+
+## Project-Specific Patterns
+- Use GraphQL for API communication
+- Implement Shadcn UI components
+- Follow NestJS best practices
+- Use PostgreSQL for data persistence
+- Use GraphQL Code Generator for type safety
+
+## Known Challenges
+- Type safety across the stack
+- GraphQL schema management
+- Database migrations
+- CI/CD pipeline configuration
+- GraphQL schema synchronization
+
+## Evolution Notes
+- Project started as a monorepo boilerplate
+- Focus on developer experience
+- Emphasis on type safety
+- Modern tooling and practices
+- Added GraphQL Code Generator for enhanced type safety 

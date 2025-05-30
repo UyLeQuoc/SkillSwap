@@ -1,0 +1,37 @@
+{
+  "name": "skillswap",
+  "version": "1.0.0",
+  "description": "Using NextJs 15 and NestJS with Graphql, Postgres and Shadcn. With CI CD",
+  "keywords": [
+    "skillswap",
+    "nextjs15",
+    "nestjs"
+  ],
+  "homepage": "https://github.com/UyLeQuoc/skillswap#readme",
+  "bugs": {
+    "url": "https://github.com/UyLeQuoc/skillswap/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/UyLeQuoc/skillswap.git"
+  },
+  "license": "ISC",
+  "author": "UyDev",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "concurrently \"npm:dev:api\" \"npm:dev:web\"",
+    "install": "cd apps/api && npm install && cd ../.. && cd apps/web && npm install",
+    "dev:api": "cd apps/api && npm run start",
+    "dev:web": "cd apps/web && npm run dev",
+    "codegen": "cd apps/web && npm run codegen",
+    "generate": "cd apps/api && npm run generate",
+    "migrate": "cd apps/api && npm run migrate",
+    "seed": "cd apps/api && npm run seed",
+    "reset": "cd apps/api && npm run reset"
+  },
+  "dependencies": {
+    "concurrently": "^9.1.2"
+  }
+}
