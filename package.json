@@ -21,17 +21,27 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "concurrently \"npm:dev:api\" \"npm:dev:web\"",
-    "install": "cd apps/api && npm install && cd ../.. && cd apps/web && npm install",
-    "dev:api": "cd apps/api && npm run start",
-    "dev:web": "cd apps/web && npm run dev",
-    "codegen": "cd apps/web && npm run codegen",
-    "generate": "cd apps/api && npm run generate",
-    "migrate": "cd apps/api && npm run migrate",
-    "seed": "cd apps/api && npm run seed",
-    "reset": "cd apps/api && npm run reset"
+    "dev": "concurrently \"yarn:dev:api\" \"yarn:dev:web\"",
+    "setup": "yarn install && cd apps/api && yarn install && cd ../.. && cd apps/web && yarn install",
+    "dev:api": "cd apps/api && yarn start:dev",
+    "dev:web": "cd apps/web && yarn dev",
+    "codegen": "cd apps/web && yarn codegen",
+    "generate": "cd apps/api && yarn generate",
+    "migrate": "cd apps/api && yarn migrate",
+    "seed": "cd apps/api && yarn seed",
+    "reset": "cd apps/api && yarn reset"
   },
   "dependencies": {
+    "@graphql-codegen/typescript-react-apollo": "^4.3.3",
     "concurrently": "^9.1.2"
+  },
+  "resolutions": {
+    "graphql": "16.11.0",
+    "**/graphql": "16.11.0",
+    "@graphql-tools/**/graphql": "16.11.0",
+    "@apollo/**/graphql": "16.11.0",
+    "@nestjs/**/graphql": "16.11.0",
+    "apollo-server-express/graphql": "16.11.0",
+    "graphql-tag/graphql": "16.11.0"
   }
 }
