@@ -6,6 +6,8 @@
 - PostgreSQL database with Prisma ORM
 - Real-time messaging system
 - Location-based services
+- Docker-based deployment with GitHub Actions CI/CD
+- VPS hosting with Docker Compose orchestration
 
 ## Core Components
 
@@ -76,6 +78,10 @@ graph TD
     A -->|Type Generation| F[GraphQL Code Generator]
     B -->|Schema| F
     B -->|Apollo Server| G[GraphQL API]
+    H[GitHub Actions] -->|Build & Deploy| I[Docker Images]
+    I -->|Deploy| J[VPS]
+    J -->|Run| K[Docker Compose]
+    K -->|Orchestrate| L[Containers]
 ```
 
 ## Key Technical Decisions

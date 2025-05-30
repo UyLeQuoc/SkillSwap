@@ -8,6 +8,9 @@
 - GraphQL Code Generator configuration
 - Apollo Client integration
 - Basic package dependencies setup
+- GitHub Actions CI/CD workflow
+- Docker configuration for frontend and backend
+- Database migration automation
 
 ## In Progress
 - User authentication system
@@ -16,6 +19,9 @@
 - Project documentation
 - GraphQL schema design
 - Apollo Client setup
+- VPS deployment configuration
+- Docker Compose orchestration
+- Production environment setup
 
 ## Pending
 - User profiles

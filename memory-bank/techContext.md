@@ -28,6 +28,14 @@
 - Prettier
 - Jest
 - Docker
+- GitHub Actions
+
+### Deployment
+- Docker-based deployment
+- GitHub Actions CI/CD pipeline
+- VPS hosting
+- Automated database migrations
+- Docker Compose for orchestration
 
 ## Development Setup
 

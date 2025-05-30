@@ -7,6 +7,9 @@
 - User authentication system
 - Basic UI implementation with Shadcn UI
 - GraphQL integration with Apollo Client
+- CI/CD pipeline implementation
+- Docker containerization
+- VPS deployment setup
 
 ## Recent Changes
 - Project initialization
@@ -15,6 +18,9 @@
 - Development environment setup
 - GraphQL Code Generator configuration
 - Apollo Client integration
+- GitHub Actions CI/CD workflow setup
+- Docker configuration for both frontend and backend
+- Database migration automation
 
 ## Next Steps
 1. Set up user authentication
