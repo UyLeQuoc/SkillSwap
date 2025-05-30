@@ -1,5 +1,5 @@
 # Stage 1: Dependencies
-FROM node:20-alpine AS deps
+FROM node:18-slim AS deps
 WORKDIR /app
 
 # Install dependencies using npm
