@@ -25,7 +25,7 @@
     "setup": "yarn install && cd apps/api && yarn install && cd ../.. && cd apps/web && yarn install",
     "dev:api": "cd apps/api && yarn start:dev",
     "dev:web": "cd apps/web && yarn dev",
-    "codegen": "cd apps/web && yarn codegen",
+    "gen": "cd apps/web && yarn gen",
     "generate": "cd apps/api && yarn generate",
     "migrate": "cd apps/api && yarn migrate",
     "seed": "cd apps/api && yarn seed",
@@ -34,14 +34,5 @@
   "dependencies": {
     "@graphql-codegen/typescript-react-apollo": "^4.3.3",
     "concurrently": "^9.1.2"
-  },
-  "resolutions": {
-    "graphql": "16.11.0",
-    "**/graphql": "16.11.0",
-    "@graphql-tools/**/graphql": "16.11.0",
-    "@apollo/**/graphql": "16.11.0",
-    "@nestjs/**/graphql": "16.11.0",
-    "apollo-server-express/graphql": "16.11.0",
-    "graphql-tag/graphql": "16.11.0"
   }
 }

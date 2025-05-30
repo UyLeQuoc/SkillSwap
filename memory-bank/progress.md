@@ -5,12 +5,17 @@
 - Memory Bank documentation
 - Basic project structure
 - Development environment setup
+- GraphQL Code Generator configuration
+- Apollo Client integration
+- Basic package dependencies setup
 
 ## In Progress
 - User authentication system
 - Database schema design
-- Basic UI components
+- Basic UI components with Shadcn UI
 - Project documentation
+- GraphQL schema design
+- Apollo Client setup
 
 ## Pending
 - User profiles

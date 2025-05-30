@@ -3,12 +3,13 @@
 ## Technology Stack
 
 ### Frontend
-- Next.js 15
+- Next.js 15.3.3
+- React 19.0.0
 - TypeScript
 - Shadcn UI
 - GraphQL Code Generator
-- React Query
-- Tailwind CSS
+- Apollo Client 3.13.8
+- Tailwind CSS 4
 - WebSocket client
 
 ### Backend

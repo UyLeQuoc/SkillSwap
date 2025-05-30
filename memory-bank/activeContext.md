@@ -5,13 +5,16 @@
 - Core feature development
 - Database schema design
 - User authentication system
-- Basic UI implementation
+- Basic UI implementation with Shadcn UI
+- GraphQL integration with Apollo Client
 
 ## Recent Changes
 - Project initialization
 - Memory Bank documentation
 - Basic project structure
 - Development environment setup
+- GraphQL Code Generator configuration
+- Apollo Client integration
 
 ## Next Steps
 1. Set up user authentication
@@ -19,13 +22,17 @@
 3. Create skill/item listing system
 4. Develop search functionality
 5. Build messaging system
+6. Configure GraphQL operations
 
 ## Active Decisions
-- Using Next.js 15 for frontend
+- Using Next.js 15.3.3 for frontend
+- React 19.0.0
+- Apollo Client for GraphQL operations
 - NestJS for backend
 - GraphQL for API
 - PostgreSQL with Prisma
 - Shadcn UI for components
+- Tailwind CSS 4 for styling
 
 ## Current Considerations
 - User verification process

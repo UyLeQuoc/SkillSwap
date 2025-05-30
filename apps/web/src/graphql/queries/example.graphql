@@ -1,3 +1,10 @@
 query ExampleQuery {
-  hello
+  findAll {
+    createdAt
+    email
+    id
+    name
+    password
+    updatedAt
+  }
 }
