@@ -1,4 +1,26 @@
 services:
+  # api:
+  #   build:
+  #     context: ./apps/api
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - "5000:5000"
+  #   environment:
+  #     - NODE_ENV=production
+  #   restart: unless-stopped
+
+  # web:
+  #   build:
+  #     context: ./apps/web
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - "3000:3000"
+  #   environment:
+  #     - NEXT_PUBLIC_API_URL=http://api:5000
+  #     - NEXT_PUBLIC_IO_URL=http://api:5000
+  #   depends_on:
+  #     - api
+  #   restart: unless-stopped 
   skillswap-db:
     container_name: skillswap-db
     image: postgres:13.5
