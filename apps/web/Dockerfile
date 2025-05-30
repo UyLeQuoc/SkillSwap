@@ -7,7 +7,7 @@ COPY package.json package-lock.json* ./
 RUN npm ci --f
 
 # Stage 2: Builder
-FROM node:20-alpine AS builder
+FROM node:18-slim AS builder
 WORKDIR /app
 
 # Install build dependencies
@@ -25,7 +25,7 @@ ENV NEXT_PUBLIC_IO_URL=https://api.skillswap.uydev.id.vn
 RUN npm run build
 
 # Stage 3: Runner
-FROM node:20-alpine AS runner
+FROM node:18-slim AS runner
 WORKDIR /app
 
 ENV NEXT_TELEMETRY_DISABLED=1
