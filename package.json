@@ -21,15 +21,15 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "concurrently \"yarn:dev:api\" \"yarn:dev:web\"",
-    "setup": "yarn install && cd apps/api && yarn install && cd ../.. && cd apps/web && yarn install",
-    "dev:api": "cd apps/api && yarn start:dev",
-    "dev:web": "cd apps/web && yarn dev",
-    "gen": "cd apps/web && yarn gen",
-    "generate": "cd apps/api && yarn generate",
-    "migrate": "cd apps/api && yarn migrate",
-    "seed": "cd apps/api && yarn seed",
-    "reset": "cd apps/api && yarn reset"
+    "dev": "concurrently \"npm run dev:api\" \"npm run dev:web\"",
+    "setup": "npm install -f && cd apps/api && npm install -f && cd ../.. && cd apps/web && npm install -f",
+    "dev:api": "cd apps/api && npm run start:dev",
+    "dev:web": "cd apps/web && npm run dev",
+    "gen": "cd apps/web && npm run gen",
+    "generate": "cd apps/api && npm run generate",
+    "migrate": "cd apps/api && npm run migrate",
+    "seed": "cd apps/api && npm run seed",
+    "reset": "cd apps/api && npm run reset"
   },
   "dependencies": {
     "@graphql-codegen/typescript-react-apollo": "^4.3.3",
