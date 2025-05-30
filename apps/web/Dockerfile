@@ -24,6 +24,10 @@ COPY . .
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV NEXT_PUBLIC_API_URL=https://api.skillswap.uydev.id.vn
 ENV NEXT_PUBLIC_IO_URL=https://api.skillswap.uydev.id.vn
+
+# Rebuild native dependencies
+RUN npm rebuild
+
 # Build the application
 RUN npm run build
 
