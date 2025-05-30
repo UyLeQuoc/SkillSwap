@@ -2,9 +2,9 @@
 FROM node:20-alpine AS deps
 WORKDIR /app
 
-# Install dependencies using npm
-COPY package.json package-lock.json* ./
-RUN npm ci --f
+# Install dependencies using yarn
+COPY package.json yarn.lock ./
+RUN yarn install --frozen-lockfile
 
 # Stage 2: Builder
 FROM node:20-alpine AS builder
@@ -22,7 +22,7 @@ ENV NEXT_TELEMETRY_DISABLED=1
 ENV NEXT_PUBLIC_API_URL=https://api.skillswap.uydev.id.vn
 ENV NEXT_PUBLIC_IO_URL=https://api.skillswap.uydev.id.vn
 # Build the application
-RUN npm run build
+RUN yarn build
 
 # Stage 3: Runner
 FROM node:20-alpine AS runner
