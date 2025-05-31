@@ -3,17 +3,17 @@ import { IsNotEmpty, IsString } from "class-validator"
 
 @InputType()
 export class LoginInput {
-  @Field()
+  @Field(() => String)
   @IsNotEmpty()
   @IsString()
       wallet: string
 
-  @Field()
+  @Field(() => String)
   @IsNotEmpty()
   @IsString()
       message: string
 
-  @Field()
+  @Field(() => String)
   @IsNotEmpty()
   @IsString()
       signature: string

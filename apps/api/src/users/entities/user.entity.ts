@@ -9,13 +9,13 @@ export class User {
   @Field()
       wallet: string
 
-  @Field({ nullable: true })
+  @Field(() => String, { nullable: true })
       name?: string | null
 
-  @Field({ nullable: true })
+  @Field(() => String, { nullable: true })
       avatarUrl?: string | null
 
-  @Field({ nullable: true })
+  @Field(() => String, { nullable: true })
       bio?: string | null
 
   @Field()

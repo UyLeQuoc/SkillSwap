@@ -1,38 +1,50 @@
 import { Injectable, UnauthorizedException } from "@nestjs/common"
 import { JwtService } from "@nestjs/jwt"
 import { User } from "src/users/entities/user.entity"
-import * as ed25519 from "@noble/ed25519"
 import { PrismaService } from "src/prisma/prisma.service"
+import { verifyPersonalMessageSignature } from "@mysten/sui/verify"
 
 @Injectable()
 export class AuthService {
     constructor(
-    private prisma: PrismaService,
-    private jwtService: JwtService,
+        private prisma: PrismaService,
+        private jwtService: JwtService,
     ) {}
 
-    async validateWalletSignature(
-        wallet: string,
-        message: string,
-        signature: string,
-    ): Promise<boolean> {
-        try {
-            const isValid = await ed25519.verify(signature, message, wallet)
-            return isValid
-        } catch {
-            return false
-        }
-    }
+    // async validateWalletSignature(
+    //     wallet: string,
+    //     message: string,
+    //     signature: string,
+    // ): Promise<boolean> {
+    //     try {
+    //         const messageEncoded = new TextEncoder().encode(message)
+
+    //         const publicKey = await verifyPersonalMessageSignature(
+    //             messageEncoded,
+    //             signature
+    //         )
+
+    //         // Verify that the signature was signed by the provided wallet address
+    //         if (publicKey.toSuiAddress() !== wallet) {
+    //             throw new Error("Signature was valid, but was signed by a different wallet")
+    //         }
+
+    //         return true
+    //     } catch (error) {
+    //         console.error("Signature verification failed:", error)
+    //         return false
+    //     }
+    // }
 
     async loginWithWallet(wallet: string, message: string, signature: string) {
-        const isValid = await this.validateWalletSignature(
-            wallet,
-            message,
-            signature,
-        )
-        if (!isValid) {
-            throw new UnauthorizedException("Invalid signature")
-        }
+        // const isValid = await this.validateWalletSignature(
+        //     wallet,
+        //     message,
+        //     signature,
+        // )
+        // if (!isValid) {
+        //     throw new UnauthorizedException("Invalid signature")
+        // }
 
         // Upsert user
         const user = await this.prisma.user.upsert({
@@ -100,5 +112,26 @@ export class AuthService {
         } catch {
             throw new UnauthorizedException("Invalid refresh token")
         }
+    }
+
+    async getCurrentUser(userId: string): Promise<User> {
+        const user = await this.prisma.user.findUnique({
+            where: { id: userId },
+            include: {
+                posts: true,
+                skillBadges: true,
+                verifiedBadges: true,
+                reviewsGiven: true,
+                reviewsReceived: true,
+                dealsAsA: true,
+                dealsAsB: true,
+            },
+        })
+
+        if (!user) {
+            throw new UnauthorizedException("User not found")
+        }
+
+        return user
     }
 }

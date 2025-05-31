@@ -9,11 +9,11 @@ import {
 import { envConfig } from '@/constants/envConfig';
   
   const authLink = setContext((_, { headers }) => {
-    // const { accessToken } = useAuthStore.getState();
+    const accessToken = localStorage.getItem('accessToken')
     return {
       headers: {
         ...headers,
-        // authorization: accessToken ? `Bearer ${accessToken}` : '',
+        authorization: accessToken ? `Bearer ${accessToken}` : '',
       },
     };
   });

@@ -18,108 +18,240 @@ export type Scalars = {
   DateTime: { input: any; output: any; }
 };
 
-export type CreateUserInput = {
-  email: Scalars['String']['input'];
-  password: Scalars['String']['input'];
+export type CreatePostInput = {
+  description?: InputMaybe<Scalars['String']['input']>;
+  haveSkill: Scalars['String']['input'];
+  type: PostType;
+  wantSkill: Scalars['String']['input'];
+};
+
+export type LoginInput = {
+  message: Scalars['String']['input'];
+  signature: Scalars['String']['input'];
+  wallet: Scalars['String']['input'];
+};
+
+export type LoginResponse = {
+  __typename?: 'LoginResponse';
+  accessToken: Scalars['String']['output'];
+  refreshToken: Scalars['String']['output'];
+  user: User;
 };
 
 export type Mutation = {
   __typename?: 'Mutation';
-  createUser: UserEntity;
-  removeUser: UserEntity;
-  updateUser: UserEntity;
+  createPost: Post;
+  loginWithWallet: LoginResponse;
+  refreshTokens: LoginResponse;
+  removePost: Post;
+  updatePost: Post;
 };
 
 
-export type MutationCreateUserArgs = {
-  createUserInput: CreateUserInput;
+export type MutationCreatePostArgs = {
+  input: CreatePostInput;
 };
 
 
-export type MutationRemoveUserArgs = {
-  id: Scalars['String']['input'];
+export type MutationLoginWithWalletArgs = {
+  input: LoginInput;
 };
 
 
-export type MutationUpdateUserArgs = {
-  updateUserInput: UpdateUserInput;
+export type MutationRefreshTokensArgs = {
+  input: RefreshTokenInput;
 };
+
+
+export type MutationRemovePostArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
+export type MutationUpdatePostArgs = {
+  input: UpdatePostInput;
+};
+
+export type Post = {
+  __typename?: 'Post';
+  createdAt: Scalars['DateTime']['output'];
+  description?: Maybe<Scalars['String']['output']>;
+  haveSkill: Scalars['String']['output'];
+  id: Scalars['String']['output'];
+  status: PostStatus;
+  tags?: Maybe<Array<PostTag>>;
+  type: PostType;
+  user?: Maybe<User>;
+  userId: Scalars['String']['output'];
+  wantSkill: Scalars['String']['output'];
+};
+
+/** The status of the post */
+export enum PostStatus {
+  Active = 'ACTIVE',
+  Inactive = 'INACTIVE',
+  Matched = 'MATCHED'
+}
+
+export type PostTag = {
+  __typename?: 'PostTag';
+  id: Scalars['ID']['output'];
+  name: Scalars['String']['output'];
+};
+
+/** The type of the post */
+export enum PostType {
+  Item = 'ITEM',
+  Skill = 'SKILL'
+}
 
 export type Query = {
   __typename?: 'Query';
-  findAll: Array<UserEntity>;
-  findOne: UserEntity;
+  getCurrentUser: User;
   hello: Scalars['String']['output'];
+  myPosts: Array<Post>;
+  post: Post;
+  posts: Array<Post>;
 };
 
 
-export type QueryFindOneArgs = {
-  id: Scalars['String']['input'];
+export type QueryPostArgs = {
+  id: Scalars['ID']['input'];
 };
 
-export type UpdateUserInput = {
-  email?: InputMaybe<Scalars['String']['input']>;
-  id: Scalars['String']['input'];
-  password?: InputMaybe<Scalars['String']['input']>;
+export type RefreshTokenInput = {
+  refreshToken: Scalars['String']['input'];
 };
 
-export type UserEntity = {
-  __typename?: 'UserEntity';
-  createdAt?: Maybe<Scalars['DateTime']['output']>;
-  email?: Maybe<Scalars['String']['output']>;
+export type UpdatePostInput = {
+  description?: InputMaybe<Scalars['String']['input']>;
+  haveSkill?: InputMaybe<Scalars['String']['input']>;
+  id: Scalars['ID']['input'];
+  status?: InputMaybe<PostStatus>;
+  type?: InputMaybe<PostType>;
+  wantSkill?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type User = {
+  __typename?: 'User';
+  avatarUrl?: Maybe<Scalars['String']['output']>;
+  bio?: Maybe<Scalars['String']['output']>;
+  createdAt: Scalars['DateTime']['output'];
   id: Scalars['ID']['output'];
   name?: Maybe<Scalars['String']['output']>;
-  password?: Maybe<Scalars['String']['output']>;
-  updatedAt?: Maybe<Scalars['DateTime']['output']>;
+  role: Scalars['String']['output'];
+  updatedAt: Scalars['DateTime']['output'];
+  wallet: Scalars['String']['output'];
 };
 
-export type ExampleQueryQueryVariables = Exact<{ [key: string]: never; }>;
+export type LoginWithWalletMutationVariables = Exact<{
+  input: LoginInput;
+}>;
 
 
-export type ExampleQueryQuery = { __typename?: 'Query', findAll: Array<{ __typename?: 'UserEntity', createdAt?: any | null, email?: string | null, id: string, name?: string | null, password?: string | null, updatedAt?: any | null }> };
+export type LoginWithWalletMutation = { __typename?: 'Mutation', loginWithWallet: { __typename?: 'LoginResponse', refreshToken: string, accessToken: string, user: { __typename?: 'User', avatarUrl?: string | null, bio?: string | null, createdAt: any, id: string, name?: string | null, role: string, updatedAt: any, wallet: string } } };
+
+export type PostsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export const ExampleQueryDocument = gql`
-    query ExampleQuery {
-  findAll {
+export type PostsQuery = { __typename?: 'Query', posts: Array<{ __typename?: 'Post', createdAt: any, description?: string | null, haveSkill: string, id: string, status: PostStatus, type: PostType, userId: string, wantSkill: string, tags?: Array<{ __typename?: 'PostTag', id: string, name: string }> | null, user?: { __typename?: 'User', id: string, wallet: string } | null }> };
+
+
+export const LoginWithWalletDocument = gql`
+    mutation LoginWithWallet($input: LoginInput!) {
+  loginWithWallet(input: $input) {
+    user {
+      avatarUrl
+      bio
+      createdAt
+      id
+      name
+      role
+      updatedAt
+      wallet
+    }
+    refreshToken
+    accessToken
+  }
+}
+    `;
+export type LoginWithWalletMutationFn = Apollo.MutationFunction<LoginWithWalletMutation, LoginWithWalletMutationVariables>;
+
+/**
+ * __useLoginWithWalletMutation__
+ *
+ * To run a mutation, you first call `useLoginWithWalletMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useLoginWithWalletMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [loginWithWalletMutation, { data, loading, error }] = useLoginWithWalletMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useLoginWithWalletMutation(baseOptions?: Apollo.MutationHookOptions<LoginWithWalletMutation, LoginWithWalletMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<LoginWithWalletMutation, LoginWithWalletMutationVariables>(LoginWithWalletDocument, options);
+      }
+export type LoginWithWalletMutationHookResult = ReturnType<typeof useLoginWithWalletMutation>;
+export type LoginWithWalletMutationResult = Apollo.MutationResult<LoginWithWalletMutation>;
+export type LoginWithWalletMutationOptions = Apollo.BaseMutationOptions<LoginWithWalletMutation, LoginWithWalletMutationVariables>;
+export const PostsDocument = gql`
+    query Posts {
+  posts {
     createdAt
-    email
+    description
+    haveSkill
     id
-    name
-    password
-    updatedAt
+    status
+    tags {
+      id
+      name
+    }
+    type
+    user {
+      id
+      wallet
+    }
+    userId
+    wantSkill
   }
 }
     `;
 
 /**
- * __useExampleQueryQuery__
+ * __usePostsQuery__
  *
- * To run a query within a React component, call `useExampleQueryQuery` and pass it any options that fit your needs.
- * When your component renders, `useExampleQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `usePostsQuery` and pass it any options that fit your needs.
+ * When your component renders, `usePostsQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useExampleQueryQuery({
+ * const { data, loading, error } = usePostsQuery({
  *   variables: {
  *   },
  * });
  */
-export function useExampleQueryQuery(baseOptions?: Apollo.QueryHookOptions<ExampleQueryQuery, ExampleQueryQueryVariables>) {
+export function usePostsQuery(baseOptions?: Apollo.QueryHookOptions<PostsQuery, PostsQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<ExampleQueryQuery, ExampleQueryQueryVariables>(ExampleQueryDocument, options);
+        return Apollo.useQuery<PostsQuery, PostsQueryVariables>(PostsDocument, options);
       }
-export function useExampleQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ExampleQueryQuery, ExampleQueryQueryVariables>) {
+export function usePostsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<PostsQuery, PostsQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<ExampleQueryQuery, ExampleQueryQueryVariables>(ExampleQueryDocument, options);
+          return Apollo.useLazyQuery<PostsQuery, PostsQueryVariables>(PostsDocument, options);
         }
-export function useExampleQuerySuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<ExampleQueryQuery, ExampleQueryQueryVariables>) {
+export function usePostsSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<PostsQuery, PostsQueryVariables>) {
           const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<ExampleQueryQuery, ExampleQueryQueryVariables>(ExampleQueryDocument, options);
+          return Apollo.useSuspenseQuery<PostsQuery, PostsQueryVariables>(PostsDocument, options);
         }
-export type ExampleQueryQueryHookResult = ReturnType<typeof useExampleQueryQuery>;
-export type ExampleQueryLazyQueryHookResult = ReturnType<typeof useExampleQueryLazyQuery>;
-export type ExampleQuerySuspenseQueryHookResult = ReturnType<typeof useExampleQuerySuspenseQuery>;
-export type ExampleQueryQueryResult = Apollo.QueryResult<ExampleQueryQuery, ExampleQueryQueryVariables>;
+export type PostsQueryHookResult = ReturnType<typeof usePostsQuery>;
+export type PostsLazyQueryHookResult = ReturnType<typeof usePostsLazyQuery>;
+export type PostsSuspenseQueryHookResult = ReturnType<typeof usePostsSuspenseQuery>;
+export type PostsQueryResult = Apollo.QueryResult<PostsQuery, PostsQueryVariables>;

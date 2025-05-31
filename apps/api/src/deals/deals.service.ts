@@ -101,7 +101,7 @@ export class DealsService {
                     userId: deal.userAId,
                     verifierId: deal.userBId,
                     skillName: deal.postB?.haveSkill || "",
-                    suiNftId: badgeA,
+                    suiObjectId: badgeA,
                 },
             }),
             this.prisma.skillBadge.create({
@@ -109,7 +109,7 @@ export class DealsService {
                     userId: deal.userBId,
                     verifierId: deal.userAId,
                     skillName: deal.postA.haveSkill,
-                    suiNftId: badgeB,
+                    suiObjectId: badgeB,
                 },
             }),
         ])

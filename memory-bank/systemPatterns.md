@@ -171,4 +171,184 @@ skillswap/
 │   └── tests/       # Contract tests
 ├── package.json      # Root package configuration
 └── memory-bank/      # Project documentation
+```
+
+## Architecture Patterns
+
+### Module Structure
+- Each feature has its own module
+- Modules contain:
+  - Resolvers (GraphQL)
+  - Services (Business Logic)
+  - DTOs (Data Transfer Objects)
+  - Entities (Database Models)
+
+### Post System
+- GraphQL-first approach
+- Input validation using class-validator
+- Service layer for business logic
+- Prisma for database operations
+- Error handling with custom exceptions
+
+### Deal System
+- Extends existing deal functionality
+- NFT minting integration
+- Transaction state management
+- Status flow: PENDING → AGREED → COMPLETED
+- Error handling for failed transactions
+
+### NFT Integration
+- Sui SDK integration
+- Transaction handling
+- Metadata storage
+- Wallet connection
+- Error recovery
+
+## Implementation Patterns
+
+### GraphQL Patterns
+- Input types for mutations
+- Response types for queries
+- Field resolvers for relationships
+- Error handling with custom types
+
+### Service Patterns
+- Dependency injection
+- Transaction management
+- Error handling
+- Logging
+- Validation
+
+### Frontend Patterns
+- Component composition
+- State management
+- Form handling
+- Error boundaries
+- Loading states
+
+## Testing Strategy
+
+### Backend Testing
+- Unit tests for services
+- Integration tests for resolvers
+- E2E tests for API endpoints
+- Mock Sui transactions
+
+### Frontend Testing
+- Component tests
+- Integration tests
+- E2E tests
+- Mock API responses
+
+## Error Handling
+
+### Backend Errors
+- Custom exception filters
+- GraphQL error types
+- Transaction rollback
+- Error logging
+
+### Frontend Errors
+- Error boundaries
+- Toast notifications
+- Form validation
+- Loading states
+
+## Security Patterns
+
+### Authentication
+- JWT tokens
+- Role-based access
+- Wallet verification
+
+### Authorization
+- Resource ownership
+- Role permissions
+- Transaction signing
+
+## Performance Patterns
+
+### Backend
+- Query optimization
+- Caching
+- Batch operations
+- Connection pooling
+
+### Frontend
+- Code splitting
+- Lazy loading
+- Image optimization
+- Caching
+
+## Deployment Patterns
+
+### Backend
+- Docker containers
+- Environment variables
+- Database migrations
+- Health checks
+
+### Frontend
+- Static generation
+- API routes
+- Environment configuration
+- Build optimization
+
+## Code Organization
+
+### Backend Structure
+```
+apps/api/src/
+├── posts/
+│   ├── dto/
+│   │   ├── create-post.input.ts
+│   │   └── update-post.input.ts
+│   ├── entities/
+│   │   └── post.entity.ts
+│   ├── posts.module.ts
+│   ├── posts.resolver.ts
+│   └── posts.service.ts
+├── deals/
+│   ├── dto/
+│   │   ├── create-deal.input.ts
+│   │   └── update-deal.input.ts
+│   ├── entities/
+│   │   └── deal.entity.ts
+│   ├── deals.module.ts
+│   ├── deals.resolver.ts
+│   └── deals.service.ts
+└── nft/
+    ├── dto/
+    │   └── mint-nft.input.ts
+    ├── nft.module.ts
+    ├── nft.resolver.ts
+    └── nft.service.ts
+```
+
+### Frontend Structure
+```
+apps/web/src/
+├── components/
+│   ├── posts/
+│   │   ├── CreatePost.tsx
+│   │   ├── PostList.tsx
+│   │   └── PostCard.tsx
+│   ├── deals/
+│   │   ├── DealRequest.tsx
+│   │   ├── DealList.tsx
+│   │   └── DealCard.tsx
+│   └── nft/
+│       ├── NFTList.tsx
+│       ├── NFTCard.tsx
+│       └── NFTDetails.tsx
+└── pages/
+    ├── posts/
+    │   ├── index.tsx
+    │   └── [id].tsx
+    ├── deals/
+    │   ├── index.tsx
+    │   └── [id].tsx
+    └── nft/
+        ├── index.tsx
+        └── [id].tsx
 ``` 

@@ -1,80 +1,50 @@
-# Active Context: SkillSwap
+# Active Context
 
 ## Current Focus
-- Core feature development
-- Database schema implementation
-- Sui wallet integration
-- Smart contract development
-- NFT implementation
-- UI development with Shadcn UI
-- GraphQL API development
-- CI/CD pipeline refinement
-- Docker containerization
-- VPS deployment configuration
- 
+- Implementing Post creation and management system
+- Implementing Deal system with NFT integration
+- Building frontend components for displaying NFTs
+
 ## Recent Changes
-- Project initialization completed
-- Memory Bank documentation established
-- Basic project structure implemented
-- Development environment configured
-- GraphQL Code Generator setup
-- Apollo Client integration
-- GitHub Actions CI/CD workflow configured
-- Docker setup for frontend and backend
-- Database migration automation
-- Sui blockchain integration planning
-- NFT contract design
-- Initial Move contract setup
-- Basic UI components with Shadcn UI
+- Analyzing existing codebase structure
+- Planning implementation of Post and Deal features
+- Planning NFT integration with Sui blockchain
 
 ## Next Steps
-1. Set up Sui wallet integration
-2. Develop NFT smart contracts
-   - Implement SkillBadge NFT contract
-   - Add minting functionality
-   - Add verification system
-3. Implement user profiles with wallet addresses
-4. Create skill/item listing system
-5. Develop search functionality
-6. Build messaging system
-7. Configure GraphQL operations
-8. Implement NFT minting service
-9. Set up deal verification system
+1. Create Post module with GraphQL resolvers and services
+2. Implement Deal system with NFT minting
+3. Build frontend components for NFT display
+4. Integrate with existing Sui functionality
 
 ## Active Decisions
-- Using Next.js 15.3.3 for frontend
-- React 19.0.0
-- Apollo Client for GraphQL operations
-- NestJS for backend
-- GraphQL for API
-- PostgreSQL with Prisma
-- Shadcn UI for components
-- Tailwind CSS 4 for styling
-- Sui blockchain for NFT implementation
-- Move language for smart contracts
-- WalletKit for wallet integration
-- Move 2024.beta edition for contracts
+- Using existing deal system structure for new implementation
+- Integrating with existing Sui functionality for NFT minting
+- Following existing GraphQL patterns for new features
 
 ## Current Considerations
-- Wallet connection UX
-- NFT minting reliability
-- Smart contract security
-- Location-based matching
-- Real-time messaging
-- Security measures
-- Mobile responsiveness
-- Transaction costs
-- Gas optimization
-- Move contract architecture
-- NFT metadata structure
+- Need to ensure proper validation for Post creation
+- Need to handle NFT minting transaction states
+- Need to maintain consistent UI/UX with existing components
+- Need to ensure proper error handling and user feedback
 
 ## Open Questions
-- NFT marketplace integration
-- Image storage solution
-- Email notification system
-- Community guidelines
-- Gas fee optimization
-- Wallet compatibility
-- Smart contract upgradeability
-- NFT metadata storage strategy
-- Contract testing approach 
+1. Validation rules for Post skills
+2. Integration approach with existing deal system
+3. NFT minting implementation details
+4. Frontend component requirements
+5. GraphQL schema extension approach
+6. UI/UX requirements for NFT display
+
+## Implementation Status
+- Planning Phase
+- Codebase Analysis Complete
+- Implementation Plan Pending
+- Development Not Started
+
+## Next Actions
+1. Create detailed implementation plan
+2. Set up Post module structure
+3. Implement GraphQL resolvers
+4. Create service implementations
+5. Build frontend components
+6. Integrate with Sui functionality 

@@ -81,4 +81,98 @@
    - User experience refinements
    - Gas optimization
    - Smart contract upgrades
-   - Contract monitoring system 
+   - Contract monitoring system
+
+## Current Status
+- Planning phase for Post and Deal system implementation
+- Analyzing existing codebase structure
+- Preparing for NFT integration
+
+## What Works
+- Basic project structure
+- GraphQL setup
+- Prisma schema
+- Existing deal system
+- Sui integration foundation
+
+## Implementation Plan
+
+### Phase 1: Post System
+1. Create Post Module
+   - GraphQL resolvers
+   - Service implementation
+   - DTOs and entities
+   - Input validation
+
+2. Post Features
+   - Create post
+   - Update post
+   - Delete post
+   - List posts
+   - Search posts
+
+### Phase 2: Deal System
+1. Deal Module Integration
+   - Extend existing deal system
+   - Add NFT minting triggers
+   - Implement deal status updates
+
+2. Deal Features
+   - Request deal
+   - Accept deal
+   - Complete deal
+   - Cancel deal
+   - List deals
+
+### Phase 3: NFT Integration
+1. NFT Minting
+   - Integrate with Sui SDK
+   - Implement minting service
+   - Handle transaction states
+   - Store NFT metadata
+
+2. NFT Display
+   - Create frontend components
+   - Implement NFT listing
+   - Add NFT details view
+   - Handle wallet connection
+
+## What's Left to Build
+1. Post Module
+   - [ ] Module structure
+   - [ ] GraphQL resolvers
+   - [ ] Service implementation
+   - [ ] DTOs and entities
+   - [ ] Input validation
+
+2. Deal System
+   - [ ] Deal request flow
+   - [ ] Deal acceptance flow
+   - [ ] NFT minting integration
+   - [ ] Deal status management
+
+3. NFT Features
+   - [ ] Minting service
+   - [ ] Transaction handling
+   - [ ] Frontend components
+   - [ ] Wallet integration
+
+## Known Issues
+- Need to define validation rules for Post skills
+- Need to determine NFT minting transaction handling
+- Need to establish frontend component requirements
+- Need to plan GraphQL schema extensions
+
+## Next Steps
+1. Create Post module structure
+2. Implement basic Post CRUD operations
+3. Integrate with existing deal system
+4. Add NFT minting functionality
+5. Build frontend components
+6. Test and deploy features
+
+## Recent Updates
+- Created implementation plan
+- Analyzed existing codebase
+- Identified integration points
+- Documented requirements 

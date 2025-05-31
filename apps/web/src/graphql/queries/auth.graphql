@@ -1,0 +1,16 @@
+mutation LoginWithWallet($input: LoginInput!) {
+  loginWithWallet(input: $input) {
+    user {
+      avatarUrl
+      bio
+      createdAt
+      id
+      name
+      role
+      updatedAt
+      wallet
+    }
+    refreshToken
+    accessToken
+  }
+}

@@ -7,8 +7,8 @@ import { join } from "path"
 import { AuthModule } from "./auth/auth.module"
 import { SuiModule } from "./sui/sui.module"
 import { HelloModule } from "./hello/hello.module"
-import { DealsModule } from "./deals/deals.module"
 import { PrismaModule } from "./prisma/prisma.module"
+import { PostsModule } from "./posts/posts.module"
 
 @Module({
     imports: [
@@ -29,6 +29,8 @@ import { PrismaModule } from "./prisma/prisma.module"
         HelloModule,
         AuthModule,
         SuiModule,
+        PostsModule,
+        // DealsModule,
     ],
 })
 export class AppModule {}

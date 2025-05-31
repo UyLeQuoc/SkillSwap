@@ -1,0 +1,20 @@
+query Posts {
+  posts {
+    createdAt
+    description
+    haveSkill
+    id
+    status
+    tags {
+      id
+      name
+    }
+    type
+    user {
+      id
+      wallet
+    }
+    userId
+    wantSkill
+  }
+}
