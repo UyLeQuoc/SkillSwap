@@ -8,6 +8,7 @@ export const envConfig = () => ({
         backendUrl: process.env.APP_BACKEND_URL || "http://localhost:3000"
     },
     jwt: {
+        secret: process.env.JWT_SECRET || "secret",
         [TokenType.AccessToken]: {
             secret: process.env.JWT_ACCESS_TOKEN_SECRET || "access-token",
             expiresIn: process.env.JWT_ACCESS_TOKEN_EXPIRES_IN || "15m"
@@ -21,27 +22,6 @@ export const envConfig = () => ({
         url: process.env.REDIS_URL || "redis://localhost:6380",
         ttl: process.env.REDIS_TTL || "604800", //60 * 60 * 24 * 7
         otpTtl: process.env.REDIS_OTP_TTL || "300" //5 minutes
-    },
-    shipping: {
-        token: process.env.GHN_TOKEN || "",
-        shopId: process.env.GHN_SHOP_ID || "",
-        baseUrl: process.env.GHN_BASE_URL || ""
-    },
-    payment: {
-        payos: {
-            clientId: process.env.PAYMENT_PAYOS_CLIENT_ID || "",
-            apiKey: process.env.PAYMENT_PAYOS_API_KEY || "",
-            checksumKey: process.env.PAYMENT_PAYOS_CHECKSUM_KEY || "",
-            cancelUrl: process.env.PAYMENT_PAYOS_CANCEL_URL || "",
-            returnUrl: process.env.PAYMENT_PAYOS_RETURN_URL || ""
-        },
-        vnpay: {
-            returnUrl: process.env.PAYMENT_VNPAY_RETURN_URL || "",
-            vnpUrl: process.env.PAYMENT_VNPAY_VNP_URL || "",
-            tmnCode: process.env.PAYMENT_VNPAY_TMN_CODE || "",
-            hashSecret: process.env.PAYMENT_VNPAY_HASH_SECRET || "",
-            version: process.env.PAYMENT_VNPAY_VERSION || "2.1.0"
-        }
     },
     cloudinary: {
         cloudName: process.env.CLOUDINARY_CLOUD_NAME || "",

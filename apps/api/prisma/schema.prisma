@@ -19,6 +19,37 @@ enum Roles {
   CUSTOMER
 }
 
+enum PostStatus {
+  ACTIVE
+  INACTIVE
+  MATCHED
+}
+
+enum MatchMethod {
+  EXACT
+  PARTIAL
+  TAG
+  GPT
+  EMBEDDING
+}
+
+enum DealStatus {
+  PENDING
+  AGREED
+  COMPLETED
+  CANCELLED
+}
+
+enum DealType {
+  SKILL_SWAP
+  ITEM_SWAP
+}
+
+enum PostType {
+  SKILL
+  ITEM
+}
+
 model User {
   id              String     @id @default(uuid())
   wallet          String     @unique
@@ -28,6 +59,7 @@ model User {
   createdAt       DateTime   @default(now())
   updatedAt       DateTime   @updatedAt
   role            Roles      @default(CUSTOMER)
+  reputationScore Float @default(0)
 
   posts           Post[]
   skillBadges     SkillBadge[] @relation("UserSkillBadges")
@@ -45,31 +77,27 @@ model Post {
   wantSkill       String
   description     String
   status          PostStatus @default(ACTIVE)
+  type            PostType   @default(SKILL)
   createdAt       DateTime   @default(now())
 
   normalizedHave  String?
   normalizedWant  String?
   normalizedDesc  String?
 
-  tags            PostTag[]  @relation("PostToTags")
-
   user            User       @relation(fields: [userId], references: [id])
+  tags            PostTag[]  @relation("PostToTags")
   dealsAsPostA    Deal[]     @relation("PostA")
   dealsAsPostB    Deal[]     @relation("PostB")
   matchAsSource   MatchingSuggestion[] @relation("MatchingSource")
   matchAsTarget   MatchingSuggestion[] @relation("MatchingTarget")
 }
 
-enum PostStatus {
-  ACTIVE
-  INACTIVE
-  MATCHED
-}
-
 model PostTag {
   id    String  @id @default(uuid())
   name  String  @unique
   posts Post[]  @relation("PostToTags")
+
+  @@index([name])
 }
 
 model MatchingSuggestion {
@@ -84,14 +112,6 @@ model MatchingSuggestion {
   targetPost    Post       @relation("MatchingTarget", fields: [targetPostId], references: [id])
 }
 
-enum MatchMethod {
-  EXACT
-  PARTIAL
-  TAG
-  GPT
-  EMBEDDING
-}
-
 model Deal {
   id          String     @id @default(uuid())
   userAId     String
@@ -99,6 +119,7 @@ model Deal {
   postAId     String?
   postBId     String?
   status      DealStatus @default(PENDING)
+  type        DealType   @default(SKILL_SWAP)
   createdAt   DateTime   @default(now())
   completedAt DateTime?
 
@@ -107,13 +128,6 @@ model Deal {
   postA       Post?      @relation("PostA", fields: [postAId], references: [id])
   postB       Post?      @relation("PostB", fields: [postBId], references: [id])
   reviews     Review[]
-}
-
-enum DealStatus {
-  PENDING
-  AGREED
-  COMPLETED
-  CANCELLED
 }
 
 model Review {
@@ -128,6 +142,8 @@ model Review {
   reviewer    User     @relation("Reviewer", fields: [reviewerId], references: [id])
   reviewee    User     @relation("Reviewee", fields: [revieweeId], references: [id])
   deal        Deal     @relation(fields: [dealId], references: [id])
+
+  @@unique([dealId, reviewerId])
 }
 
 model SkillBadge {
@@ -140,4 +156,6 @@ model SkillBadge {
 
   user        User     @relation("UserSkillBadges", fields: [userId], references: [id])
   verifier    User     @relation("VerifierSkillBadges", fields: [verifierId], references: [id])
+
+  @@index([userId, skillName])
 }

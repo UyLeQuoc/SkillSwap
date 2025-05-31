@@ -1,26 +1,33 @@
 import { Field, ID, ObjectType } from "@nestjs/graphql"
+import { Roles } from "@prisma/client"
 
 @ObjectType()
-export class UserEntity {
+export class User {
     @Field(() => ID)
         id: string
 
-    @Field(() => String, { nullable: true })
-        name?: string
+    @Field()
+        wallet: string
 
-    @Field(() => String, { nullable: true })
-        email?: string
+    @Field({ nullable: true })
+        name?: string | null
 
-    @Field(() => String, { nullable: true })
-        password?: string
+    @Field({ nullable: true })
+        avatarUrl?: string | null
 
-    @Field(() => Date, { nullable: true })
-        createdAt?: Date
+    @Field({ nullable: true })
+        bio?: string | null
 
-    @Field(() => Date, { nullable: true })
-        updatedAt?: Date
+    @Field()
+        createdAt: Date
 
-    constructor(partial: Partial<UserEntity>) {
+    @Field()
+        updatedAt: Date
+
+    @Field(() => String)
+        role: Roles
+
+    constructor(partial: Partial<User>) {
         Object.assign(this, partial)
     }
 }

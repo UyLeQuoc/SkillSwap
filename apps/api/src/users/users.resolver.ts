@@ -1,35 +1,42 @@
-import { Args, Mutation, Query, Resolver } from "@nestjs/graphql"
+import { Args, Mutation, Query, Resolver, ID } from "@nestjs/graphql"
 import { UsersService } from "./users.service"
-import { CreateUserInput } from "./inputs/create-user.input"
-import { UpdateUserInput } from "./inputs/update-user.input"
-import { UserEntity } from "./entities/user.entity"
+import { User } from "./entities/user.entity"
+import { UseGuards } from "@nestjs/common"
+import { JwtAuthGuard } from "../auth/guards/jwt-auth.guard"
+import { CurrentUser } from "src/auth/decorators/current-user.decorator"
 
-@Resolver(() => UserEntity)
+@Resolver(() => User)
 export class UsersResolver {
     constructor(private readonly usersService: UsersService) {}
 
-    @Mutation(() => UserEntity)
-    createUser(@Args("createUserInput") createUserInput: CreateUserInput) {
-        return this.usersService.create(createUserInput)
-    }
+    // @Query(() => [User])
+    // findAll() {
+    //     return this.usersService.findAll()
+    // }
 
-    @Query(() => [UserEntity])
-    findAll() {
-        return this.usersService.findAll()
-    }
+    // @Query(() => User)
+    // @UseGuards(JwtAuthGuard)
+    // async me(@CurrentUser() user: User) {
+    //     return this.usersService.findOne(user.id)
+    // }
 
-    @Query(() => UserEntity)
-    findOne(@Args("id") id: string) {
-        return this.usersService.findOne(id)
-    }
+    // @Query(() => User)
+    // @UseGuards(JwtAuthGuard)
+    // async user(@Args("id", { type: () => ID }) id: string) {
+    //     return this.usersService.findOne(id)
+    // }
 
-    @Mutation(() => UserEntity)
-    updateUser(@Args("updateUserInput") updateUserInput: UpdateUserInput) {
-        return this.usersService.update(updateUserInput.id, updateUserInput)
-    }
+    // @Mutation(() => User)
+    // @UseGuards(JwtAuthGuard)
+    // async updateAvatar(
+    //     @CurrentUser() user: User,
+    //     @Args("avatarUrl") avatarUrl: string
+    // ) {
+    //     return this.usersService.updateAvatar(user.id, avatarUrl)
+    // }
 
-    @Mutation(() => UserEntity)
-    removeUser(@Args("id") id: string) {
-        return this.usersService.remove(id)
-    }
+    // @Mutation(() => User)
+    // removeUser(@Args("id") id: string) {
+    //     return this.usersService.remove(id)
+    // }
 } 

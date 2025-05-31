@@ -4,9 +4,9 @@ import { EnvModule } from "./dynamic-modules"
 import { ApolloDriver, ApolloDriverConfig } from "@nestjs/apollo"
 import { GraphQLModule } from "@nestjs/graphql"
 import { join } from "path"
-import { UsersModule } from "./users/users.module"
 import { HelloModule } from "./hello/hello.module"
 import { PrismaModule } from "./dynamic-modules/prisma/prisma.module"
+import { AuthModule } from "./auth/auth.module"
 
 @Module({
     imports: [
@@ -25,7 +25,8 @@ import { PrismaModule } from "./dynamic-modules/prisma/prisma.module"
             sortSchema: true,
         }),
         HelloModule,
-        UsersModule,
+        AuthModule,
+        // UsersModule,
     ],
 })
 export class AppModule {}
