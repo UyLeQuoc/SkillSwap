@@ -8,6 +8,8 @@ module skillswap::skillswap;
 
 module skillswap::skill_badge_nft {
     use std::string::String;
+    use sui::clock::Clock;
+    use sui::clock::timestamp_ms;
 
 	public struct SkillBadge has key, store {
         id: UID,
@@ -17,4 +19,22 @@ module skillswap::skill_badge_nft {
         issued_at: u64,
     }
 
+    public fun mint_skill_badge(
+        ctx: &mut TxContext,
+        recipient: address,
+        skill_name: String,
+        verifier: address,
+        clock: &Clock
+    ) {
+        let time = clock.timestamp_ms();
+        let badge = SkillBadge {
+            id: object::new(ctx),
+            owner: recipient,
+            skill_name,
+            verifier,
+            issued_at: time,
+        };
+
+        transfer::transfer(badge, recipient);
+	}
 }
