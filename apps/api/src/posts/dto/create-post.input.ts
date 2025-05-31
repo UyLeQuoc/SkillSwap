@@ -1,6 +1,14 @@
 import { Field, InputType } from "@nestjs/graphql";
-import { IsNotEmpty, IsString, IsEnum, IsOptional } from "class-validator";
+import { IsNotEmpty, IsString, IsEnum, IsOptional, IsArray } from "class-validator";
 import { PostType } from "@prisma/client";
+
+@InputType()
+export class CreateTagInput {
+    @Field()
+    @IsNotEmpty()
+    @IsString()
+    name: string;
+}
 
 @InputType()
 export class CreatePostInput {
@@ -22,4 +30,9 @@ export class CreatePostInput {
     @Field(() => PostType)
     @IsEnum(PostType)
     type: PostType;
+
+    @Field(() => [CreateTagInput], { nullable: true })
+    @IsOptional()
+    @IsArray()
+    tags?: CreateTagInput[];
 } 

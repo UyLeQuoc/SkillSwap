@@ -1,28 +1,38 @@
 import { Injectable } from "@nestjs/common";
 import { PrismaService } from "../prisma/prisma.service";
-import { CreatePostInput } from "./dto/create-post.input";
+import { CreatePostInput, CreateTagInput } from "./dto/create-post.input";
 import { UpdatePostInput } from "./dto/update-post.input";
 import { Post } from "./entities/post.entity";
 import { PostStatus } from "@prisma/client";
+import { PostTag } from "./entities/post-tag.entity";
 
 @Injectable()
 export class PostsService {
     constructor(private prisma: PrismaService) {}
 
     async create(createPostInput: CreatePostInput, userId: string): Promise<Post> {
+        const { tags, ...postData } = createPostInput;
+
+        // Create or connect tags
+        const tagConnections = tags?.map(tag => ({
+            where: { name: tag.name },
+            create: { name: tag.name }
+        })) || [];
+
         const post = await this.prisma.post.create({
             data: {
+                ...postData,
                 userId,
-                haveSkill: createPostInput.haveSkill,
-                wantSkill: createPostInput.wantSkill,
-                description: createPostInput.description ,
-                type: createPostInput.type,
-                status: PostStatus.ACTIVE,
+                tags: {
+                    connectOrCreate: tagConnections
+                }
             },
+            include: {
+                user: true,
+                tags: true
+            }
         });
-        if (!post) {
-            throw new Error("Post not found");
-        }
+
         return new Post(post);
     }
 
@@ -95,5 +105,37 @@ export class PostsService {
             },
         });
         return posts.map(post => new Post(post));
+    }
+
+    async findByWallet(wallet: string): Promise<Post[]> {
+        const posts = await this.prisma.post.findMany({
+            where: {
+                user: {
+                    wallet,
+                },
+                status: PostStatus.ACTIVE,
+            },
+            include: {
+                user: true,
+                tags: true,
+            },
+        });
+        return posts.map(post => new Post(post));
+    }
+
+    async createTag(createTagInput: CreateTagInput): Promise<PostTag> {
+        const existingTag = await this.prisma.postTag.findUnique({
+            where: { name: createTagInput.name }
+        })
+        if (existingTag) {
+            return new PostTag(existingTag);
+        }
+
+        const tag = await this.prisma.postTag.create({
+            data: {
+                name: createTagInput.name
+            }
+        })
+        return new PostTag(tag)
     }
 } 

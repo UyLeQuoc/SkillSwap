@@ -6,13 +6,13 @@ import { ConnectButton } from '@mysten/dapp-kit'
 import { ModeToggle } from './toggle-theme'
 import { ScrollProgress } from '../magicui/scroll-progress'
 import { useCurrentWallet } from '@mysten/dapp-kit'
-import { useLoginWithWalletMutation } from '@/graphql/generated/graphql'
-
+import { useLoginWithWalletMutation, useGetCurrentUserQuery } from '@/graphql/generated/graphql'
+import Link from 'next/link'
 export const Header = () => {
   const { currentWallet, isConnected } = useCurrentWallet()
   const [loginWithWallet, { loading }] = useLoginWithWalletMutation()
   // const { mutate: signPersonalMessage } = useSignPersonalMessage()
-
+  const { data: userData } = useGetCurrentUserQuery()
   useEffect(() => {
     if (isConnected) {
       loginWithWallet({
@@ -38,7 +38,20 @@ export const Header = () => {
   return (
     <div className=' flex justify-between items-center py-4 sticky top-0 z-50 bg-background/5 backdrop-blur-md'>
         <div className='container mx-auto flex justify-between items-center'>
-          <Logo />
+          <div className='flex items-center gap-10'>
+            <Logo />
+            <nav className='flex items-center gap-5'>
+              <Link href="/explore">Explore</Link>
+              {
+                currentWallet?.accounts[0].address && (
+                  <>
+                    <Link href={"/wallet/"+ currentWallet?.accounts[0].address}>Your Profile</Link>
+                    <Link href="/create-post">Create Post</Link>
+                  </>
+                )
+              }
+            </nav>
+          </div>
           <div className='flex items-center gap-2'>
               <ModeToggle />
               <ConnectButton />

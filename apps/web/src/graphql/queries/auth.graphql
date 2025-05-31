@@ -14,3 +14,16 @@ mutation LoginWithWallet($input: LoginInput!) {
     accessToken
   }
 }
+
+query GetCurrentUser {
+  getCurrentUser {
+    avatarUrl
+    bio
+    createdAt
+    id
+    name
+    role
+    updatedAt
+    wallet
+  }
+}

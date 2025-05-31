@@ -21,8 +21,13 @@ export type Scalars = {
 export type CreatePostInput = {
   description?: InputMaybe<Scalars['String']['input']>;
   haveSkill: Scalars['String']['input'];
+  tags?: InputMaybe<Array<CreateTagInput>>;
   type: PostType;
   wantSkill: Scalars['String']['input'];
+};
+
+export type CreateTagInput = {
+  name: Scalars['String']['input'];
 };
 
 export type LoginInput = {
@@ -41,6 +46,7 @@ export type LoginResponse = {
 export type Mutation = {
   __typename?: 'Mutation';
   createPost: Post;
+  createTag: PostTag;
   loginWithWallet: LoginResponse;
   refreshTokens: LoginResponse;
   removePost: Post;
@@ -50,6 +56,11 @@ export type Mutation = {
 
 export type MutationCreatePostArgs = {
   input: CreatePostInput;
+};
+
+
+export type MutationCreateTagArgs = {
+  input: CreateTagInput;
 };
 
 
@@ -112,11 +123,17 @@ export type Query = {
   myPosts: Array<Post>;
   post: Post;
   posts: Array<Post>;
+  postsByWallet: Array<Post>;
 };
 
 
 export type QueryPostArgs = {
   id: Scalars['ID']['input'];
+};
+
+
+export type QueryPostsByWalletArgs = {
+  wallet: Scalars['String']['input'];
 };
 
 export type RefreshTokenInput = {
@@ -151,10 +168,36 @@ export type LoginWithWalletMutationVariables = Exact<{
 
 export type LoginWithWalletMutation = { __typename?: 'Mutation', loginWithWallet: { __typename?: 'LoginResponse', refreshToken: string, accessToken: string, user: { __typename?: 'User', avatarUrl?: string | null, bio?: string | null, createdAt: any, id: string, name?: string | null, role: string, updatedAt: any, wallet: string } } };
 
+export type GetCurrentUserQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetCurrentUserQuery = { __typename?: 'Query', getCurrentUser: { __typename?: 'User', avatarUrl?: string | null, bio?: string | null, createdAt: any, id: string, name?: string | null, role: string, updatedAt: any, wallet: string } };
+
 export type PostsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type PostsQuery = { __typename?: 'Query', posts: Array<{ __typename?: 'Post', createdAt: any, description?: string | null, haveSkill: string, id: string, status: PostStatus, type: PostType, userId: string, wantSkill: string, tags?: Array<{ __typename?: 'PostTag', id: string, name: string }> | null, user?: { __typename?: 'User', id: string, wallet: string } | null }> };
+
+export type PostsByWalletQueryVariables = Exact<{
+  wallet: Scalars['String']['input'];
+}>;
+
+
+export type PostsByWalletQuery = { __typename?: 'Query', postsByWallet: Array<{ __typename?: 'Post', createdAt: any, description?: string | null, haveSkill: string, id: string, status: PostStatus, type: PostType, userId: string, wantSkill: string, tags?: Array<{ __typename?: 'PostTag', id: string, name: string }> | null, user?: { __typename?: 'User', id: string, wallet: string } | null }> };
+
+export type CreatePostMutationVariables = Exact<{
+  input: CreatePostInput;
+}>;
+
+
+export type CreatePostMutation = { __typename?: 'Mutation', createPost: { __typename?: 'Post', id: string, user?: { __typename?: 'User', wallet: string } | null } };
+
+export type CreateTagMutationVariables = Exact<{
+  input: CreateTagInput;
+}>;
+
+
+export type CreateTagMutation = { __typename?: 'Mutation', createTag: { __typename?: 'PostTag', id: string, name: string } };
 
 
 export const LoginWithWalletDocument = gql`
@@ -201,6 +244,52 @@ export function useLoginWithWalletMutation(baseOptions?: Apollo.MutationHookOpti
 export type LoginWithWalletMutationHookResult = ReturnType<typeof useLoginWithWalletMutation>;
 export type LoginWithWalletMutationResult = Apollo.MutationResult<LoginWithWalletMutation>;
 export type LoginWithWalletMutationOptions = Apollo.BaseMutationOptions<LoginWithWalletMutation, LoginWithWalletMutationVariables>;
+export const GetCurrentUserDocument = gql`
+    query GetCurrentUser {
+  getCurrentUser {
+    avatarUrl
+    bio
+    createdAt
+    id
+    name
+    role
+    updatedAt
+    wallet
+  }
+}
+    `;
+
+/**
+ * __useGetCurrentUserQuery__
+ *
+ * To run a query within a React component, call `useGetCurrentUserQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCurrentUserQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetCurrentUserQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetCurrentUserQuery(baseOptions?: Apollo.QueryHookOptions<GetCurrentUserQuery, GetCurrentUserQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetCurrentUserQuery, GetCurrentUserQueryVariables>(GetCurrentUserDocument, options);
+      }
+export function useGetCurrentUserLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetCurrentUserQuery, GetCurrentUserQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetCurrentUserQuery, GetCurrentUserQueryVariables>(GetCurrentUserDocument, options);
+        }
+export function useGetCurrentUserSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetCurrentUserQuery, GetCurrentUserQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetCurrentUserQuery, GetCurrentUserQueryVariables>(GetCurrentUserDocument, options);
+        }
+export type GetCurrentUserQueryHookResult = ReturnType<typeof useGetCurrentUserQuery>;
+export type GetCurrentUserLazyQueryHookResult = ReturnType<typeof useGetCurrentUserLazyQuery>;
+export type GetCurrentUserSuspenseQueryHookResult = ReturnType<typeof useGetCurrentUserSuspenseQuery>;
+export type GetCurrentUserQueryResult = Apollo.QueryResult<GetCurrentUserQuery, GetCurrentUserQueryVariables>;
 export const PostsDocument = gql`
     query Posts {
   posts {
@@ -255,3 +344,128 @@ export type PostsQueryHookResult = ReturnType<typeof usePostsQuery>;
 export type PostsLazyQueryHookResult = ReturnType<typeof usePostsLazyQuery>;
 export type PostsSuspenseQueryHookResult = ReturnType<typeof usePostsSuspenseQuery>;
 export type PostsQueryResult = Apollo.QueryResult<PostsQuery, PostsQueryVariables>;
+export const PostsByWalletDocument = gql`
+    query PostsByWallet($wallet: String!) {
+  postsByWallet(wallet: $wallet) {
+    createdAt
+    description
+    haveSkill
+    id
+    status
+    tags {
+      id
+      name
+    }
+    type
+    user {
+      id
+      wallet
+    }
+    userId
+    wantSkill
+  }
+}
+    `;
+
+/**
+ * __usePostsByWalletQuery__
+ *
+ * To run a query within a React component, call `usePostsByWalletQuery` and pass it any options that fit your needs.
+ * When your component renders, `usePostsByWalletQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = usePostsByWalletQuery({
+ *   variables: {
+ *      wallet: // value for 'wallet'
+ *   },
+ * });
+ */
+export function usePostsByWalletQuery(baseOptions: Apollo.QueryHookOptions<PostsByWalletQuery, PostsByWalletQueryVariables> & ({ variables: PostsByWalletQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<PostsByWalletQuery, PostsByWalletQueryVariables>(PostsByWalletDocument, options);
+      }
+export function usePostsByWalletLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<PostsByWalletQuery, PostsByWalletQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<PostsByWalletQuery, PostsByWalletQueryVariables>(PostsByWalletDocument, options);
+        }
+export function usePostsByWalletSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<PostsByWalletQuery, PostsByWalletQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<PostsByWalletQuery, PostsByWalletQueryVariables>(PostsByWalletDocument, options);
+        }
+export type PostsByWalletQueryHookResult = ReturnType<typeof usePostsByWalletQuery>;
+export type PostsByWalletLazyQueryHookResult = ReturnType<typeof usePostsByWalletLazyQuery>;
+export type PostsByWalletSuspenseQueryHookResult = ReturnType<typeof usePostsByWalletSuspenseQuery>;
+export type PostsByWalletQueryResult = Apollo.QueryResult<PostsByWalletQuery, PostsByWalletQueryVariables>;
+export const CreatePostDocument = gql`
+    mutation CreatePost($input: CreatePostInput!) {
+  createPost(input: $input) {
+    id
+    user {
+      wallet
+    }
+  }
+}
+    `;
+export type CreatePostMutationFn = Apollo.MutationFunction<CreatePostMutation, CreatePostMutationVariables>;
+
+/**
+ * __useCreatePostMutation__
+ *
+ * To run a mutation, you first call `useCreatePostMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreatePostMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createPostMutation, { data, loading, error }] = useCreatePostMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCreatePostMutation(baseOptions?: Apollo.MutationHookOptions<CreatePostMutation, CreatePostMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreatePostMutation, CreatePostMutationVariables>(CreatePostDocument, options);
+      }
+export type CreatePostMutationHookResult = ReturnType<typeof useCreatePostMutation>;
+export type CreatePostMutationResult = Apollo.MutationResult<CreatePostMutation>;
+export type CreatePostMutationOptions = Apollo.BaseMutationOptions<CreatePostMutation, CreatePostMutationVariables>;
+export const CreateTagDocument = gql`
+    mutation CreateTag($input: CreateTagInput!) {
+  createTag(input: $input) {
+    id
+    name
+  }
+}
+    `;
+export type CreateTagMutationFn = Apollo.MutationFunction<CreateTagMutation, CreateTagMutationVariables>;
+
+/**
+ * __useCreateTagMutation__
+ *
+ * To run a mutation, you first call `useCreateTagMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateTagMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createTagMutation, { data, loading, error }] = useCreateTagMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCreateTagMutation(baseOptions?: Apollo.MutationHookOptions<CreateTagMutation, CreateTagMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateTagMutation, CreateTagMutationVariables>(CreateTagDocument, options);
+      }
+export type CreateTagMutationHookResult = ReturnType<typeof useCreateTagMutation>;
+export type CreateTagMutationResult = Apollo.MutationResult<CreateTagMutation>;
+export type CreateTagMutationOptions = Apollo.BaseMutationOptions<CreateTagMutation, CreateTagMutationVariables>;

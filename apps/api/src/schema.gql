@@ -5,8 +5,13 @@
 input CreatePostInput {
   description: String
   haveSkill: String!
+  tags: [CreateTagInput!]
   type: PostType!
   wantSkill: String!
+}
+
+input CreateTagInput {
+  name: String!
 }
 
 """
@@ -28,6 +33,7 @@ type LoginResponse {
 
 type Mutation {
   createPost(input: CreatePostInput!): Post!
+  createTag(input: CreateTagInput!): PostTag!
   loginWithWallet(input: LoginInput!): LoginResponse!
   refreshTokens(input: RefreshTokenInput!): LoginResponse!
   removePost(id: ID!): Post!
@@ -71,6 +77,7 @@ type Query {
   myPosts: [Post!]!
   post(id: ID!): Post!
   posts: [Post!]!
+  postsByWallet(wallet: String!): [Post!]!
 }
 
 input RefreshTokenInput {

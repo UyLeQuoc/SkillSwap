@@ -9,7 +9,7 @@ import {
 import { envConfig } from '@/constants/envConfig';
   
   const authLink = setContext((_, { headers }) => {
-    const accessToken = localStorage.getItem('accessToken')
+    const accessToken = localStorage.getItem('token')
     return {
       headers: {
         ...headers,

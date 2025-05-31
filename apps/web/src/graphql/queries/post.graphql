@@ -18,3 +18,40 @@ query Posts {
     wantSkill
   }
 }
+
+query PostsByWallet($wallet: String!) {
+  postsByWallet(wallet: $wallet) {
+    createdAt
+    description
+    haveSkill
+    id
+    status
+    tags {
+      id
+      name
+    }
+    type
+    user {
+      id
+      wallet
+    }
+    userId
+    wantSkill
+  }
+}
+
+mutation CreatePost($input: CreatePostInput!) {
+  createPost(input: $input) {
+    id
+    user {
+      wallet
+    }
+  }
+}
+
+mutation CreateTag($input: CreateTagInput!) {
+  createTag(input: $input) {
+    id
+    name
+  }
+}

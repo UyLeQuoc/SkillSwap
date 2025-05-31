@@ -30,7 +30,8 @@
     "migrate": "cd apps/api && npm run migrate",
     "seed": "cd apps/api && npm run seed",
     "reset": "cd apps/api && npm run reset",
-    "format": "cd apps/api && npm run lint"
+    "format": "cd apps/api && npm run lint",
+    "studio": "cd apps/api && npm run studio"
   },
   "dependencies": {
     "@graphql-codegen/typescript-react-apollo": "^4.3.3",

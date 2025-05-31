@@ -1,12 +1,13 @@
 import { Resolver, Query, Mutation, Args, ID } from "@nestjs/graphql";
 import { PostsService } from "./posts.service";
-import { CreatePostInput } from "./dto/create-post.input";
+import { CreatePostInput, CreateTagInput } from "./dto/create-post.input";
 import { UpdatePostInput } from "./dto/update-post.input";
 import { Post } from "./entities/post.entity";
 import { UseGuards } from "@nestjs/common";
 import { CurrentUser } from "../auth/decorators/current-user.decorator";
 import { User } from "../users/entities/user.entity";
 import { GraphqlJwtAuthGuard } from "src/auth/guards/graphql-jwt-auth.guard";
+import { PostTag } from "./entities/post-tag.entity";
 
 @Resolver(() => Post)
 export class PostsResolver {
@@ -61,5 +62,18 @@ export class PostsResolver {
     @UseGuards(GraphqlJwtAuthGuard)
     async myPosts(@CurrentUser() user: User) {
         return this.postsService.findByUser(user.id);
+    }
+
+    @Query(() => [Post])
+    async postsByWallet(@Args("wallet") wallet: string) {
+        return this.postsService.findByWallet(wallet);
+    }
+
+    @Mutation(() => PostTag)
+    @UseGuards(GraphqlJwtAuthGuard)
+    async createTag(
+        @Args("input") createTagInput: CreateTagInput,
+    ) {
+        return this.postsService.createTag(createTagInput);
     }
 } 

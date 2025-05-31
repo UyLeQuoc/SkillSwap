@@ -8,4 +8,8 @@ export class PostTag implements PrismaPostTag {
 
     @Field()
     name: string
+
+    constructor(partial: Partial<PostTag>) {
+        Object.assign(this, partial)
+    }
 } 
