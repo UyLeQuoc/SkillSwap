@@ -113,6 +113,33 @@ graph TD
     N -->|Orchestrate| O[Containers]
 ```
 
+## Code Organization
+```
+skillswap/
+├── apps/
+│   ├── web/          # Next.js frontend
+│   │   ├── src/
+│   │   └── codegen.ts # GraphQL Code Generator config
+│   ├── api/          # NestJS backend
+│   │   ├── src/
+│   │   │   ├── dynamic-modules/  # Dynamic module configurations
+│   │   │   ├── users/           # User module
+│   │   │   ├── blockchain/      # Blockchain integration
+│   │   │   ├── nft/            # NFT service
+│   │   │   └── app.module.ts    # Root module
+│   └── contract/    # Move smart contracts
+│       ├── sources/  # Contract source files
+│       │   ├── skillswap.move   # Main contract module
+│       │   ├── nft.move        # NFT implementation
+│       │   └── deal.move       # Deal verification
+│       ├── tests/    # Contract tests
+│       │   ├── nft_tests.move  # NFT contract tests
+│       │   └── deal_tests.move # Deal contract tests
+│       └── Move.toml # Contract configuration
+├── package.json      # Root package configuration
+└── memory-bank/      # Project documentation
+```
+
 ## Key Technical Decisions
 1. Monorepo structure for better code sharing and management
 2. Apollo Server for GraphQL implementation
@@ -123,6 +150,7 @@ graph TD
 7. Sui blockchain for NFT implementation
 8. WalletKit for wallet integration
 9. Move language for smart contracts
+10. Modular contract design for better maintainability
 
 ## Code Organization
 ```

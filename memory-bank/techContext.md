@@ -25,10 +25,11 @@
 - NFT minting service
 
 ### Smart Contracts
-- Move language
+- Move language (2024.beta edition)
 - Sui blockchain
 - NFT contract for SkillBadges
 - Deal verification contract
+- Contract testing framework
 
 ### Development Tools
 - npm
@@ -40,6 +41,7 @@
 - GitHub Actions
 - Sui CLI
 - Move Analyzer
+- Move Prover (for contract verification)
 
 ### Deployment
 - Docker-based deployment
@@ -48,6 +50,7 @@
 - Automated database migrations
 - Docker Compose for orchestration
 - Sui testnet/mainnet deployment
+- Contract verification and publishing
 
 ## Development Setup
 
@@ -58,6 +61,7 @@
 - Git
 - Sui CLI
 - Move Analyzer
+- Move Prover
 
 ### Environment Variables
 - Database connection
@@ -66,6 +70,7 @@
 - API keys
 - Service endpoints
 - Wallet configuration
+- Contract verification keys
 
 ### Development Workflow
 1. Clone repository
@@ -74,6 +79,7 @@
 4. Deploy smart contracts
 5. Start development servers
 6. Run database migrations
+7. Run contract tests
 
 ## Technical Constraints
 - HCMC location-based services
@@ -84,6 +90,8 @@
 - Blockchain transaction costs
 - Wallet compatibility
 - NFT minting reliability
+- Contract upgradeability
+- Gas optimization
 
 ## Dependencies
 - Location services API
@@ -93,6 +101,8 @@
 - Sui blockchain network
 - NFT marketplace integration
 - Wallet providers
+- Move standard library
+- Sui framework
 
 ## Performance Requirements
 - Fast page loads
@@ -103,9 +113,14 @@
 - Quick wallet connections
 - Fast NFT minting
 - Low transaction latency
+- Efficient contract execution
+- Minimal gas usage
 
 ## Development Scripts
 - `npm run dev`: Run both frontend and backend concurrently
 - `npm run dev:api`: Run backend only
 - `npm run dev:web`: Run frontend only
 - `npm run codegen`: Generate GraphQL types and operations
+- `npm run test:contracts`: Run Move contract tests
+- `npm run verify:contracts`: Verify contract code
+- `npm run deploy:contracts`: Deploy contracts to Sui network

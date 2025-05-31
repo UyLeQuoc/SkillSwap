@@ -1,6 +1,6 @@
 # SkillSwap
 
-A community-driven platform for skill and item exchange in Ho Chi Minh City (HCMC). Connect with others to trade skills, items, or request help within your local community.
+A Web3 peer-to-peer skill and item exchange platform built for people in Ho Chi Minh City (HCMC). Connect with others to trade skills, items, or request help within your local community, powered by the Sui blockchain.
 
 ## Features
 
@@ -8,8 +8,10 @@ A community-driven platform for skill and item exchange in Ho Chi Minh City (HCM
 - 🏷️ **Item Trading**: List items for trade or find what you need
 - 📍 **Location-Based**: Connect with people in HCMC
 - 💬 **Real-time Messaging**: Communicate securely with other users
-- ⭐ **Reputation System**: Build trust through reviews and ratings
-- 🔒 **Safe & Secure**: Verified users and secure exchanges
+- ⭐ **NFT SkillBadges**: Earn verifiable skill badges as NFTs
+- 🔒 **Web3 Security**: Secure wallet-based authentication
+- 🌐 **Decentralized**: Built on Sui blockchain
+- 📱 **Wallet Integration**: Connect with Sui wallet
 
 ## Tech Stack
 
@@ -20,6 +22,8 @@ A community-driven platform for skill and item exchange in Ho Chi Minh City (HCM
 - React Query
 - GraphQL Code Generator
 - Tailwind CSS
+- WalletKit for Sui
+- Sui SDK
 
 ### Backend
 - NestJS
@@ -28,6 +32,14 @@ A community-driven platform for skill and item exchange in Ho Chi Minh City (HCM
 - Prisma ORM
 - PostgreSQL
 - WebSocket
+- Sui blockchain integration
+- NFT minting service
+
+### Smart Contracts
+- Move language (2024.beta)
+- Sui blockchain
+- NFT contract for SkillBadges
+- Deal verification contract
 
 ## Getting Started
 
@@ -36,6 +48,9 @@ A community-driven platform for skill and item exchange in Ho Chi Minh City (HCM
 - Node.js (Latest LTS version)
 - PostgreSQL
 - npm
+- Sui CLI
+- Move Analyzer
+- Move Prover
 
 ### Installation
 
@@ -57,7 +72,13 @@ cp apps/api/.env.example apps/api/.env
 cp apps/web/.env.example apps/web/.env
 ```
 
-4. Start the development servers:
+4. Deploy smart contracts:
+```bash
+# Deploy contracts to Sui testnet
+npm run deploy:contracts
+```
+
+5. Start the development servers:
 ```bash
 # Run both frontend and backend
 npm run dev
@@ -77,13 +98,24 @@ skillswap/
 │   ├── web/          # Next.js frontend
 │   │   ├── src/
 │   │   └── codegen.ts # GraphQL Code Generator config
-│   └── api/          # NestJS backend
-│       ├── src/
-│       │   ├── users/           # User module
-│       │   ├── skills/          # Skills module
-│       │   ├── items/           # Items module
-│       │   ├── messages/        # Messaging module
-│       │   └── app.module.ts    # Root module
+│   ├── api/          # NestJS backend
+│   │   ├── src/
+│   │   │   ├── users/           # User module
+│   │   │   ├── skills/          # Skills module
+│   │   │   ├── items/           # Items module
+│   │   │   ├── messages/        # Messaging module
+│   │   │   ├── blockchain/      # Blockchain integration
+│   │   │   ├── nft/            # NFT service
+│   │   │   └── app.module.ts    # Root module
+│   └── contracts/    # Move smart contracts
+│       ├── sources/  # Contract source files
+│       │   ├── skillswap.move   # Main contract module
+│       │   ├── nft.move        # NFT implementation
+│       │   └── deal.move       # Deal verification
+│       ├── tests/    # Contract tests
+│       │   ├── nft_tests.move  # NFT contract tests
+│       │   └── deal_tests.move # Deal contract tests
+│       └── Move.toml # Contract configuration
 ├── package.json      # Root package configuration
 └── memory-bank/      # Project documentation
 ```
@@ -96,6 +128,9 @@ skillswap/
 - `npm run dev:api`: Run backend only
 - `npm run dev:web`: Run frontend only
 - `npm run codegen`: Generate GraphQL types and operations
+- `npm run deploy:contracts`: Deploy smart contracts to Sui network
+- `npm run test:contracts`: Run Move contract tests
+- `npm run verify:contracts`: Verify contract code
 
 ### Database Management
 
@@ -109,6 +144,18 @@ npm run prisma:generate
 3. Create and apply migrations:
 ```bash
 npm run prisma:migrate
+```
+
+### Smart Contract Development
+
+1. Write and test contracts in `apps/contracts/sources/`
+2. Run contract tests:
+```bash
+npm run test:contracts
+```
+3. Deploy to Sui network:
+```bash
+npm run deploy:contracts
 ```
 
 ## Contributing
@@ -130,3 +177,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - [Apollo Server](https://www.apollographql.com/docs/apollo-server/)
 - [Prisma](https://www.prisma.io/)
 - [Shadcn UI](https://ui.shadcn.com/)
+- [Sui Blockchain](https://sui.io/)
+- [Move Language](https://move-language.github.io/move/)
+- [WalletKit](https://github.com/MystenLabs/sui/tree/main/sdk/wallet-kit)

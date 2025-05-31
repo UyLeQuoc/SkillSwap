@@ -13,10 +13,17 @@
 - Database migration automation
 - Initial Web3 architecture planning
 - NFT contract design planning
+- Basic Move contract setup
+  - Initial skillswap module
+  - Move.toml configuration
+  - Project structure setup
 
 ## In Progress
 - Sui wallet integration
 - Smart contract development
+  - NFT contract implementation
+  - Minting functionality
+  - Verification system
 - Database schema design
 - Basic UI components with Shadcn UI
 - Project documentation
@@ -38,6 +45,8 @@
 - NFT marketplace integration
 - Deal verification system
 - Gas optimization
+- Contract testing implementation
+- NFT metadata implementation
 
 ## Known Issues
 - None at this stage (project initialization)
@@ -48,6 +57,7 @@
    - Smart contract deployment
    - NFT contract implementation
    - Wallet-based authentication
+   - Contract testing framework
 
 2. Core Features
    - User profiles with wallet addresses
@@ -55,6 +65,7 @@
    - Search and filtering
    - Basic messaging
    - NFT minting service
+   - Contract verification system
 
 3. Enhanced Features
    - Location services
@@ -62,10 +73,12 @@
    - Review system
    - Deal verification
    - NFT marketplace integration
+   - Contract upgrade system
 
 4. Platform Optimization
    - Performance improvements
    - Security enhancements
    - User experience refinements
    - Gas optimization
-   - Smart contract upgrades 
+   - Smart contract upgrades
+   - Contract monitoring system 
