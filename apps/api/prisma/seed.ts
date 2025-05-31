@@ -1,31 +1,39 @@
-import { PrismaClient } from "@prisma/client"
+import { PrismaClient, Roles } from "@prisma/client"
 
 const prisma = new PrismaClient()
 
 async function main() {
-    // Create admin user
-    const admin = await prisma.user.upsert({
-        where: { email: "admin@example.com" },
-        update: {},
-        create: {
-            email: "admin@example.com",
-            password: "admin123", // In production, this should be hashed
-            role: "ADMIN",
+    // Create user
+    const user = await prisma.user.create({
+        data: {
+            wallet: "0x994845a200c22d021eb08f97136a43fb04ea93fe27b1efbf8fd95f8a3034757b",
+            name: "UyDev",
+            bio: "IT Professional specializing in web design",
+            role: Roles.ADMIN,
         },
     })
 
-    // Create customer user
-    const customer = await prisma.user.upsert({
-        where: { email: "customer@example.com" },
-        update: {},
-        create: {
-            email: "customer@example.com",
-            password: "customer123", // In production, this should be hashed
-            role: "CUSTOMER",
+    // Create post for web design skill
+    const post = await prisma.post.create({
+        data: {
+            userId: user.id,
+            haveSkill: "Web Design",
+            wantSkill: "English Speaking",
+            description: "I can help with website design and development. Looking to improve my English speaking skills.",
+            normalizedHave: "web design",
+            normalizedWant: "english speaking",
+            normalizedDesc: "i can help with website design and development looking to improve my english speaking skills",
+            tags: {
+                create: [
+                    { name: "web-design" },
+                    { name: "it" },
+                    { name: "english" },
+                ],
+            },
         },
     })
 
-    console.log({ admin, customer })
+    console.log("Seed data created:", { user, post })
 }
 
 main()

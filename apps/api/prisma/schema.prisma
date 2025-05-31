@@ -19,12 +19,125 @@ enum Roles {
   CUSTOMER
 }
 
-//User
 model User {
-  id        String   @id @default(uuid())
-  email     String   @unique
-  password  String
-  role      Roles    @default(CUSTOMER)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id              String     @id @default(uuid())
+  wallet          String     @unique
+  name            String?
+  avatarUrl       String?
+  bio             String?
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
+  role            Roles      @default(CUSTOMER)
+
+  posts           Post[]
+  skillBadges     SkillBadge[] @relation("UserSkillBadges")
+  verifiedBadges  SkillBadge[] @relation("VerifierSkillBadges")
+  reviewsGiven    Review[]   @relation("Reviewer")
+  reviewsReceived Review[]   @relation("Reviewee")
+  dealsAsA        Deal[]     @relation("DealsAsA")
+  dealsAsB        Deal[]     @relation("DealsAsB")
+}
+
+model Post {
+  id              String     @id @default(uuid())
+  userId          String
+  haveSkill       String
+  wantSkill       String
+  description     String
+  status          PostStatus @default(ACTIVE)
+  createdAt       DateTime   @default(now())
+
+  normalizedHave  String?
+  normalizedWant  String?
+  normalizedDesc  String?
+
+  tags            PostTag[]  @relation("PostToTags")
+
+  user            User       @relation(fields: [userId], references: [id])
+  dealsAsPostA    Deal[]     @relation("PostA")
+  dealsAsPostB    Deal[]     @relation("PostB")
+  matchAsSource   MatchingSuggestion[] @relation("MatchingSource")
+  matchAsTarget   MatchingSuggestion[] @relation("MatchingTarget")
+}
+
+enum PostStatus {
+  ACTIVE
+  INACTIVE
+  MATCHED
+}
+
+model PostTag {
+  id    String  @id @default(uuid())
+  name  String  @unique
+  posts Post[]  @relation("PostToTags")
+}
+
+model MatchingSuggestion {
+  id            String     @id @default(uuid())
+  sourcePostId  String
+  targetPostId  String
+  method        MatchMethod
+  score         Float?
+  createdAt     DateTime   @default(now())
+
+  sourcePost    Post       @relation("MatchingSource", fields: [sourcePostId], references: [id])
+  targetPost    Post       @relation("MatchingTarget", fields: [targetPostId], references: [id])
+}
+
+enum MatchMethod {
+  EXACT
+  PARTIAL
+  TAG
+  GPT
+  EMBEDDING
+}
+
+model Deal {
+  id          String     @id @default(uuid())
+  userAId     String
+  userBId     String
+  postAId     String?
+  postBId     String?
+  status      DealStatus @default(PENDING)
+  createdAt   DateTime   @default(now())
+  completedAt DateTime?
+
+  userA       User       @relation("DealsAsA", fields: [userAId], references: [id])
+  userB       User       @relation("DealsAsB", fields: [userBId], references: [id])
+  postA       Post?      @relation("PostA", fields: [postAId], references: [id])
+  postB       Post?      @relation("PostB", fields: [postBId], references: [id])
+  reviews     Review[]
+}
+
+enum DealStatus {
+  PENDING
+  AGREED
+  COMPLETED
+  CANCELLED
+}
+
+model Review {
+  id          String   @id @default(uuid())
+  dealId      String
+  reviewerId  String
+  revieweeId  String
+  rating      Int
+  comment     String?
+  createdAt   DateTime @default(now())
+
+  reviewer    User     @relation("Reviewer", fields: [reviewerId], references: [id])
+  reviewee    User     @relation("Reviewee", fields: [revieweeId], references: [id])
+  deal        Deal     @relation(fields: [dealId], references: [id])
+}
+
+model SkillBadge {
+  id          String   @id @default(uuid())
+  userId      String
+  verifierId  String
+  skillName   String
+  suiNftId    String
+  mintedAt    DateTime @default(now())
+
+  user        User     @relation("UserSkillBadges", fields: [userId], references: [id])
+  verifier    User     @relation("VerifierSkillBadges", fields: [verifierId], references: [id])
 }
