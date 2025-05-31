@@ -2,6 +2,7 @@ import React from "react"
 import { cn } from "@/lib/utils"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
+import Image from "next/image"
 
 interface LogoProps {
     withText?: boolean
@@ -22,9 +23,6 @@ export const Logo = ({
                     'hover:[mask-position:100%]'
                 )
                 }>
-                {/* <Image src="/logo.png" alt="Skillswap" width={32} height={32}
-                    className={'rounded-full'}
-                /> */}
                 <span className={
                     'text-2xl font-bold'
                 }>Skillswap</span>

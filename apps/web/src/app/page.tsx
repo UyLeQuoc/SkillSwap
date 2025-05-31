@@ -38,7 +38,7 @@ export default function Home() {
             </Badge>
             <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-6">
               Trade Skills. Earn Trust.{" "}
-              <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent dark:from-blue-400 dark:to-purple-400">
                 Build Community.
               </span>
             </h1>
