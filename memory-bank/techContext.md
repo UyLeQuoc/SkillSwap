@@ -11,6 +11,8 @@
 - Apollo Client 3.13.8
 - Tailwind CSS 4
 - WebSocket client
+- WalletKit for Sui integration
+- Sui SDK
 
 ### Backend
 - NestJS
@@ -19,7 +21,14 @@
 - Prisma ORM
 - PostgreSQL
 - WebSocket server
-- JWT authentication
+- Sui blockchain integration
+- NFT minting service
+
+### Smart Contracts
+- Move language
+- Sui blockchain
+- NFT contract for SkillBadges
+- Deal verification contract
 
 ### Development Tools
 - npm
@@ -29,6 +38,8 @@
 - Jest
 - Docker
 - GitHub Actions
+- Sui CLI
+- Move Analyzer
 
 ### Deployment
 - Docker-based deployment
@@ -36,6 +47,7 @@
 - VPS hosting
 - Automated database migrations
 - Docker Compose for orchestration
+- Sui testnet/mainnet deployment
 
 ## Development Setup
 
@@ -44,19 +56,24 @@
 - PostgreSQL
 - npm
 - Git
+- Sui CLI
+- Move Analyzer
 
 ### Environment Variables
 - Database connection
-- JWT secrets
+- Sui network configuration
+- NFT contract address
 - API keys
 - Service endpoints
+- Wallet configuration
 
 ### Development Workflow
 1. Clone repository
 2. Install dependencies
 3. Set up environment
-4. Start development servers
-5. Run database migrations
+4. Deploy smart contracts
+5. Start development servers
+6. Run database migrations
 
 ## Technical Constraints
 - HCMC location-based services
@@ -64,13 +81,18 @@
 - User data privacy
 - Scalability needs
 - Mobile responsiveness
+- Blockchain transaction costs
+- Wallet compatibility
+- NFT minting reliability
 
 ## Dependencies
 - Location services API
 - Image storage service
 - Email service
 - Social media APIs
-- Payment gateway (future)
+- Sui blockchain network
+- NFT marketplace integration
+- Wallet providers
 
 ## Performance Requirements
 - Fast page loads
@@ -78,9 +100,12 @@
 - Efficient search
 - Reliable messaging
 - Secure data handling
+- Quick wallet connections
+- Fast NFT minting
+- Low transaction latency
 
 ## Development Scripts
 - `npm run dev`: Run both frontend and backend concurrently
 - `npm run dev:api`: Run backend only
 - `npm run dev:web`: Run frontend only
-- `npm run codegen`: Generate GraphQL types and operations 
+- `npm run codegen`: Generate GraphQL types and operations
