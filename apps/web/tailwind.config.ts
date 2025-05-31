@@ -11,6 +11,7 @@ const config: Config = {
       animation: {
         marquee: "marquee var(--duration) linear infinite",
         "marquee-vertical": "marquee-vertical var(--duration) linear infinite",
+        grid: "grid 15s linear infinite",
       },
       keyframes: {
         marquee: {
@@ -20,6 +21,10 @@ const config: Config = {
         "marquee-vertical": {
           from: { transform: "translateY(0)" },
           to: { transform: "translateY(calc(-100% - var(--gap)))" },
+        },
+        grid: {
+          "0%": { transform: "translateY(-50%)" },
+          "100%": { transform: "translateY(0)" },
         },
       },
     },

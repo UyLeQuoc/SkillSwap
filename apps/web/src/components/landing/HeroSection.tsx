@@ -1,11 +1,12 @@
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Search, Wallet } from "lucide-react"
+import { RetroGrid } from "../magicui/retro-grid"
 
 export function HeroSection() {
   return (
-    <section className="py-20 px-4">
-      <div className="container mx-auto text-center max-w-4xl">
+    <section>
+      <div className="container mx-auto text-center max-w-4xl py-10 pb-0 px-4 z-30">
         <Badge variant="secondary" className="mb-6 px-4 py-2 text-sm font-medium">
           🌟 Powered by Sui Blockchain
         </Badge>
@@ -29,6 +30,12 @@ export function HeroSection() {
             Explore Offers
           </Button>
         </div>
+      </div>
+      <div className="relative h-[500px] w-full overflow-hidden -mt-80">
+        <RetroGrid 
+            darkLineColor="#C5E7F4"
+            lightLineColor="#2C5286"
+        />
       </div>
     </section>
   )
