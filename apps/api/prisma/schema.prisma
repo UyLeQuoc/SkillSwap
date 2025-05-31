@@ -75,14 +75,10 @@ model Post {
   userId          String
   haveSkill       String
   wantSkill       String
-  description     String
+  description     String?
   status          PostStatus @default(ACTIVE)
   type            PostType   @default(SKILL)
   createdAt       DateTime   @default(now())
-
-  normalizedHave  String?
-  normalizedWant  String?
-  normalizedDesc  String?
 
   user            User       @relation(fields: [userId], references: [id])
   tags            PostTag[]  @relation("PostToTags")
@@ -151,7 +147,7 @@ model SkillBadge {
   userId      String
   verifierId  String
   skillName   String
-  suiNftId    String
+  suiObjectId    String
   mintedAt    DateTime @default(now())
 
   user        User     @relation("UserSkillBadges", fields: [userId], references: [id])
