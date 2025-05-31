@@ -19,12 +19,12 @@ module skillswap::skill_badge_nft {
         issued_at: u64,
     }
 
-    public fun mint_skill_badge(
-        ctx: &mut TxContext,
+    public  fun mint_skill_badge(
         recipient: address,
         skill_name: String,
         verifier: address,
-        clock: &Clock
+        clock: &Clock,
+        ctx: &mut TxContext
     ) {
         let time = clock.timestamp_ms();
         let badge = SkillBadge {

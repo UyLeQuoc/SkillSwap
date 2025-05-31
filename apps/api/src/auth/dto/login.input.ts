@@ -17,4 +17,4 @@ export class LoginInput {
   @IsNotEmpty()
   @IsString()
       signature: string
-} 
+}

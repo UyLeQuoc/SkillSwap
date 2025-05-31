@@ -1,5 +1,5 @@
 import { Injectable, NotFoundException } from "@nestjs/common"
-import { PrismaService } from "../dynamic-modules"
+import { PrismaService } from "../prisma/prisma.service"
 import { User } from "./entities/user.entity"
 
 @Injectable()
@@ -45,4 +45,4 @@ export class UsersService {
         })
         return new User(user)
     }
-} 
+}

@@ -3,31 +3,31 @@ import { Roles } from "@prisma/client"
 
 @ObjectType()
 export class User {
-    @Field(() => ID)
-        id: string
+  @Field(() => ID)
+      id: string
 
-    @Field()
-        wallet: string
+  @Field()
+      wallet: string
 
-    @Field({ nullable: true })
-        name?: string | null
+  @Field({ nullable: true })
+      name?: string | null
 
-    @Field({ nullable: true })
-        avatarUrl?: string | null
+  @Field({ nullable: true })
+      avatarUrl?: string | null
 
-    @Field({ nullable: true })
-        bio?: string | null
+  @Field({ nullable: true })
+      bio?: string | null
 
-    @Field()
-        createdAt: Date
+  @Field()
+      createdAt: Date
 
-    @Field()
-        updatedAt: Date
+  @Field()
+      updatedAt: Date
 
-    @Field(() => String)
-        role: Roles
+  @Field(() => String)
+      role: Roles
 
-    constructor(partial: Partial<User>) {
-        Object.assign(this, partial)
-    }
+  constructor(partial: Partial<User>) {
+      Object.assign(this, partial)
+  }
 }

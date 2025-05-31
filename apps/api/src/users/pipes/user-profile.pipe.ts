@@ -27,4 +27,4 @@ export class UserProfilePipe implements PipeTransform {
             return false
         }
     }
-} 
+}

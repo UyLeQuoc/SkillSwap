@@ -4,9 +4,11 @@ import { EnvModule } from "./dynamic-modules"
 import { ApolloDriver, ApolloDriverConfig } from "@nestjs/apollo"
 import { GraphQLModule } from "@nestjs/graphql"
 import { join } from "path"
-import { HelloModule } from "./hello/hello.module"
-import { PrismaModule } from "./dynamic-modules/prisma/prisma.module"
 import { AuthModule } from "./auth/auth.module"
+import { SuiModule } from "./sui/sui.module"
+import { HelloModule } from "./hello/hello.module"
+import { DealsModule } from "./deals/deals.module"
+import { PrismaModule } from "./prisma/prisma.module"
 
 @Module({
     imports: [
@@ -19,14 +21,14 @@ import { AuthModule } from "./auth/auth.module"
             playground: false,
             plugins: [
                 ApolloServerPluginLandingPageLocalDefault({
-                    embed: true
-                })
+                    embed: true,
+                }),
             ],
             sortSchema: true,
         }),
         HelloModule,
         AuthModule,
-        // UsersModule,
+        SuiModule,
     ],
 })
 export class AppModule {}

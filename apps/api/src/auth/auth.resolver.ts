@@ -21,4 +21,4 @@ export class AuthResolver {
   async refreshTokens(@Args("input") input: RefreshTokenInput) {
       return this.authService.refreshTokens(input.refreshToken)
   }
-} 
+}

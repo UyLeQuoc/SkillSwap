@@ -13,9 +13,9 @@ export class EnvModule extends ConfigurableModuleClass {
                 ConfigModule.forRoot({
                     isGlobal: true,
                     load: [envConfig],
-                    envFilePath: [".env"]
-                })
-            ]
+                    envFilePath: [".env"],
+                }),
+            ],
         }
     }
 }

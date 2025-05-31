@@ -15,10 +15,10 @@ async function bootstrap() {
             "Content-Type",
             "Accept",
             "Authorization",
-            "Access-Control-Allow-Origin"
+            "Access-Control-Allow-Origin",
         ],
         preflightContinue: false,
-        optionsSuccessStatus: 204
+        optionsSuccessStatus: 204,
     })
 
     await app.listen(process.env.PORT ?? 4000)

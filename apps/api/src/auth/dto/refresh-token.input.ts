@@ -7,4 +7,4 @@ export class RefreshTokenInput {
   @IsNotEmpty()
   @IsString()
       refreshToken: string
-} 
+}

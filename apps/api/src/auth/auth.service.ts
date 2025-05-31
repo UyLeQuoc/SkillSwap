@@ -1,8 +1,8 @@
 import { Injectable, UnauthorizedException } from "@nestjs/common"
 import { JwtService } from "@nestjs/jwt"
-import { PrismaService } from "src/dynamic-modules"
 import { User } from "src/users/entities/user.entity"
 import * as ed25519 from "@noble/ed25519"
+import { PrismaService } from "src/prisma/prisma.service"
 
 @Injectable()
 export class AuthService {
@@ -17,23 +17,19 @@ export class AuthService {
         signature: string,
     ): Promise<boolean> {
         try {
-            const isValid = await ed25519.verify(
-                signature,
-                message,
-                wallet,
-            )
+            const isValid = await ed25519.verify(signature, message, wallet)
             return isValid
         } catch {
             return false
         }
     }
 
-    async loginWithWallet(
-        wallet: string,
-        message: string,
-        signature: string,
-    ) {
-        const isValid = await this.validateWalletSignature(wallet, message, signature)
+    async loginWithWallet(wallet: string, message: string, signature: string) {
+        const isValid = await this.validateWalletSignature(
+            wallet,
+            message,
+            signature,
+        )
         if (!isValid) {
             throw new UnauthorizedException("Invalid signature")
         }
@@ -43,7 +39,7 @@ export class AuthService {
             where: { wallet },
             update: {},
             create: {
-                wallet
+                wallet,
             },
         })
 
@@ -105,4 +101,4 @@ export class AuthService {
             throw new UnauthorizedException("Invalid refresh token")
         }
     }
-} 
+}

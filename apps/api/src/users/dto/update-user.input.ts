@@ -17,4 +17,4 @@ export class UpdateUserInput {
   @IsOptional()
   @IsString()
       avatarUrl?: string
-} 
+}

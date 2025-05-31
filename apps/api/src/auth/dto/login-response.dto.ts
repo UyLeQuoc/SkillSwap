@@ -11,4 +11,4 @@ export class LoginResponse {
 
   @Field()
       refreshToken: string
-} 
+}
