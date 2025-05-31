@@ -17,6 +17,7 @@
   - Initial skillswap module
   - Move.toml configuration
   - Project structure setup
+- Basic UI components with Shadcn UI
 
 ## In Progress
 - Sui wallet integration
@@ -24,15 +25,14 @@
   - NFT contract implementation
   - Minting functionality
   - Verification system
-- Database schema design
-- Basic UI components with Shadcn UI
-- Project documentation
-- GraphQL schema design
-- Apollo Client setup
+- Database schema implementation
+- UI development with Shadcn UI
+- GraphQL API development
 - VPS deployment configuration
 - Docker Compose orchestration
 - Production environment setup
 - NFT minting service design
+- Contract testing framework
 
 ## Pending
 - User profiles with wallet addresses
