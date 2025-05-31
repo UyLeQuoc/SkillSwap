@@ -58,7 +58,6 @@ jobs:
         run: |
           echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" > .env
           npx prisma migrate reset -f
-          npx prisma db seed
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
 
