@@ -74,6 +74,6 @@ jobs:
           username: ${{ secrets.SERVER_USERNAME }}
           password: ${{ secrets.SERVER_PASSWORD }}
           script: |
-            cd /devops/skillswap
+            cd /devops-vps/skillswap
             docker compose pull
             docker compose up -d
