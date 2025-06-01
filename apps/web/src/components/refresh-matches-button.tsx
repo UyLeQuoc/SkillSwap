@@ -15,7 +15,6 @@ export function RefreshMatchesButton({ postId, onMatchesRefreshed }: RefreshMatc
   const [refreshMatches, { loading }] = useRefreshMatchesMutation({
     onCompleted: (data) => {
       setIsRefreshing(false)
-      toast.success(`Found ${data.refreshMatches.length} new matches!`)
       onMatchesRefreshed?.()
     },
     onError: (error) => {

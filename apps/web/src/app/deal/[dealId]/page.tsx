@@ -204,8 +204,16 @@ export default function DealPage() {
                 </div>
                 <div className="space-y-2">
                   <h3 className="font-semibold">{deal.userB?.name || "User B"}</h3>
-                  <p className="text-sm text-muted-foreground">Offering: {deal.postB?.haveSkill}</p>
-                  <p className="text-sm text-muted-foreground">Seeking: {deal.postB?.wantSkill}</p>
+                  {
+                    deal.postB?.haveSkill ? (
+                      <>
+                        <p className="text-sm text-muted-foreground">Offering: {deal.postB?.haveSkill}</p>
+                        <p className="text-sm text-muted-foreground">Seeking: {deal.postB?.wantSkill}</p>
+                      </>
+                    ) : (
+                      <p className="text-sm text-muted-foreground">Oneway offer</p>
+                    )
+                  }
                 </div>
               </div>
             </CardContent>
