@@ -66,6 +66,10 @@ type DealsResponse {
   dealsAsB: [Deal!]
 }
 
+input GetBadgesByWalletInput {
+  wallet: String!
+}
+
 input LoginInput {
   message: String!
   signature: String!
@@ -105,6 +109,7 @@ type Mutation {
   createPost(input: CreatePostInput!): Post!
   createTag(input: CreateTagInput!): PostTag!
   loginWithWallet(input: LoginInput!): LoginResponse!
+  mintSkillBadge(recipient: String!, skillName: String!): String!
   refreshMatches(postId: ID!): Post!
   refreshTokens(input: RefreshTokenInput!): LoginResponse!
   rejectDeal(dealId: String!): Deal!
@@ -151,6 +156,7 @@ enum PostType {
 type Query {
   deal(dealId: String!): Deal!
   getActiveDeals(wallet: String!): ActiveDealsResponse!
+  getBadgesByWallet(input: GetBadgesByWalletInput!): [SkillBadgeDto!]!
   getCurrentUser: User!
   getDealsByWallet(wallet: String!): DealsResponse!
   hello: String!
@@ -176,6 +182,15 @@ type Review {
   revieweeId: String!
   reviewer: User
   reviewerId: String!
+}
+
+type SkillBadgeDto {
+  id: String!
+  mintedAt: DateTime!
+  skillName: String!
+  suiObjectId: String!
+  userId: String!
+  verifierId: String!
 }
 
 input UpdatePostInput {

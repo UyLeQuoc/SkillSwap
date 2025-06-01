@@ -1,0 +1,10 @@
+query GetBadgesByWallet($input: GetBadgesByWalletInput!) {
+    getBadgesByWallet(input: $input) {
+        id
+        userId
+        verifierId
+        skillName
+        suiObjectId
+        mintedAt
+    }
+} 

@@ -80,6 +80,10 @@ export type DealsResponse = {
   dealsAsB?: Maybe<Array<Deal>>;
 };
 
+export type GetBadgesByWalletInput = {
+  wallet: Scalars['String']['input'];
+};
+
 export type LoginInput = {
   message: Scalars['String']['input'];
   signature: Scalars['String']['input'];
@@ -122,6 +126,7 @@ export type Mutation = {
   createPost: Post;
   createTag: PostTag;
   loginWithWallet: LoginResponse;
+  mintSkillBadge: Scalars['String']['output'];
   refreshMatches: Post;
   refreshTokens: LoginResponse;
   rejectDeal: Deal;
@@ -163,6 +168,12 @@ export type MutationCreateTagArgs = {
 
 export type MutationLoginWithWalletArgs = {
   input: LoginInput;
+};
+
+
+export type MutationMintSkillBadgeArgs = {
+  recipient: Scalars['String']['input'];
+  skillName: Scalars['String']['input'];
 };
 
 
@@ -236,6 +247,7 @@ export type Query = {
   __typename?: 'Query';
   deal: Deal;
   getActiveDeals: ActiveDealsResponse;
+  getBadgesByWallet: Array<SkillBadgeDto>;
   getCurrentUser: User;
   getDealsByWallet: DealsResponse;
   hello: Scalars['String']['output'];
@@ -254,6 +266,11 @@ export type QueryDealArgs = {
 
 export type QueryGetActiveDealsArgs = {
   wallet: Scalars['String']['input'];
+};
+
+
+export type QueryGetBadgesByWalletArgs = {
+  input: GetBadgesByWalletInput;
 };
 
 
@@ -294,6 +311,16 @@ export type Review = {
   reviewerId: Scalars['String']['output'];
 };
 
+export type SkillBadgeDto = {
+  __typename?: 'SkillBadgeDto';
+  id: Scalars['String']['output'];
+  mintedAt: Scalars['DateTime']['output'];
+  skillName: Scalars['String']['output'];
+  suiObjectId: Scalars['String']['output'];
+  userId: Scalars['String']['output'];
+  verifierId: Scalars['String']['output'];
+};
+
 export type UpdatePostInput = {
   description?: InputMaybe<Scalars['String']['input']>;
   haveSkill?: InputMaybe<Scalars['String']['input']>;
@@ -330,6 +357,13 @@ export type GetCurrentUserQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type GetCurrentUserQuery = { __typename?: 'Query', getCurrentUser: { __typename?: 'User', id: string, wallet: string, name?: string | null, avatarUrl?: string | null, bio?: string | null, role: string, createdAt: any, updatedAt: any, dealsAsA?: Array<{ __typename?: 'Deal', id: string, status: DealStatus, type: DealType, createdAt: any, completedAt?: any | null, userA?: { __typename?: 'User', id: string, wallet: string, name?: string | null, avatarUrl?: string | null } | null, userB?: { __typename?: 'User', id: string, wallet: string, name?: string | null, avatarUrl?: string | null } | null, postA?: { __typename?: 'Post', id: string, haveSkill: string, wantSkill: string, description?: string | null } | null, postB?: { __typename?: 'Post', id: string, haveSkill: string, wantSkill: string, description?: string | null } | null }> | null, dealsAsB?: Array<{ __typename?: 'Deal', id: string, status: DealStatus, type: DealType, createdAt: any, completedAt?: any | null, userA?: { __typename?: 'User', id: string, wallet: string, name?: string | null, avatarUrl?: string | null } | null, userB?: { __typename?: 'User', id: string, wallet: string, name?: string | null, avatarUrl?: string | null } | null, postA?: { __typename?: 'Post', id: string, haveSkill: string, wantSkill: string, description?: string | null } | null, postB?: { __typename?: 'Post', id: string, haveSkill: string, wantSkill: string, description?: string | null } | null }> | null } };
+
+export type GetBadgesByWalletQueryVariables = Exact<{
+  input: GetBadgesByWalletInput;
+}>;
+
+
+export type GetBadgesByWalletQuery = { __typename?: 'Query', getBadgesByWallet: Array<{ __typename?: 'SkillBadgeDto', id: string, userId: string, verifierId: string, skillName: string, suiObjectId: string, mintedAt: any }> };
 
 export type DealQueryVariables = Exact<{
   dealId: Scalars['String']['input'];
@@ -587,6 +621,51 @@ export type GetCurrentUserQueryHookResult = ReturnType<typeof useGetCurrentUserQ
 export type GetCurrentUserLazyQueryHookResult = ReturnType<typeof useGetCurrentUserLazyQuery>;
 export type GetCurrentUserSuspenseQueryHookResult = ReturnType<typeof useGetCurrentUserSuspenseQuery>;
 export type GetCurrentUserQueryResult = Apollo.QueryResult<GetCurrentUserQuery, GetCurrentUserQueryVariables>;
+export const GetBadgesByWalletDocument = gql`
+    query GetBadgesByWallet($input: GetBadgesByWalletInput!) {
+  getBadgesByWallet(input: $input) {
+    id
+    userId
+    verifierId
+    skillName
+    suiObjectId
+    mintedAt
+  }
+}
+    `;
+
+/**
+ * __useGetBadgesByWalletQuery__
+ *
+ * To run a query within a React component, call `useGetBadgesByWalletQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetBadgesByWalletQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetBadgesByWalletQuery({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useGetBadgesByWalletQuery(baseOptions: Apollo.QueryHookOptions<GetBadgesByWalletQuery, GetBadgesByWalletQueryVariables> & ({ variables: GetBadgesByWalletQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetBadgesByWalletQuery, GetBadgesByWalletQueryVariables>(GetBadgesByWalletDocument, options);
+      }
+export function useGetBadgesByWalletLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetBadgesByWalletQuery, GetBadgesByWalletQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetBadgesByWalletQuery, GetBadgesByWalletQueryVariables>(GetBadgesByWalletDocument, options);
+        }
+export function useGetBadgesByWalletSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetBadgesByWalletQuery, GetBadgesByWalletQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetBadgesByWalletQuery, GetBadgesByWalletQueryVariables>(GetBadgesByWalletDocument, options);
+        }
+export type GetBadgesByWalletQueryHookResult = ReturnType<typeof useGetBadgesByWalletQuery>;
+export type GetBadgesByWalletLazyQueryHookResult = ReturnType<typeof useGetBadgesByWalletLazyQuery>;
+export type GetBadgesByWalletSuspenseQueryHookResult = ReturnType<typeof useGetBadgesByWalletSuspenseQuery>;
+export type GetBadgesByWalletQueryResult = Apollo.QueryResult<GetBadgesByWalletQuery, GetBadgesByWalletQueryVariables>;
 export const DealDocument = gql`
     query Deal($dealId: String!) {
   deal(dealId: $dealId) {
