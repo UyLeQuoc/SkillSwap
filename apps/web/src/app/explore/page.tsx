@@ -19,6 +19,7 @@ import { Search, Sparkle } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { useEffect, useMemo, useState } from "react"
 import { SkillCard, SkillCardSkeleton } from "@/components/skill-card"
+import { InteractiveGridPattern } from "@/components/magicui/interactive-grid-pattern"
 
 const ITEMS_PER_PAGE = 3 // For demonstration with few items
 
@@ -132,7 +133,11 @@ export default function SkillExchangePage() {
   }
 
   return (
-    <div className="bg-muted/20 min-h-screen">
+    <div className="relative">
+      <div className="opacity-75 -z-50 inset-0 absolute">
+      <InteractiveGridPattern className="w-full h-full" width={75} height={75}/>
+    </div>
+    <div className="bg-muted/20 min-h-screen relative">
       <Header />
       <div className="container mx-auto py-8 px-4 md:px-6 lg:px-8">
         <header className="mb-10 text-center">
@@ -242,6 +247,7 @@ export default function SkillExchangePage() {
           </Pagination>
         )}
       </div>
+    </div>
     </div>
   )
 }
