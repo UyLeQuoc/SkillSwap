@@ -1,5 +1,5 @@
 export const envConfig = () => {
     return {
-        apiUrl: "https://api.goodsdesign.uydev.id.vn",
+        apiUrl: process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000",
     }
 }

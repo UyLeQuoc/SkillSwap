@@ -127,6 +127,7 @@ import { envConfig } from '@/constants/envConfig';
     uri: envConfig().apiUrl + '/graphql',
     fetchOptions: {
       mode: 'cors',
+      credentials: 'include'
     }
   });
   
