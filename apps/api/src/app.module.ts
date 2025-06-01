@@ -9,6 +9,7 @@ import { SuiModule } from "./sui/sui.module"
 import { HelloModule } from "./hello/hello.module"
 import { PrismaModule } from "./prisma/prisma.module"
 import { PostsModule } from "./posts/posts.module"
+import { DealsModule } from "./deals/deals.module"
 
 @Module({
     imports: [
@@ -30,7 +31,7 @@ import { PostsModule } from "./posts/posts.module"
         AuthModule,
         SuiModule,
         PostsModule,
-        // DealsModule,
+        DealsModule,
     ],
 })
 export class AppModule {}

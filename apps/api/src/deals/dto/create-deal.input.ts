@@ -3,17 +3,17 @@ import { IsNotEmpty, IsOptional, IsString } from "class-validator"
 
 @InputType()
 export class CreateDealInput {
-  @Field()
+  @Field(() => String)
   @IsString()
   @IsNotEmpty()
       userBId: string
 
-  @Field()
+  @Field(() => String)
   @IsString()
   @IsNotEmpty()
       postAId: string
 
-  @Field({ nullable: true })
+  @Field(() => String, { nullable: true })
   @IsString()
   @IsOptional()
       postBId?: string

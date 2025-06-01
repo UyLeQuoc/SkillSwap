@@ -2,6 +2,12 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+input CreateDealInput {
+  postAId: String!
+  postBId: String
+  userBId: String!
+}
+
 input CreatePostInput {
   description: String
   haveSkill: String!
@@ -19,6 +25,32 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
+type Deal {
+  completedAt: DateTime
+  createdAt: DateTime!
+  id: String!
+  postAId: String
+  postBId: String
+  status: DealStatus!
+  type: DealType!
+  userAId: String!
+  userBId: String!
+}
+
+"""The status of a deal"""
+enum DealStatus {
+  AGREED
+  CANCELLED
+  COMPLETED
+  PENDING
+}
+
+"""The type of a deal"""
+enum DealType {
+  ITEM_SWAP
+  SKILL_SWAP
+}
+
 input LoginInput {
   message: String!
   signature: String!
@@ -32,6 +64,9 @@ type LoginResponse {
 }
 
 type Mutation {
+  completeDeal(dealId: String!): Deal!
+  confirmDeal(dealId: String!): Deal!
+  createDeal(input: CreateDealInput!): Deal!
   createPost(input: CreatePostInput!): Post!
   createTag(input: CreateTagInput!): PostTag!
   loginWithWallet(input: LoginInput!): LoginResponse!
@@ -72,6 +107,7 @@ enum PostType {
 }
 
 type Query {
+  deal(dealId: String!): Deal!
   getCurrentUser: User!
   hello: String!
   myPosts: [Post!]!
