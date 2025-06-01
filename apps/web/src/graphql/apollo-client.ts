@@ -13,8 +13,6 @@ import { envConfig } from '@/constants/envConfig';
     return {
       headers: {
         ...headers,
-        "Access-Control-Allow-Credentials": true,
-        "Access-Control-Allow-Origin": "*",
         authorization: accessToken ? `Bearer ${accessToken}` : '',
       },
     };
