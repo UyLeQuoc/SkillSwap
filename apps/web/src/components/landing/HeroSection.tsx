@@ -1,12 +1,20 @@
+"use client"
+
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Search, Wallet } from "lucide-react"
 import { RetroGrid } from "../magicui/retro-grid"
 import { useRouter } from "next/navigation"
 import { BoxReveal } from "../magicui/box-reveal"
+import { ConnectModal, useAccounts, useCurrentWallet } from "@mysten/dapp-kit"
+import { useGetCurrentUserQuery } from "@/graphql/generated/graphql"
 
 export function HeroSection() {
   const router = useRouter()
+  const accounts = useAccounts()
+
+  const currentAccount = accounts[0]
+
   return (
     <section>
       <div className="container mx-auto text-center max-w-4xl py-10 pb-0 px-4 z-30">
@@ -28,10 +36,15 @@ export function HeroSection() {
           NFT-based proof of contribution.
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
-          <Button size="lg" className="text-lg px-8 py-6 cursor-pointer z-50" onClick={() => router.push("/")}>
-            <Wallet className="mr-2 h-5 w-5" />
-            Connect Wallet
-          </Button>
+        <ConnectModal
+            trigger={
+              <Button size="lg" className="text-lg px-8 py-6 cursor-pointer z-50" disabled={!!currentAccount}>
+                <Wallet className="mr-2 h-5 w-5" />
+                {currentAccount ? 'Connected' : 'Connect Wallet'}
+              </Button>
+            }
+          />
+          
           <Button size="lg" variant="outline" className="text-lg px-8 py-6 cursor-pointer z-50" onClick={() => router.push("/explore")}>
             <Search className="mr-2 h-5 w-5" />
             Explore Offers

@@ -124,7 +124,7 @@ import { envConfig } from '@/constants/envConfig';
   const httpLink = new HttpLink({
     uri: envConfig().apiUrl + '/graphql',
     fetchOptions: {
-      mode: 'no-cors'
+      mode: 'cors',
     }
   });
   

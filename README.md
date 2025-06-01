@@ -7,7 +7,6 @@ A Web3 peer-to-peer skill and item exchange platform built for people in Ho Chi 
 - 🎯 **Skill Exchange**: Offer your skills or request help from others
 - 🏷️ **Item Trading**: List items for trade or find what you need
 - 📍 **Location-Based**: Connect with people in HCMC
-- 💬 **Real-time Messaging**: Communicate securely with other users
 - ⭐ **NFT SkillBadges**: Earn verifiable skill badges as NFTs
 - 🔒 **Web3 Security**: Secure wallet-based authentication
 - 🌐 **Decentralized**: Built on Sui blockchain
