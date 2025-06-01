@@ -63,7 +63,6 @@ model User {
 
   posts           Post[]
   skillBadges     SkillBadge[] @relation("UserSkillBadges")
-  verifiedBadges  SkillBadge[] @relation("VerifierSkillBadges")
   reviewsGiven    Review[]   @relation("Reviewer")
   reviewsReceived Review[]   @relation("Reviewee")
   dealsAsA        Deal[]     @relation("DealsAsA")
@@ -151,7 +150,4 @@ model SkillBadge {
   mintedAt    DateTime @default(now())
 
   user        User     @relation("UserSkillBadges", fields: [userId], references: [id])
-  verifier    User     @relation("VerifierSkillBadges", fields: [verifierId], references: [id])
-
-  @@index([userId, skillName])
 }

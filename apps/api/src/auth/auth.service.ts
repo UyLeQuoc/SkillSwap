@@ -120,7 +120,6 @@ export class AuthService {
             include: {
                 posts: true,
                 skillBadges: true,
-                verifiedBadges: true,
                 reviewsGiven: true,
                 reviewsReceived: true,
                 dealsAsA: true,

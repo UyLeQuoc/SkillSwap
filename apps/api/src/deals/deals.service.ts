@@ -2,6 +2,7 @@ import { Injectable } from "@nestjs/common"
 import { SuiService } from "../sui/sui.service"
 import { DealStatus, DealType } from "@prisma/client"
 import { PrismaService } from "src/prisma/prisma.service"
+import { envConfig } from "src/dynamic-modules"
 
 @Injectable()
 export class DealsService {
@@ -144,38 +145,37 @@ export class DealsService {
             throw new Error("Only agreed deals can be completed")
         }
 
-        if (deal.reviews.length !== 2) {
-            throw new Error("Both users must submit reviews before completing the deal")
-        }
+        let badgeA: string | null = null
+        let badgeB: string | null = null
 
-        // Mint skill badges for both users
-        const [badgeA, badgeB] = await Promise.all([
-            this.suiService.mintSkillBadge(
+        console.log(deal)
+
+        if(deal.postA?.haveSkill) {
+            badgeA = await this.suiService.mintSkillBadge(
                 deal.userA.wallet,
-                deal.postB?.haveSkill || "",
-            ),
-            this.suiService.mintSkillBadge(deal.userB.wallet, deal.postA?.haveSkill || ""),
-        ])
-
-        // Create skill badge records
-        await Promise.all([
-            this.prisma.skillBadge.create({
+                deal.postA?.haveSkill,
+            )
+            await this.prisma.skillBadge.create({
                 data: {
                     userId: deal.userAId,
-                    verifierId: deal.userBId,
-                    skillName: deal.postB?.haveSkill || "",
+                    verifierId: envConfig().sui.verifier,
+                    skillName: deal.postA?.haveSkill,
                     suiObjectId: badgeA,
                 },
-            }),
-            this.prisma.skillBadge.create({
+            })
+            badgeB = await this.suiService.mintSkillBadge(
+                deal.userB.wallet,
+                deal.postA?.wantSkill,
+            )
+            await this.prisma.skillBadge.create({
                 data: {
-                    userId: deal.userBId,
-                    verifierId: deal.userAId,
-                    skillName: deal.postA?.haveSkill || "",
+                    userId: deal.userAId,
+                    verifierId: envConfig().sui.verifier,
+                    skillName: deal.postA?.wantSkill,
                     suiObjectId: badgeB,
                 },
-            }),
-        ])
+            })
+        }
 
         return this.prisma.deal.update({
             where: { id: dealId },

@@ -73,6 +73,7 @@ export default function DealPage() {
               toast.success("Deal completed successfully!")
               setIsActionDialogOpen(false)
             },
+            refetchQueries: ["Deal"],
           })
           break
         case "cancel":
