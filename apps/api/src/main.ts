@@ -11,8 +11,8 @@ async function bootstrap() {
             "https://api.skillswap.uydev.id.vn",
             "http://localhost:3000", // For local development
         ],
-        credentials: false,
-        methods: "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS",
+        credentials: true, // Enable credentials
+        methods: ["GET", "HEAD", "PUT", "PATCH", "POST", "DELETE", "OPTIONS"],
         allowedHeaders: [
             "Origin",
             "X-Requested-With",

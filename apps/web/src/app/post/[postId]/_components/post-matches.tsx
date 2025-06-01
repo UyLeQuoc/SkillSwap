@@ -7,13 +7,14 @@ import { Skeleton } from "@/components/ui/skeleton"
 import { formatDistanceToNow } from "date-fns"
 import { ArrowRightLeft, Sparkles } from "lucide-react"
 import { DisplayMatch } from "./types"
-
+import { useRouter } from "next/navigation"
 interface PostMatchesProps {
     matches: DisplayMatch[]
     currentPostId: string
 }
 
 export function PostMatches({ matches, currentPostId }: PostMatchesProps) {
+    const router = useRouter()
     if (matches.length === 0) {
         return (
             <div className="text-center py-8">
@@ -50,7 +51,11 @@ export function PostMatches({ matches, currentPostId }: PostMatchesProps) {
                                 <span className="text-muted-foreground">{match.matchedPost.user.wallet}</span>
                             </div>
                         </div>
-                        <Button className="w-full">
+                        <Button className="w-full"
+                            onClick={() => {
+                                router.push(`/post/${match.matchedPost.id}`)
+                            }}
+                        >
                             <ArrowRightLeft className="mr-2 h-4 w-4" /> View Match Details
                         </Button>
                     </CardHeader>
