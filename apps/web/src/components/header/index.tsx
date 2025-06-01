@@ -18,7 +18,7 @@ export const Header = () => {
       loginWithWallet({
         variables: {
           input: {
-              wallet: currentWallet.accounts[0].address || '',
+              wallet: currentWallet.accounts[0]?.address || '',
               message: "Login access to SkillSwap",
               signature: "Login access to SkillSwap",
           },
@@ -46,9 +46,9 @@ export const Header = () => {
             <nav className='flex items-center gap-5'>
               <Link href="/explore">Explore</Link>
               {
-                currentWallet?.accounts[0].address && (
+                currentWallet?.accounts[0]?.address && (
                   <>
-                    <Link href={"/wallet/"+ currentWallet?.accounts[0].address}>Your Profile</Link>
+                    <Link href={"/wallet/"+ currentWallet?.accounts[0]?.address}>Your Profile</Link>
                     <Link href="/deal">Your Deals</Link>
                     <Link href="/create-post">Create Post</Link>
                   </>

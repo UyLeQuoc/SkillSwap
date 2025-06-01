@@ -1,5 +1,5 @@
 "use client"
-import { useParams, useRouter } from "next/navigation"
+import { useParams, useRouter, useSearchParams } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { AlertTriangle, Edit3, PlusCircle } from "lucide-react"
@@ -19,9 +19,12 @@ import { RefreshMatchesButton } from "@/components/refresh-matches-button"
 export default function PostPage() {
   const params = useParams()
   const router = useRouter()
+  const searchParams = useSearchParams()
   const postId = params.postId as string
   const [isProposeDialogOpen, setIsProposeDialogOpen] = useState(false)
   const [selectedDealType, setSelectedDealType] = useState<DealType>(DealType.SkillSwap)
+
+  const fromPostId = searchParams.get('fromPostId')
 
   const { data: postData, loading: postLoading } = usePostQuery({
     variables: {
@@ -58,24 +61,13 @@ export default function PostPage() {
       return
     }
 
-    // Check if there's already an active deal for this post
-    const hasActiveDeal = post?.dealsAsPostA?.some(
-      (deal) => deal.status === "PENDING" || deal.status === "AGREED"
-    ) || post?.dealsAsPostB?.some(
-      (deal) => deal.status === "PENDING" || deal.status === "AGREED"
-    )
-
-    if (hasActiveDeal) {
-      toast.error("This post is already part of an active deal")
-      return
-    }
-
     try {
       await createDeal({
         variables: {
           input: {
-            postAId: postId,
             userBId: post?.user?.id || "",
+            postAId: postId,
+            postBId: fromPostId || null,
           },
         },
         onCompleted: () => {
@@ -214,10 +206,10 @@ export default function PostPage() {
             <TabsTrigger value="deals">Deals ({allDeals.length})</TabsTrigger>
           </TabsList>
           <TabsContent value="matches" className="mt-4">
-            <PostMatches matches={allMatches} currentPostId={post.id} />
+            <PostMatches matches={allMatches} currentPostId={postId} />
           </TabsContent>
           <TabsContent value="deals" className="mt-4">
-            <PostDeals deals={allDeals} currentPostId={post.id} />
+            <PostDeals deals={allDeals} currentPostId={postId} />
           </TabsContent>
         </Tabs>
       </div>

@@ -242,3 +242,10 @@ mutation CancelDeal($dealId: String!) {
     status
   }
 }
+
+mutation CompleteDeal($dealId: String!) {
+  completeDeal(dealId: $dealId) {
+    id
+    status
+  }
+}

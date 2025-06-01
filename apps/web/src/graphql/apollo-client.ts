@@ -14,6 +14,7 @@ import { envConfig } from '@/constants/envConfig';
       headers: {
         ...headers,
         authorization: accessToken ? `Bearer ${accessToken}` : '',
+
       },
     };
   });
@@ -121,10 +122,6 @@ import { envConfig } from '@/constants/envConfig';
 //     },
 //   );
   
-  const httpLink = new HttpLink({
-    uri: envConfig().apiUrl + '/graphql',
-  });
-  
   export const defaultOptions: DefaultOptions = {
     watchQuery: {
       fetchPolicy: 'no-cache',
@@ -138,7 +135,12 @@ import { envConfig } from '@/constants/envConfig';
   
   const client = new ApolloClient({
     cache: new InMemoryCache(),
-    link: authLink.concat(httpLink),
+    link: new HttpLink({
+      uri: envConfig().apiUrl + '/graphql',
+      fetchOptions: {
+        mode: 'no-cors'
+    }
+    }),
     defaultOptions,
   });
   

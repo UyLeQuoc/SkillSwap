@@ -53,7 +53,7 @@ export function PostMatches({ matches, currentPostId }: PostMatchesProps) {
                         </div>
                         <Button className="w-full"
                             onClick={() => {
-                                router.push(`/post/${match.matchedPost.id}`)
+                                router.push(`/post/${match.matchedPost.id}?fromPostId=${currentPostId}`)
                             }}
                         >
                             <ArrowRightLeft className="mr-2 h-4 w-4" /> View Match Details

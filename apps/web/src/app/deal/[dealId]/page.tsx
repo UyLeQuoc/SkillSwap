@@ -2,7 +2,7 @@
 import { useParams, useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { AlertTriangle, CheckCircle2, XCircle } from "lucide-react"
-import { useDealQuery, useAcceptDealMutation, useRejectDealMutation, useCancelDealMutation } from "@/graphql/generated/graphql"
+import { useDealQuery, useAcceptDealMutation, useRejectDealMutation, useCancelDealMutation, useCompleteDealMutation } from "@/graphql/generated/graphql"
 import { Header } from "@/components/header"
 import { toast } from "sonner"
 import { useAccounts } from "@mysten/dapp-kit"
@@ -27,7 +27,7 @@ export default function DealPage() {
 
   const [acceptDeal] = useAcceptDealMutation()
   const [rejectDeal] = useRejectDealMutation()
-  // const [completeDeal] = useCompleteDealMutation()
+  const [completeDeal] = useCompleteDealMutation()
   const [cancelDeal] = useCancelDealMutation()
 
   const accounts = useAccounts()

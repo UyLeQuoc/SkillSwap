@@ -117,6 +117,7 @@ export type Mutation = {
   __typename?: 'Mutation';
   acceptDeal: Deal;
   cancelDeal: Deal;
+  completeDeal: Deal;
   createDeal: Deal;
   createPost: Post;
   createTag: PostTag;
@@ -136,6 +137,11 @@ export type MutationAcceptDealArgs = {
 
 
 export type MutationCancelDealArgs = {
+  dealId: Scalars['String']['input'];
+};
+
+
+export type MutationCompleteDealArgs = {
   dealId: Scalars['String']['input'];
 };
 
@@ -366,6 +372,13 @@ export type CancelDealMutationVariables = Exact<{
 
 
 export type CancelDealMutation = { __typename?: 'Mutation', cancelDeal: { __typename?: 'Deal', id: string, status: DealStatus } };
+
+export type CompleteDealMutationVariables = Exact<{
+  dealId: Scalars['String']['input'];
+}>;
+
+
+export type CompleteDealMutation = { __typename?: 'Mutation', completeDeal: { __typename?: 'Deal', id: string, status: DealStatus } };
 
 export type RefreshMatchesMutationVariables = Exact<{
   postId: Scalars['ID']['input'];
@@ -1002,6 +1015,40 @@ export function useCancelDealMutation(baseOptions?: Apollo.MutationHookOptions<C
 export type CancelDealMutationHookResult = ReturnType<typeof useCancelDealMutation>;
 export type CancelDealMutationResult = Apollo.MutationResult<CancelDealMutation>;
 export type CancelDealMutationOptions = Apollo.BaseMutationOptions<CancelDealMutation, CancelDealMutationVariables>;
+export const CompleteDealDocument = gql`
+    mutation CompleteDeal($dealId: String!) {
+  completeDeal(dealId: $dealId) {
+    id
+    status
+  }
+}
+    `;
+export type CompleteDealMutationFn = Apollo.MutationFunction<CompleteDealMutation, CompleteDealMutationVariables>;
+
+/**
+ * __useCompleteDealMutation__
+ *
+ * To run a mutation, you first call `useCompleteDealMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCompleteDealMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [completeDealMutation, { data, loading, error }] = useCompleteDealMutation({
+ *   variables: {
+ *      dealId: // value for 'dealId'
+ *   },
+ * });
+ */
+export function useCompleteDealMutation(baseOptions?: Apollo.MutationHookOptions<CompleteDealMutation, CompleteDealMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CompleteDealMutation, CompleteDealMutationVariables>(CompleteDealDocument, options);
+      }
+export type CompleteDealMutationHookResult = ReturnType<typeof useCompleteDealMutation>;
+export type CompleteDealMutationResult = Apollo.MutationResult<CompleteDealMutation>;
+export type CompleteDealMutationOptions = Apollo.BaseMutationOptions<CompleteDealMutation, CompleteDealMutationVariables>;
 export const RefreshMatchesDocument = gql`
     mutation RefreshMatches($postId: ID!) {
   refreshMatches(postId: $postId) {
