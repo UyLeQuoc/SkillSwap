@@ -6,7 +6,10 @@ async function bootstrap() {
 
     // Configure CORS with specific options
     app.enableCors({
-        origin: true, // This allows all origins and will reflect the request origin
+        origin: [
+            "https://skillswap.uydev.id.vn",
+            "http://localhost:3000", // For local development
+        ],
         credentials: true,
         methods: "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS",
         allowedHeaders: [
