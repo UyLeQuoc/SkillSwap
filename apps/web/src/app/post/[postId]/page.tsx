@@ -8,6 +8,7 @@ import { PostDetails, PostDetailsSkeleton } from "./_components/post-details"
 import { PostMatches, PostMatchesSkeleton } from "./_components/post-matches"
 import { PostDeals, PostDealsSkeleton } from "./_components/post-deals"
 import { DisplayDeal, DisplayMatch, FullPost } from "./_components/types"
+import { Header } from "@/components/header"
 
 export default function PostPage() {
   const params = useParams()
@@ -100,35 +101,38 @@ export default function PostPage() {
   ]
 
   return (
-    <div className="container mx-auto p-4 md:p-6 lg:p-8 max-w-4xl">
-      <div className="flex flex-col sm:flex-row justify-between sm:items-center mb-6 gap-4">
-        <h1 className="text-2xl sm:text-3xl font-bold truncate" title={post.wantSkill || "Post Details"}>
-          {post.wantSkill || "Post Details"}
-        </h1>
-        <div className="flex gap-2 flex-shrink-0">
-          <Button variant="outline" onClick={handleUpdatePost}>
-            <Edit3 className="mr-2 h-4 w-4" /> Update Post
-          </Button>
-          <Button onClick={handleProposeDeal}>
-            <PlusCircle className="mr-2 h-4 w-4" /> Propose Deal
-          </Button>
+    <div className="relative">
+      <Header />
+      <div className="container mx-auto p-4 md:p-6 lg:p-8 max-w-4xl">
+        <div className="flex flex-col sm:flex-row justify-between sm:items-center mb-6 gap-4">
+          <h1 className="text-2xl sm:text-3xl font-bold truncate" title={post.wantSkill || "Post Details"}>
+            {post.wantSkill || "Post Details"}
+          </h1>
+          <div className="flex gap-2 flex-shrink-0">
+            <Button variant="outline" onClick={handleUpdatePost}>
+              <Edit3 className="mr-2 h-4 w-4" /> Update Post
+            </Button>
+            <Button onClick={handleProposeDeal}>
+              <PlusCircle className="mr-2 h-4 w-4" /> Propose Deal
+            </Button>
+          </div>
         </div>
+
+        <PostDetails post={post} />
+
+        <Tabs defaultValue="matches" className="mt-8">
+          <TabsList className="grid w-full grid-cols-2">
+            <TabsTrigger value="matches">Matches ({allMatches.length})</TabsTrigger>
+            <TabsTrigger value="deals">Deals ({allDeals.length})</TabsTrigger>
+          </TabsList>
+          <TabsContent value="matches" className="mt-4">
+            <PostMatches matches={allMatches} currentPostId={post.id} />
+          </TabsContent>
+          <TabsContent value="deals" className="mt-4">
+            <PostDeals deals={allDeals} currentPostId={post.id} />
+          </TabsContent>
+        </Tabs>
       </div>
-
-      <PostDetails post={post} />
-
-      <Tabs defaultValue="matches" className="mt-8">
-        <TabsList className="grid w-full grid-cols-2">
-          <TabsTrigger value="matches">Matches ({allMatches.length})</TabsTrigger>
-          <TabsTrigger value="deals">Deals ({allDeals.length})</TabsTrigger>
-        </TabsList>
-        <TabsContent value="matches" className="mt-4">
-          <PostMatches matches={allMatches} currentPostId={post.id} />
-        </TabsContent>
-        <TabsContent value="deals" className="mt-4">
-          <PostDeals deals={allDeals} currentPostId={post.id} />
-        </TabsContent>
-      </Tabs>
     </div>
   )
 }
