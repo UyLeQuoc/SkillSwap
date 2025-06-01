@@ -14,7 +14,6 @@ export function HeroSection() {
   const accounts = useAccounts()
 
   const currentAccount = accounts[0]
-
   return (
     <section>
       <div className="container mx-auto text-center max-w-4xl py-10 pb-0 px-4 z-30">

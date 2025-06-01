@@ -1,6 +1,5 @@
 "use client"
 
-import { useCurrentWallet } from "@mysten/dapp-kit"
 import { Header } from "@/components/header"
 import { HeroSection } from "@/components/landing/HeroSection"
 import { WhySkillSwapSection } from "@/components/landing/WhySkillSwapSection"
