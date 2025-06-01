@@ -8,6 +8,7 @@ import { CurrentUser } from "../auth/decorators/current-user.decorator";
 import { User } from "../users/entities/user.entity";
 import { GraphqlJwtAuthGuard } from "src/auth/guards/graphql-jwt-auth.guard";
 import { PostTag } from "./entities/post-tag.entity";
+import { MatchingSuggestion } from "./entities/matching-suggestion.entity";
 
 @Resolver(() => Post)
 export class PostsResolver {
@@ -75,5 +76,18 @@ export class PostsResolver {
         @Args("input") createTagInput: CreateTagInput,
     ) {
         return this.postsService.createTag(createTagInput);
+    }
+
+    @Mutation(() => [MatchingSuggestion])
+    @UseGuards(GraphqlJwtAuthGuard)
+    async refreshMatches(
+        @Args("postId", { type: () => ID }) postId: string,
+        @CurrentUser() user: User,
+    ) {
+        const post = await this.postsService.findOne(postId);
+        if (post.userId !== user.id) {
+            throw new Error("Not authorized to refresh matches for this post");
+        }
+        return this.postsService.refreshMatches(postId);
     }
 } 

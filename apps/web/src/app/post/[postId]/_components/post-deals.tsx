@@ -7,13 +7,14 @@ import { Skeleton } from "@/components/ui/skeleton"
 import { formatDistanceToNow } from "date-fns"
 import { ArrowRightLeft, Briefcase, CheckCircle, Clock, Star, XCircle } from "lucide-react"
 import { DisplayDeal } from "./types"
-
+import { useRouter } from "next/navigation"
 interface PostDealsProps {
     deals: DisplayDeal[]
     currentPostId: string
 }
 
 export function PostDeals({ deals, currentPostId }: PostDealsProps) {
+    const router = useRouter()
     if (deals.length === 0) {
         return (
             <div className="text-center py-8">
@@ -71,7 +72,11 @@ export function PostDeals({ deals, currentPostId }: PostDealsProps) {
                                 </div>
                             )}
                         </div>
-                        <Button className="w-full">
+                        <Button className="w-full"
+                            onClick={() => {
+                                router.push(`/deal/${deal.id}`)
+                            }}
+                        >
                             <ArrowRightLeft className="mr-2 h-4 w-4" /> View Deal Details
                         </Button>
                     </CardHeader>

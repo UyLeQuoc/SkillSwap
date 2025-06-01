@@ -32,7 +32,7 @@ export function PostMatches({ matches, currentPostId }: PostMatchesProps) {
                     <CardHeader className="space-y-4">
                         <div className="flex items-center justify-between">
                             <div className="flex items-center gap-2">
-                                <Badge variant="outline">Match Score: {match.score}%</Badge>
+                                <Badge variant="outline">Match Score: {match.score ? `${match.score * 100}%` : 'N/A'}</Badge>
                                 <Badge variant="secondary">{match.method}</Badge>
                             </div>
                             <span className="text-sm text-muted-foreground">

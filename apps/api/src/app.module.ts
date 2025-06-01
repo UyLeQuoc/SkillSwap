@@ -11,6 +11,7 @@ import { PrismaModule } from "./prisma/prisma.module"
 import { PostsModule } from "./posts/posts.module"
 import { DealsModule } from "./deals/deals.module"
 import { UsersModule } from "./users/users.module"
+import { MatchingModule } from "./matching/matching.module"
 
 @Module({
     imports: [
@@ -33,7 +34,8 @@ import { UsersModule } from "./users/users.module"
         SuiModule,
         PostsModule,
         DealsModule,
-        UsersModule
+        UsersModule,
+        MatchingModule
     ],
 })
 export class AppModule {}

@@ -13,8 +13,8 @@ import { toast } from "sonner"
 import { useAccounts } from "@mysten/dapp-kit"
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { useState } from "react"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { DealType } from "@/graphql/generated/graphql"
+import { RefreshMatchesButton } from "@/components/refresh-matches-button"
 
 export default function PostPage() {
   const params = useParams()
@@ -177,9 +177,12 @@ export default function PostPage() {
           </h1>
           <div className="flex gap-2 flex-shrink-0">
             {isAuthorized && isOwner && (
-              <Button variant="outline" onClick={handleUpdatePost} disabled={updateLoading}>
-                <Edit3 className="mr-2 h-4 w-4" /> Update Post
-              </Button>
+              <>
+                <RefreshMatchesButton postId={post.id} />
+                <Button variant="outline" onClick={handleUpdatePost} disabled={updateLoading}>
+                  <Edit3 className="mr-2 h-4 w-4" /> Update Post
+                </Button>
+              </>
             )}
             {isAuthorized && !isOwner && (
               <Dialog open={isProposeDialogOpen} onOpenChange={setIsProposeDialogOpen}>

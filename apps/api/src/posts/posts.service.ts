@@ -6,10 +6,14 @@ import { Post } from "./entities/post.entity";
 import { PostStatus } from "@prisma/client";
 import { PostTag } from "./entities/post-tag.entity";
 import { User } from "../users/entities/user.entity";
+import { MatchingService } from "../matching/matching.service";
 
 @Injectable()
 export class PostsService {
-    constructor(private prisma: PrismaService) {}
+    constructor(
+        private prisma: PrismaService,
+        private matchingService: MatchingService,
+    ) {}
 
     async create(createPostInput: CreatePostInput, user: User) {
         const { tags, ...postData } = createPostInput;
@@ -29,6 +33,14 @@ export class PostsService {
                 tags: true,
             },
         });
+
+        // Generate matches for the new post
+        try {
+            await this.matchingService.generateMatches(post);
+        } catch (error) {
+            console.error("Error generating matches:", error);
+            // Continue even if matching fails
+        }
 
         return new Post(post);
     }
@@ -209,5 +221,23 @@ export class PostsService {
             }
         })
         return new PostTag(tag)
+    }
+
+    async refreshMatches(postId: string) {
+        const post = await this.prisma.post.findUnique({
+            where: { id: postId },
+        });
+
+        if (!post) {
+            throw new Error("Post not found");
+        }
+
+        // Clean existing GPT/EMBEDDING matches
+        await this.matchingService.cleanExistingMatches(postId);
+
+        // Generate new matches
+        const matches = await this.matchingService.generateMatches(post);
+
+        return matches;
     }
 } 
