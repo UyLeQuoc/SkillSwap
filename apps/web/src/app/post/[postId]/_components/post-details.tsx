@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import { Skeleton } from "@/components/ui/skeleton"
 import { formatDistanceToNow } from "date-fns"
 import { FullPost } from "./types"
+import { PostStatus } from "@/graphql/generated/graphql"
 
 interface PostDetailsProps {
     post: FullPost
@@ -15,7 +16,7 @@ export function PostDetails({ post }: PostDetailsProps) {
                 <div className="flex flex-col gap-2">
                     <div className="flex items-center gap-2">
                         <Badge variant="outline">{post.type}</Badge>
-                        <Badge variant={post.status === "ACTIVE" ? "default" : "secondary"}>{post.status}</Badge>
+                        <Badge variant={post.status === PostStatus.Active ? "default" : "secondary"}>{post.status}</Badge>
                     </div>
                     <div className="flex flex-col gap-1">
                         <h2 className="text-xl font-semibold">Offering: {post.haveSkill}</h2>

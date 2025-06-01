@@ -75,7 +75,7 @@ export default function PostPage() {
         variables: {
           input: {
             postAId: postId,
-            userBId: userData.getCurrentUser.id,
+            userBId: post?.user?.id || "",
           },
         },
         onCompleted: () => {
@@ -85,13 +85,7 @@ export default function PostPage() {
         onError: (error) => {
           console.error("Error proposing deal:", error)
           const errorMessage = error.message.toLowerCase()
-          if (errorMessage.includes("already exists")) {
-            toast.error("You already have an active deal with this user")
-          } else if (errorMessage.includes("already part of")) {
-            toast.error("This post is already part of an active deal")
-          } else {
-            toast.error(error.message || "Error proposing deal. Please try again.")
-          }
+          toast.error(errorMessage)
         },
         refetchQueries: ["GetCurrentUser", "Post"],
       })

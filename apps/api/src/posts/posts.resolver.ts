@@ -78,7 +78,7 @@ export class PostsResolver {
         return this.postsService.createTag(createTagInput);
     }
 
-    @Mutation(() => [MatchingSuggestion])
+    @Mutation(() => Post)
     @UseGuards(GraphqlJwtAuthGuard)
     async refreshMatches(
         @Args("postId", { type: () => ID }) postId: string,

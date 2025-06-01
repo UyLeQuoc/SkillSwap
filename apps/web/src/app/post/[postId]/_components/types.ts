@@ -1,6 +1,7 @@
 import { PostStatus, PostType, DealStatus, DealType } from "@/graphql/generated/graphql"
 
 export interface User {
+    id: string
     wallet: string
 }
 

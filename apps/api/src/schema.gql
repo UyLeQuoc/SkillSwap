@@ -100,11 +100,12 @@ type MatchingSuggestion {
 type Mutation {
   acceptDeal(dealId: String!): Deal!
   cancelDeal(dealId: String!): Deal!
+  completeDeal(dealId: String!): Deal!
   createDeal(input: CreateDealInput!): Deal!
   createPost(input: CreatePostInput!): Post!
   createTag(input: CreateTagInput!): PostTag!
   loginWithWallet(input: LoginInput!): LoginResponse!
-  refreshMatches(postId: ID!): [MatchingSuggestion!]!
+  refreshMatches(postId: ID!): Post!
   refreshTokens(input: RefreshTokenInput!): LoginResponse!
   rejectDeal(dealId: String!): Deal!
   removePost(id: ID!): Post!

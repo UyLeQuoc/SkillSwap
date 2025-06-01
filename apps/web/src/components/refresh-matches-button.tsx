@@ -34,9 +34,19 @@ export function RefreshMatchesButton({ postId, onMatchesRefreshed }: RefreshMatc
         variables: {
           postId: postId,
         },
+        refetchQueries: ["Post"],
+        onCompleted: () => {
+          setIsRefreshing(false)
+          toast.success("Matches refreshed successfully")
+          onMatchesRefreshed?.()
+        },
+        onError: (error) => {
+          setIsRefreshing(false)
+          toast.error("Failed to refresh matches: " + error.message)
+        },
       })
     } catch (error) {
-      // Error is handled in onError callback
+      setIsRefreshing(false)
     }
   }
 

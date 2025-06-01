@@ -121,7 +121,7 @@ export type Mutation = {
   createPost: Post;
   createTag: PostTag;
   loginWithWallet: LoginResponse;
-  refreshMatches: Array<MatchingSuggestion>;
+  refreshMatches: Post;
   refreshTokens: LoginResponse;
   rejectDeal: Deal;
   removePost: Post;
@@ -372,7 +372,7 @@ export type RefreshMatchesMutationVariables = Exact<{
 }>;
 
 
-export type RefreshMatchesMutation = { __typename?: 'Mutation', refreshMatches: Array<{ __typename?: 'MatchingSuggestion', id: string, sourcePostId: string, targetPostId: string, method: MatchMethod, score?: number | null, createdAt: any, sourcePost: { __typename?: 'Post', id: string, haveSkill: string, wantSkill: string, description?: string | null, createdAt: any, status: PostStatus, type: PostType, user?: { __typename?: 'User', wallet: string } | null, tags?: Array<{ __typename?: 'PostTag', name: string }> | null }, targetPost: { __typename?: 'Post', id: string, haveSkill: string, wantSkill: string, description?: string | null, createdAt: any, status: PostStatus, type: PostType, user?: { __typename?: 'User', wallet: string } | null, tags?: Array<{ __typename?: 'PostTag', name: string }> | null } }> };
+export type RefreshMatchesMutation = { __typename?: 'Mutation', refreshMatches: { __typename?: 'Post', id: string } };
 
 export type PostsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -1006,41 +1006,6 @@ export const RefreshMatchesDocument = gql`
     mutation RefreshMatches($postId: ID!) {
   refreshMatches(postId: $postId) {
     id
-    sourcePostId
-    targetPostId
-    method
-    score
-    createdAt
-    sourcePost {
-      id
-      haveSkill
-      wantSkill
-      description
-      createdAt
-      user {
-        wallet
-      }
-      status
-      tags {
-        name
-      }
-      type
-    }
-    targetPost {
-      id
-      haveSkill
-      wantSkill
-      description
-      createdAt
-      user {
-        wallet
-      }
-      status
-      tags {
-        name
-      }
-      type
-    }
   }
 }
     `;

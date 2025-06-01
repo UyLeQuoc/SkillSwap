@@ -53,6 +53,7 @@ export default function DealPage() {
               toast.success("Deal accepted successfully!")
               setIsActionDialogOpen(false)
             },
+            refetchQueries: ["Deal"],
           })
           break
         case "reject":
@@ -62,16 +63,17 @@ export default function DealPage() {
               toast.success("Deal rejected")
               setIsActionDialogOpen(false)
             },
+            refetchQueries: ["Deal"],
           })
           break
         case "complete":
-          // await completeDeal({
-          //   variables: { dealId },
-          //   onCompleted: () => {
-          //     toast.success("Deal completed successfully!")
-          //     setIsActionDialogOpen(false)
-          //   },
-          // })
+          await completeDeal({
+            variables: { dealId },
+            onCompleted: () => {
+              toast.success("Deal completed successfully!")
+              setIsActionDialogOpen(false)
+            },
+          })
           break
         case "cancel":
           await cancelDeal({
@@ -80,6 +82,7 @@ export default function DealPage() {
               toast.success("Deal cancelled")
               setIsActionDialogOpen(false)
             },
+            refetchQueries: ["Deal"],
           })
           break
       }

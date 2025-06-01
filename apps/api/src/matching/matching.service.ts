@@ -27,91 +27,97 @@ export class MatchingService {
         })
     }
 
-    private async checkMatch(post1: Post, post2: Post): Promise<number | null> {
-        try {
-            const prompt = `Analyze these two skill swap posts and rate their compatibility on a scale of 0 to 1 (where 1 is perfect match):
-
-Post 1:
-- Has skill: "${post1.haveSkill}"
-- Wants to learn: "${post1.wantSkill}"
-- Description: "${post1.description || "No description provided"}"
-
-Post 2:
-- Has skill: "${post2.haveSkill}"
-- Wants to learn: "${post2.wantSkill}"
-- Description: "${post2.description || "No description provided"}"
-
-Consider the following factors:
-1. Direct skill match: How well do the skills they have match what the other wants to learn?
-2. Skill level compatibility: Are the skills at similar levels of expertise?
-3. Learning potential: How well can each person teach their skill to the other?
-4. Interest alignment: How interested would each person be in learning the other's skill?
-
-IMPORTANT: Respond with ONLY the score number between 0 and 1 (e.g., 0.85). Do not include any other text or explanation.`
-
-            const response = await this.openai.completions.create({
-                model: "gpt-3.5-turbo-instruct",
-                prompt: prompt,
-                max_tokens: 10,
-                temperature: 0.3,
-            })
-
-            const answer = response.choices[0].text?.toLowerCase().trim()
-            console.log("answer", answer)
-            if (!answer) return null
-
-            // Extract score from response - now just looking for a number
-            const scoreMatch = answer.match(/([0-9]*[.]?[0-9]+)/)
-            if (!scoreMatch) return null
-
-            const score = parseFloat(scoreMatch[1])
-            return isNaN(score) ? null : score
-        } catch (error) {
-            console.error("Error checking match with OpenAI:", error)
-            return null
-        }
-    }
-
-    async generateMatches(post: Post) {
-        // Get all active posts except the current one
+    async generateMatches(post: Post & { tags?: { name: string }[] }) {
+        // Get 10 potential posts (can adjust filter logic as needed)
         const otherPosts = await this.prisma.post.findMany({
             where: {
                 id: { not: post.id },
                 status: "ACTIVE",
+                userId: { not: post.userId },
             },
             include: {
                 user: true,
+                tags: true,
             },
+            take: 10,
         })
 
-        const matches = []
+        if (otherPosts.length === 0) return []
 
-        for (const otherPost of otherPosts) {
-            // Check if there's a potential match and get score
-            const score = await this.checkMatch(post, otherPost)
-      
-            if (score !== null && score > 0.5) { // Only consider matches with score > 0.5
-                matches.push({
-                    sourcePostId: post.id,
-                    targetPostId: otherPost.id,
-                    method: MatchMethod.GPT,
-                    score: score,
-                })
+        // Build batch prompt
+        const prompt = `You are a skill matching system. Below is 1 source post and 10 target posts. For each target post, analyze the compatibility with the source post and rate it from 0 to 1 (where 1 is a perfect match). Consider the following factors:
+1. Direct skill match: How well do the skills they have match what the other wants to learn?
+2. If their skill is a job (e.g., Developer), they can perform related tasks (e.g., web design, app design) for all professions.
+3. Tag compatibility: How well do the tags of the posts align with each other?
+
+Return ONLY a JSON array in the following format:
+[
+  {"targetPostId": "id1", "score": 0.8},
+  {"targetPostId": "id2", "score": 0.6},
+  ...
+]
+
+Source Post:
+- Has skill: "${post.haveSkill}"
+- Wants to learn: "${post.wantSkill}"
+- Description: "${post.description || "No description provided"}"
+- Tags: ${post.tags?.map((tag: { name: string }) => tag.name).join(", ") || "None"}
+
+${otherPosts.map((p, i) => `Target Post ${i+1}:
+- ID: "${p.id}"
+- Has skill: "${p.haveSkill}"
+- Wants to learn: "${p.wantSkill}"
+- Description: "${p.description || "No description provided"}"
+- Tags: ${p.tags?.map((tag: { name: string }) => tag.name).join(", ") || "None"}
+`).join("\n")}
+
+Return ONLY the JSON array as shown above.`
+
+        const response = await this.openai.completions.create({
+            model: "gpt-3.5-turbo-instruct",
+            prompt: prompt,
+            max_tokens: 500,
+            temperature: 0.3,
+        })
+
+        const answer = response.choices[0].text?.trim()
+
+        console.log(answer + "\n\n")
+        if (!answer) return []
+
+        let scores: { targetPostId: string, score: number }[] = []
+        try {
+            // Tìm đoạn JSON trong câu trả lời
+            const jsonMatch = answer.match(/\[.*\]/s)
+            if (jsonMatch) {
+                scores = JSON.parse(jsonMatch[0])
+            } else {
+                scores = JSON.parse(answer)
             }
+        } catch {
+            console.error("Could not parse AI batch match result:", answer)
+            return []
         }
 
-        // Sort matches by score in descending order and take top 3
-        const topMatches = matches
-            .sort((a, b) => b.score - a.score)
-            .slice(0, 3)
+        // Lọc các match có score > 0.5
+        const validMatches = scores.filter(m => typeof m.score === "number" && m.score > 0.5)
+        // Sắp xếp và lấy top 3
+        const topMatches = validMatches.sort((a, b) => b.score - a.score).slice(0, 3)
 
-        // Create matches in database
-        if (topMatches.length > 0) {
+        // Tạo dữ liệu để lưu vào DB
+        const matchData = topMatches.map(m => ({
+            sourcePostId: post.id,
+            targetPostId: m.targetPostId,
+            method: MatchMethod.GPT,
+            score: m.score,
+        }))
+
+        if (matchData.length > 0) {
             await this.prisma.matchingSuggestion.createMany({
-                data: topMatches,
+                data: matchData,
             })
         }
 
-        return topMatches
+        return matchData
     }
 } 

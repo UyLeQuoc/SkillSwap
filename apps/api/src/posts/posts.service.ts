@@ -236,8 +236,8 @@ export class PostsService {
         await this.matchingService.cleanExistingMatches(postId);
 
         // Generate new matches
-        const matches = await this.matchingService.generateMatches(post);
+        await this.matchingService.generateMatches(post);
 
-        return matches;
+        return new Post(post);
     }
 } 

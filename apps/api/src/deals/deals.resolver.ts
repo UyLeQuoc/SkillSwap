@@ -54,4 +54,12 @@ export class DealsResolver {
   ) {
       return this.dealsService.cancelDeal(dealId, user.id)
   }
+
+  @Mutation(() => Deal)
+  async completeDeal(
+    @Args("dealId") dealId: string,
+    @CurrentUser() user: { id: string },
+  ) {
+      return this.dealsService.completeDeal(dealId, user.id)
+  }
 }

@@ -62,10 +62,6 @@ export class DealsService {
             },
         })
 
-        if (existingPostDeal) {
-            throw new Error("One or both posts are already part of an active deal")
-        }
-
         return this.prisma.deal.create({
             data: {
                 userAId,
