@@ -17,50 +17,50 @@ export class DealsService {
         postBId?: string,
     ) {
         // Check for existing active deals between these users
-        const existingDeal = await this.prisma.deal.findFirst({
-            where: {
-                OR: [
-                    {
-                        userAId,
-                        userBId,
-                        status: {
-                            in: [DealStatus.PENDING, DealStatus.AGREED],
-                        },
-                    },
-                    {
-                        userAId: userBId,
-                        userBId: userAId,
-                        status: {
-                            in: [DealStatus.PENDING, DealStatus.AGREED],
-                        },
-                    },
-                ],
-            },
-        })
+        // const existingDeal = await this.prisma.deal.findFirst({
+        //     where: {
+        //         OR: [
+        //             {
+        //                 userAId,
+        //                 userBId,
+        //                 status: {
+        //                     in: [DealStatus.PENDING, DealStatus.AGREED],
+        //                 },
+        //             },
+        //             {
+        //                 userAId: userBId,
+        //                 userBId: userAId,
+        //                 status: {
+        //                     in: [DealStatus.PENDING, DealStatus.AGREED],
+        //                 },
+        //             },
+        //         ],
+        //     },
+        // })
 
-        if (existingDeal) {
-            throw new Error("An active deal already exists between these users")
-        }
+        // if (existingDeal) {
+        //     throw new Error("An active deal already exists between these users")
+        // }
 
         // Check if either post is already part of an active deal
-        const existingPostDeal = await this.prisma.deal.findFirst({
-            where: {
-                OR: [
-                    {
-                        postAId,
-                        status: {
-                            in: [DealStatus.PENDING, DealStatus.AGREED],
-                        },
-                    },
-                    {
-                        postBId,
-                        status: {
-                            in: [DealStatus.PENDING, DealStatus.AGREED],
-                        },
-                    },
-                ],
-            },
-        })
+        // const existingPostDeal = await this.prisma.deal.findFirst({
+        //     where: {
+        //         OR: [
+        //             {
+        //                 postAId,
+        //                 status: {
+        //                     in: [DealStatus.PENDING, DealStatus.AGREED],
+        //                 },
+        //             },
+        //             {
+        //                 postBId,
+        //                 status: {
+        //                     in: [DealStatus.PENDING, DealStatus.AGREED],
+        //                 },
+        //             },
+        //         ],
+        //     },
+        // })
 
         return this.prisma.deal.create({
             data: {
