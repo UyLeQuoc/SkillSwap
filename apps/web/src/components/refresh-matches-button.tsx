@@ -1,52 +1,8 @@
-import { Button } from "./ui/button"
+import { useRefreshMatchesMutation } from "@/graphql/generated/graphql"
 import { RefreshCw } from "lucide-react"
-import { useMutation } from "@apollo/client"
-import { gql } from "@apollo/client"
 import { useState } from "react"
 import { toast } from "sonner"
-
-const REFRESH_MATCHES = gql`
-  mutation RefreshMatches($postId: ID!) {
-    refreshMatches(postId: $postId) {
-      id
-      sourcePostId
-      targetPostId
-      method
-      score
-      createdAt
-      sourcePost {
-        id
-        haveSkill
-        wantSkill
-        description
-        createdAt
-        user {
-          wallet
-        }
-        status
-        tags {
-          name
-        }
-        type
-      }
-      targetPost {
-        id
-        haveSkill
-        wantSkill
-        description
-        createdAt
-        user {
-          wallet
-        }
-        status
-        tags {
-          name
-        }
-        type
-      }
-    }
-  }
-`
+import { Button } from "./ui/button"
 
 interface RefreshMatchesButtonProps {
   postId: string
@@ -56,7 +12,7 @@ interface RefreshMatchesButtonProps {
 export function RefreshMatchesButton({ postId, onMatchesRefreshed }: RefreshMatchesButtonProps) {
   const [isRefreshing, setIsRefreshing] = useState(false)
 
-  const [refreshMatches] = useMutation(REFRESH_MATCHES, {
+  const [refreshMatches, { loading }] = useRefreshMatchesMutation({
     onCompleted: (data) => {
       setIsRefreshing(false)
       toast.success(`Found ${data.refreshMatches.length} new matches!`)
@@ -70,11 +26,13 @@ export function RefreshMatchesButton({ postId, onMatchesRefreshed }: RefreshMatc
   })
 
   const handleRefresh = async () => {
+    toast.success("Refreshing matches: " + postId)
+
     setIsRefreshing(true)
     try {
       await refreshMatches({
         variables: {
-          postId,
+          postId: postId,
         },
       })
     } catch (error) {

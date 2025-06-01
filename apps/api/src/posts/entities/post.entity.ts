@@ -1,4 +1,4 @@
-import { Field, ObjectType, registerEnumType } from "@nestjs/graphql"
+import { Field, ID, ObjectType, registerEnumType } from "@nestjs/graphql"
 import { PostStatus, PostType, Post as PrismaPost } from "@prisma/client"
 import { User } from "../../users/entities/user.entity"
 import { PostTag } from "./post-tag.entity"
@@ -17,7 +17,7 @@ registerEnumType(PostType, {
 
 @ObjectType()
 export class Post implements PrismaPost {
-    @Field(() => String)
+    @Field(() => ID)
     id: string
 
     @Field(() => String)

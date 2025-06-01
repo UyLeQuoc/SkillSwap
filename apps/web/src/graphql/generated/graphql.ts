@@ -93,7 +93,6 @@ export type LoginResponse = {
   user: User;
 };
 
-/** The method used to match posts */
 export enum MatchMethod {
   Embedding = 'EMBEDDING',
   Exact = 'EXACT',
@@ -122,6 +121,7 @@ export type Mutation = {
   createPost: Post;
   createTag: PostTag;
   loginWithWallet: LoginResponse;
+  refreshMatches: Array<MatchingSuggestion>;
   refreshTokens: LoginResponse;
   rejectDeal: Deal;
   removePost: Post;
@@ -160,6 +160,11 @@ export type MutationLoginWithWalletArgs = {
 };
 
 
+export type MutationRefreshMatchesArgs = {
+  postId: Scalars['ID']['input'];
+};
+
+
 export type MutationRefreshTokensArgs = {
   input: RefreshTokenInput;
 };
@@ -191,7 +196,7 @@ export type Post = {
   dealsAsPostB?: Maybe<Array<Deal>>;
   description?: Maybe<Scalars['String']['output']>;
   haveSkill: Scalars['String']['output'];
-  id: Scalars['String']['output'];
+  id: Scalars['ID']['output'];
   matchAsSource?: Maybe<Array<MatchingSuggestion>>;
   matchAsTarget?: Maybe<Array<MatchingSuggestion>>;
   status: PostStatus;
@@ -361,6 +366,13 @@ export type CancelDealMutationVariables = Exact<{
 
 
 export type CancelDealMutation = { __typename?: 'Mutation', cancelDeal: { __typename?: 'Deal', id: string, status: DealStatus } };
+
+export type RefreshMatchesMutationVariables = Exact<{
+  postId: Scalars['ID']['input'];
+}>;
+
+
+export type RefreshMatchesMutation = { __typename?: 'Mutation', refreshMatches: Array<{ __typename?: 'MatchingSuggestion', id: string, sourcePostId: string, targetPostId: string, method: MatchMethod, score?: number | null, createdAt: any, sourcePost: { __typename?: 'Post', id: string, haveSkill: string, wantSkill: string, description?: string | null, createdAt: any, status: PostStatus, type: PostType, user?: { __typename?: 'User', wallet: string } | null, tags?: Array<{ __typename?: 'PostTag', name: string }> | null }, targetPost: { __typename?: 'Post', id: string, haveSkill: string, wantSkill: string, description?: string | null, createdAt: any, status: PostStatus, type: PostType, user?: { __typename?: 'User', wallet: string } | null, tags?: Array<{ __typename?: 'PostTag', name: string }> | null } }> };
 
 export type PostsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -990,6 +1002,74 @@ export function useCancelDealMutation(baseOptions?: Apollo.MutationHookOptions<C
 export type CancelDealMutationHookResult = ReturnType<typeof useCancelDealMutation>;
 export type CancelDealMutationResult = Apollo.MutationResult<CancelDealMutation>;
 export type CancelDealMutationOptions = Apollo.BaseMutationOptions<CancelDealMutation, CancelDealMutationVariables>;
+export const RefreshMatchesDocument = gql`
+    mutation RefreshMatches($postId: ID!) {
+  refreshMatches(postId: $postId) {
+    id
+    sourcePostId
+    targetPostId
+    method
+    score
+    createdAt
+    sourcePost {
+      id
+      haveSkill
+      wantSkill
+      description
+      createdAt
+      user {
+        wallet
+      }
+      status
+      tags {
+        name
+      }
+      type
+    }
+    targetPost {
+      id
+      haveSkill
+      wantSkill
+      description
+      createdAt
+      user {
+        wallet
+      }
+      status
+      tags {
+        name
+      }
+      type
+    }
+  }
+}
+    `;
+export type RefreshMatchesMutationFn = Apollo.MutationFunction<RefreshMatchesMutation, RefreshMatchesMutationVariables>;
+
+/**
+ * __useRefreshMatchesMutation__
+ *
+ * To run a mutation, you first call `useRefreshMatchesMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRefreshMatchesMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [refreshMatchesMutation, { data, loading, error }] = useRefreshMatchesMutation({
+ *   variables: {
+ *      postId: // value for 'postId'
+ *   },
+ * });
+ */
+export function useRefreshMatchesMutation(baseOptions?: Apollo.MutationHookOptions<RefreshMatchesMutation, RefreshMatchesMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<RefreshMatchesMutation, RefreshMatchesMutationVariables>(RefreshMatchesDocument, options);
+      }
+export type RefreshMatchesMutationHookResult = ReturnType<typeof useRefreshMatchesMutation>;
+export type RefreshMatchesMutationResult = Apollo.MutationResult<RefreshMatchesMutation>;
+export type RefreshMatchesMutationOptions = Apollo.BaseMutationOptions<RefreshMatchesMutation, RefreshMatchesMutationVariables>;
 export const PostsDocument = gql`
     query Posts {
   posts {

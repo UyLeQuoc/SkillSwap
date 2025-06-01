@@ -84,6 +84,8 @@ export class PostsResolver {
         @Args("postId", { type: () => ID }) postId: string,
         @CurrentUser() user: User,
     ) {
+        console.log("postId", postId);
+
         const post = await this.postsService.findOne(postId);
         if (post.userId !== user.id) {
             throw new Error("Not authorized to refresh matches for this post");

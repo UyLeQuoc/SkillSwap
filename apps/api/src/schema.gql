@@ -118,7 +118,7 @@ type Post {
   dealsAsPostB: [Deal!]
   description: String
   haveSkill: String!
-  id: String!
+  id: ID!
   matchAsSource: [MatchingSuggestion!]
   matchAsTarget: [MatchingSuggestion!]
   status: PostStatus!

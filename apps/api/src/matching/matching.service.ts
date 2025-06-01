@@ -27,8 +27,53 @@ export class MatchingService {
         })
     }
 
+    private async checkMatch(post1: Post, post2: Post): Promise<number | null> {
+        try {
+            const prompt = `Analyze these two skill swap posts and rate their compatibility on a scale of 0 to 1 (where 1 is perfect match):
+
+Post 1:
+- Has skill: "${post1.haveSkill}"
+- Wants to learn: "${post1.wantSkill}"
+- Description: "${post1.description || "No description provided"}"
+
+Post 2:
+- Has skill: "${post2.haveSkill}"
+- Wants to learn: "${post2.wantSkill}"
+- Description: "${post2.description || "No description provided"}"
+
+Consider the following factors:
+1. Direct skill match: How well do the skills they have match what the other wants to learn?
+2. Skill level compatibility: Are the skills at similar levels of expertise?
+3. Learning potential: How well can each person teach their skill to the other?
+4. Interest alignment: How interested would each person be in learning the other's skill?
+
+IMPORTANT: Respond with ONLY the score number between 0 and 1 (e.g., 0.85). Do not include any other text or explanation.`
+
+            const response = await this.openai.completions.create({
+                model: "gpt-3.5-turbo-instruct",
+                prompt: prompt,
+                max_tokens: 10,
+                temperature: 0.3,
+            })
+
+            const answer = response.choices[0].text?.toLowerCase().trim()
+            console.log("answer", answer)
+            if (!answer) return null
+
+            // Extract score from response - now just looking for a number
+            const scoreMatch = answer.match(/([0-9]*[.]?[0-9]+)/)
+            if (!scoreMatch) return null
+
+            const score = parseFloat(scoreMatch[1])
+            return isNaN(score) ? null : score
+        } catch (error) {
+            console.error("Error checking match with OpenAI:", error)
+            return null
+        }
+    }
+
     async generateMatches(post: Post) {
-    // Get all active posts except the current one
+        // Get all active posts except the current one
         const otherPosts = await this.prisma.post.findMany({
             where: {
                 id: { not: post.id },
@@ -42,54 +87,31 @@ export class MatchingService {
         const matches = []
 
         for (const otherPost of otherPosts) {
-            // Check if there's a potential match
-            const isMatch = await this.checkMatch(post, otherPost)
+            // Check if there's a potential match and get score
+            const score = await this.checkMatch(post, otherPost)
       
-            if (isMatch) {
+            if (score !== null && score > 0.5) { // Only consider matches with score > 0.5
                 matches.push({
                     sourcePostId: post.id,
                     targetPostId: otherPost.id,
                     method: MatchMethod.GPT,
-                    score: 0.8, // Default score for GPT matches
+                    score: score,
                 })
             }
         }
 
+        // Sort matches by score in descending order and take top 3
+        const topMatches = matches
+            .sort((a, b) => b.score - a.score)
+            .slice(0, 3)
+
         // Create matches in database
-        if (matches.length > 0) {
+        if (topMatches.length > 0) {
             await this.prisma.matchingSuggestion.createMany({
-                data: matches,
+                data: topMatches,
             })
         }
 
-        return matches
-    }
-
-    private async checkMatch(post1: Post, post2: Post): Promise<boolean> {
-        try {
-            const prompt = `Check if these two skill swap posts are a good match:
-Post 1: Has "${post1.haveSkill}" and wants "${post1.wantSkill}"
-Post 2: Has "${post2.haveSkill}" and wants "${post2.wantSkill}"
-
-Are these posts a good match for a skill swap? Answer with just "yes" or "no".`
-
-            const response = await this.openai.chat.completions.create({
-                model: "gpt-3.5-turbo-instruct",
-                messages: [
-                    {
-                        role: "user",
-                        content: prompt,
-                    },
-                ],
-                max_tokens: 10,
-                temperature: 0.3,
-            })
-
-            const answer = response.choices[0].message.content?.toLowerCase().trim()
-            return answer === "yes"
-        } catch (error) {
-            console.error("Error checking match with OpenAI:", error)
-            return false
-        }
+        return topMatches
     }
 } 

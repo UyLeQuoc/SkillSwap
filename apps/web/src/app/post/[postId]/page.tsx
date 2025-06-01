@@ -178,7 +178,7 @@ export default function PostPage() {
           <div className="flex gap-2 flex-shrink-0">
             {isAuthorized && isOwner && (
               <>
-                <RefreshMatchesButton postId={post.id} />
+                <RefreshMatchesButton postId={postId} />
                 <Button variant="outline" onClick={handleUpdatePost} disabled={updateLoading}>
                   <Edit3 className="mr-2 h-4 w-4" /> Update Post
                 </Button>
