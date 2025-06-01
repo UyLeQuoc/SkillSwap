@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button"
 import { Search, Wallet } from "lucide-react"
 import { RetroGrid } from "../magicui/retro-grid"
 import { useRouter } from "next/navigation"
+import { BoxReveal } from "../magicui/box-reveal"
 
 export function HeroSection() {
   const router = useRouter()
@@ -12,11 +13,15 @@ export function HeroSection() {
         <Badge variant="secondary" className="mb-6 px-4 py-2 text-sm font-medium">
           🌟 Powered by Sui Blockchain
         </Badge>
-        <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-6">
-          Trade Skills. Earn Trust.{" "}
-          <span className="bg-gradient-to-r from-blue-600 to-primary bg-clip-text text-transparent dark:from-blue-400 dark:to-primary">
-            Build Community.
-          </span>
+        <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-6 flex flex-col items-center">
+          <BoxReveal boxColor="#1864FC">
+            Trade Skills. Earn Trust.{" "}
+          </BoxReveal>
+          <BoxReveal boxColor="#1864FC">
+            <span className="bg-gradient-to-r from-blue-600 to-primary bg-clip-text text-transparent dark:from-blue-400 dark:to-primary">
+              Build Community.
+            </span>
+          </BoxReveal>
         </h1>
         <p className="text-xl md:text-2xl text-muted-foreground mb-8 max-w-3xl mx-auto">
           SkillSwap is a Web3 platform where people in HCMC exchange skills or items, and get verified through
