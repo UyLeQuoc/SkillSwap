@@ -30,8 +30,11 @@ export const Header = () => {
         },
         onError: (error) => {
           console.error(error)
+          localStorage.removeItem('token')
         },
       })
+    }else{
+      localStorage.removeItem('token')
     }
   }, [isConnected])
 

@@ -67,6 +67,43 @@ mutation UpdatePost($input: UpdatePostInput!) {
   }
 }
 
+mutation CreateDeal($input: CreateDealInput!) {
+  createDeal(input: $input) {
+    id
+    postA {
+      id
+      haveSkill
+      wantSkill
+      description
+      type
+      user {
+        wallet
+      }
+    }
+    postB {
+      id
+      haveSkill
+      wantSkill
+      description
+      type
+      user {
+        wallet
+      }
+    }
+    userA {
+      id
+      wallet
+    }
+    userB {
+      id
+      wallet
+    }
+    type
+    status
+    createdAt
+  }
+}
+
 mutation CreateTag($input: CreateTagInput!) {
   createTag(input: $input) {
     id

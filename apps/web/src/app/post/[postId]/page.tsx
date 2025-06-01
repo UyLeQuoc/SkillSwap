@@ -3,7 +3,7 @@ import { useParams, useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { AlertTriangle, Edit3, PlusCircle } from "lucide-react"
-import { usePostQuery, useUpdatePostMutation, useGetCurrentUserQuery } from "@/graphql/generated/graphql"
+import { usePostQuery, useUpdatePostMutation, useGetCurrentUserQuery, useCreateDealMutation } from "@/graphql/generated/graphql"
 import { PostDetails, PostDetailsSkeleton } from "./_components/post-details"
 import { PostMatches, PostMatchesSkeleton } from "./_components/post-matches"
 import { PostDeals, PostDealsSkeleton } from "./_components/post-deals"
@@ -11,11 +11,17 @@ import { DisplayDeal, DisplayMatch, FullPost } from "./_components/types"
 import { Header } from "@/components/header"
 import { toast } from "sonner"
 import { useAccounts } from "@mysten/dapp-kit"
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
+import { useState } from "react"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { DealType } from "@/graphql/generated/graphql"
 
 export default function PostPage() {
   const params = useParams()
   const router = useRouter()
   const postId = params.postId as string
+  const [isProposeDialogOpen, setIsProposeDialogOpen] = useState(false)
+  const [selectedDealType, setSelectedDealType] = useState<DealType>(DealType.SkillSwap)
 
   const { data: postData, loading: postLoading } = usePostQuery({
     variables: {
@@ -25,6 +31,7 @@ export default function PostPage() {
 
   const { data: userData } = useGetCurrentUserQuery()
   const [updatePost, { loading: updateLoading }] = useUpdatePostMutation()
+  const [createDeal, { loading: createDealLoading }] = useCreateDealMutation()
 
   const accounts = useAccounts()
   const currentWallet = accounts[0]
@@ -41,18 +48,38 @@ export default function PostPage() {
     router.push(`/post/${postId}/edit`)
   }
 
-  const handleProposeDeal = () => {
+  const handleProposeDeal = async () => {
     if (!userData?.getCurrentUser) {
       toast.error("Please connect your wallet to propose a deal")
       return
     }
-    if (isAuthorized) {
+    if (isOwner) {
       toast.error("You cannot propose a deal to your own post")
       return
     }
-    // Logic to initiate a new deal
-    console.log("Propose deal for post:", postId)
-    toast.info("Propose deal functionality coming soon!")
+
+    try {
+      await createDeal({
+        variables: {
+          input: {
+            postAId: postId,
+            userBId: userData.getCurrentUser.id,
+          },
+        },
+        onCompleted: () => {
+          toast.success("Deal proposed successfully!")
+          setIsProposeDialogOpen(false)
+        },
+        onError: (error) => {
+          console.error("Error proposing deal:", error)
+          toast.error(error.message || "Error proposing deal. Please try again.")
+        },
+        refetchQueries: ["GetCurrentUser", "Post"], 
+      })
+    } catch (error) {
+      console.error("Unhandled error in proposeDeal:", error)
+      toast.error("An unexpected error occurred.")
+    }
   }
 
   if (postLoading) {
@@ -136,9 +163,29 @@ export default function PostPage() {
               </Button>
             )}
             {isAuthorized && !isOwner && (
-              <Button onClick={handleProposeDeal}>
-                <PlusCircle className="mr-2 h-4 w-4" /> Propose Deal
-              </Button>
+              <Dialog open={isProposeDialogOpen} onOpenChange={setIsProposeDialogOpen}>
+                <DialogTrigger asChild>
+                  <Button>
+                    <PlusCircle className="mr-2 h-4 w-4" /> Propose Deal
+                  </Button>
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>Propose a Deal</DialogTitle>
+                    <DialogDescription>
+                      Are you sure you want to propose a deal with this post?
+                    </DialogDescription>
+                  </DialogHeader>
+                  <DialogFooter>
+                    <Button variant="outline" onClick={() => setIsProposeDialogOpen(false)}>
+                      Cancel
+                    </Button>
+                    <Button onClick={handleProposeDeal} disabled={createDealLoading}>
+                      {createDealLoading ? "Proposing..." : "Propose Deal"}
+                    </Button>
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
             )}
           </div>
         </div>

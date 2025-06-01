@@ -7,6 +7,7 @@ import { Briefcase, CalendarDays, Copy, GraduationCap, TagsIcon, UserCircle, Arr
 import { toast } from "sonner"
 import { useRouter } from "next/navigation"
 import { cn } from "@/lib/utils"
+import { useAccounts } from "@mysten/dapp-kit"
 
 export function SkillCardSkeleton() {
   return (
@@ -91,14 +92,26 @@ export function SkillCard({ post }: SkillCardProps) {
     router.push(`/post/${post.id}`)
   }
 
+  const accounts = useAccounts()
+  const currentWallet = accounts[0]
+
+  const isOwner = post?.user?.wallet === currentWallet?.address
+
   return (
     <Card className="flex flex-col h-full hover:shadow-lg transition-shadow duration-200">
       <CardHeader>
         <div className="flex justify-between items-start gap-2">
           <CardTitle className="text-xl">{post.haveSkill}</CardTitle>
-          <Badge variant={post.status === "ACTIVE" ? "default" : "secondary"} className="capitalize shrink-0">
-            {post.status.toLowerCase()}
-          </Badge>
+          <div className="flex gap-2">
+            <Badge variant={post.status === "ACTIVE" ? "default" : "secondary"} className="capitalize shrink-0">
+              {post.status.toLowerCase()}
+            </Badge>
+            {isOwner && (
+              <Badge variant="default" className="capitalize shrink-0">
+                Owner
+              </Badge>
+            )}
+          </div>
         </div>
         <CardDescription className="flex items-center pt-1">
           <UserCircle className="h-4 w-4 mr-1.5 text-muted-foreground" />
@@ -148,11 +161,11 @@ export function SkillCard({ post }: SkillCardProps) {
             Posted: {formatDate(post.createdAt)}
           </div>
           <Button 
-            variant="ghost" 
+            variant="default" 
             size="sm" 
             onClick={handleViewDetails}
             className={cn(
-              "group transition-all duration-300 hover:bg-primary/10",
+              "group transition-all duration-300 hover:bg-primary/70",
               "hover:translate-x-1 hover:translate-y-[-2px]"
             )}
           >

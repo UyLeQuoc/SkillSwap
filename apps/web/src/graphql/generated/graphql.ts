@@ -246,6 +246,7 @@ export type UpdatePostInput = {
   haveSkill?: InputMaybe<Scalars['String']['input']>;
   id: Scalars['ID']['input'];
   status?: InputMaybe<PostStatus>;
+  tags?: InputMaybe<Array<CreateTagInput>>;
   type?: InputMaybe<PostType>;
   wantSkill?: InputMaybe<Scalars['String']['input']>;
 };
@@ -299,6 +300,13 @@ export type UpdatePostMutationVariables = Exact<{
 
 
 export type UpdatePostMutation = { __typename?: 'Mutation', updatePost: { __typename?: 'Post', id: string, haveSkill: string, wantSkill: string, description?: string | null, type: PostType, status: PostStatus, tags?: Array<{ __typename?: 'PostTag', id: string, name: string }> | null, user?: { __typename?: 'User', wallet: string } | null } };
+
+export type CreateDealMutationVariables = Exact<{
+  input: CreateDealInput;
+}>;
+
+
+export type CreateDealMutation = { __typename?: 'Mutation', createDeal: { __typename?: 'Deal', id: string, type: DealType, status: DealStatus, createdAt: any, postA?: { __typename?: 'Post', id: string, haveSkill: string, wantSkill: string, description?: string | null, type: PostType, user?: { __typename?: 'User', wallet: string } | null } | null, postB?: { __typename?: 'Post', id: string, haveSkill: string, wantSkill: string, description?: string | null, type: PostType, user?: { __typename?: 'User', wallet: string } | null } | null, userA?: { __typename?: 'User', id: string, wallet: string } | null, userB?: { __typename?: 'User', id: string, wallet: string } | null } };
 
 export type CreateTagMutationVariables = Exact<{
   input: CreateTagInput;
@@ -595,6 +603,70 @@ export function useUpdatePostMutation(baseOptions?: Apollo.MutationHookOptions<U
 export type UpdatePostMutationHookResult = ReturnType<typeof useUpdatePostMutation>;
 export type UpdatePostMutationResult = Apollo.MutationResult<UpdatePostMutation>;
 export type UpdatePostMutationOptions = Apollo.BaseMutationOptions<UpdatePostMutation, UpdatePostMutationVariables>;
+export const CreateDealDocument = gql`
+    mutation CreateDeal($input: CreateDealInput!) {
+  createDeal(input: $input) {
+    id
+    postA {
+      id
+      haveSkill
+      wantSkill
+      description
+      type
+      user {
+        wallet
+      }
+    }
+    postB {
+      id
+      haveSkill
+      wantSkill
+      description
+      type
+      user {
+        wallet
+      }
+    }
+    userA {
+      id
+      wallet
+    }
+    userB {
+      id
+      wallet
+    }
+    type
+    status
+    createdAt
+  }
+}
+    `;
+export type CreateDealMutationFn = Apollo.MutationFunction<CreateDealMutation, CreateDealMutationVariables>;
+
+/**
+ * __useCreateDealMutation__
+ *
+ * To run a mutation, you first call `useCreateDealMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateDealMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createDealMutation, { data, loading, error }] = useCreateDealMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCreateDealMutation(baseOptions?: Apollo.MutationHookOptions<CreateDealMutation, CreateDealMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateDealMutation, CreateDealMutationVariables>(CreateDealDocument, options);
+      }
+export type CreateDealMutationHookResult = ReturnType<typeof useCreateDealMutation>;
+export type CreateDealMutationResult = Apollo.MutationResult<CreateDealMutation>;
+export type CreateDealMutationOptions = Apollo.BaseMutationOptions<CreateDealMutation, CreateDealMutationVariables>;
 export const CreateTagDocument = gql`
     mutation CreateTag($input: CreateTagInput!) {
   createTag(input: $input) {
