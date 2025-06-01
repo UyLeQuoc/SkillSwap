@@ -49,6 +49,24 @@ mutation CreatePost($input: CreatePostInput!) {
   }
 }
 
+mutation UpdatePost($input: UpdatePostInput!) {
+  updatePost(input: $input) {
+    id
+    haveSkill
+    wantSkill
+    description
+    type
+    tags {
+      id
+      name
+    }
+    status
+    user {
+      wallet
+    }
+  }
+}
+
 mutation CreateTag($input: CreateTagInput!) {
   createTag(input: $input) {
     id
@@ -62,6 +80,7 @@ query Post($postId: ID!) {
     haveSkill
     user {
       wallet
+      id
     }
     type
     tags {

@@ -19,7 +19,7 @@ export class PostsResolver {
         @Args("input") createPostInput: CreatePostInput,
         @CurrentUser() user: User,
     ) {
-        return this.postsService.create(createPostInput, user.id);
+        return this.postsService.create(createPostInput, user);
     }
 
     @Query(() => [Post])

@@ -293,6 +293,13 @@ export type CreatePostMutationVariables = Exact<{
 
 export type CreatePostMutation = { __typename?: 'Mutation', createPost: { __typename?: 'Post', id: string, user?: { __typename?: 'User', wallet: string } | null } };
 
+export type UpdatePostMutationVariables = Exact<{
+  input: UpdatePostInput;
+}>;
+
+
+export type UpdatePostMutation = { __typename?: 'Mutation', updatePost: { __typename?: 'Post', id: string, haveSkill: string, wantSkill: string, description?: string | null, type: PostType, status: PostStatus, tags?: Array<{ __typename?: 'PostTag', id: string, name: string }> | null, user?: { __typename?: 'User', wallet: string } | null } };
+
 export type CreateTagMutationVariables = Exact<{
   input: CreateTagInput;
 }>;
@@ -305,7 +312,7 @@ export type PostQueryVariables = Exact<{
 }>;
 
 
-export type PostQuery = { __typename?: 'Query', post: { __typename?: 'Post', wantSkill: string, haveSkill: string, type: PostType, status: PostStatus, description?: string | null, createdAt: any, user?: { __typename?: 'User', wallet: string } | null, tags?: Array<{ __typename?: 'PostTag', name: string }> | null, matchAsTarget?: Array<{ __typename?: 'MatchingSuggestion', score?: number | null, method: MatchMethod, createdAt: any, id: string, targetPost: { __typename?: 'Post', id: string, wantSkill: string, haveSkill: string, description?: string | null, createdAt: any, status: PostStatus, type: PostType, user?: { __typename?: 'User', wallet: string } | null, tags?: Array<{ __typename?: 'PostTag', name: string }> | null }, sourcePost: { __typename?: 'Post', id: string, wantSkill: string, haveSkill: string, description?: string | null, createdAt: any, status: PostStatus, type: PostType, user?: { __typename?: 'User', wallet: string } | null, tags?: Array<{ __typename?: 'PostTag', name: string }> | null } }> | null, matchAsSource?: Array<{ __typename?: 'MatchingSuggestion', score?: number | null, method: MatchMethod, createdAt: any, id: string, targetPost: { __typename?: 'Post', id: string, wantSkill: string, haveSkill: string, description?: string | null, createdAt: any, status: PostStatus, type: PostType, user?: { __typename?: 'User', wallet: string } | null, tags?: Array<{ __typename?: 'PostTag', name: string }> | null }, sourcePost: { __typename?: 'Post', id: string, wantSkill: string, haveSkill: string, description?: string | null, createdAt: any, status: PostStatus, type: PostType, user?: { __typename?: 'User', wallet: string } | null, tags?: Array<{ __typename?: 'PostTag', name: string }> | null } }> | null, dealsAsPostA?: Array<{ __typename?: 'Deal', type: DealType, status: DealStatus, completedAt?: any | null, postAId?: string | null, postBId?: string | null, createdAt: any, id: string, userA?: { __typename?: 'User', wallet: string } | null, userB?: { __typename?: 'User', wallet: string } | null, reviews?: Array<{ __typename?: 'Review', rating: number, createdAt: any, comment?: string | null, reviewer?: { __typename?: 'User', wallet: string } | null, reviewee?: { __typename?: 'User', wallet: string } | null }> | null }> | null, dealsAsPostB?: Array<{ __typename?: 'Deal', type: DealType, status: DealStatus, completedAt?: any | null, postAId?: string | null, postBId?: string | null, createdAt: any, id: string, userA?: { __typename?: 'User', wallet: string } | null, userB?: { __typename?: 'User', wallet: string } | null, reviews?: Array<{ __typename?: 'Review', rating: number, createdAt: any, comment?: string | null, reviewer?: { __typename?: 'User', wallet: string } | null, reviewee?: { __typename?: 'User', wallet: string } | null }> | null }> | null } };
+export type PostQuery = { __typename?: 'Query', post: { __typename?: 'Post', wantSkill: string, haveSkill: string, type: PostType, status: PostStatus, description?: string | null, createdAt: any, user?: { __typename?: 'User', wallet: string, id: string } | null, tags?: Array<{ __typename?: 'PostTag', name: string }> | null, matchAsTarget?: Array<{ __typename?: 'MatchingSuggestion', score?: number | null, method: MatchMethod, createdAt: any, id: string, targetPost: { __typename?: 'Post', id: string, wantSkill: string, haveSkill: string, description?: string | null, createdAt: any, status: PostStatus, type: PostType, user?: { __typename?: 'User', wallet: string } | null, tags?: Array<{ __typename?: 'PostTag', name: string }> | null }, sourcePost: { __typename?: 'Post', id: string, wantSkill: string, haveSkill: string, description?: string | null, createdAt: any, status: PostStatus, type: PostType, user?: { __typename?: 'User', wallet: string } | null, tags?: Array<{ __typename?: 'PostTag', name: string }> | null } }> | null, matchAsSource?: Array<{ __typename?: 'MatchingSuggestion', score?: number | null, method: MatchMethod, createdAt: any, id: string, targetPost: { __typename?: 'Post', id: string, wantSkill: string, haveSkill: string, description?: string | null, createdAt: any, status: PostStatus, type: PostType, user?: { __typename?: 'User', wallet: string } | null, tags?: Array<{ __typename?: 'PostTag', name: string }> | null }, sourcePost: { __typename?: 'Post', id: string, wantSkill: string, haveSkill: string, description?: string | null, createdAt: any, status: PostStatus, type: PostType, user?: { __typename?: 'User', wallet: string } | null, tags?: Array<{ __typename?: 'PostTag', name: string }> | null } }> | null, dealsAsPostA?: Array<{ __typename?: 'Deal', type: DealType, status: DealStatus, completedAt?: any | null, postAId?: string | null, postBId?: string | null, createdAt: any, id: string, userA?: { __typename?: 'User', wallet: string } | null, userB?: { __typename?: 'User', wallet: string } | null, reviews?: Array<{ __typename?: 'Review', rating: number, createdAt: any, comment?: string | null, reviewer?: { __typename?: 'User', wallet: string } | null, reviewee?: { __typename?: 'User', wallet: string } | null }> | null }> | null, dealsAsPostB?: Array<{ __typename?: 'Deal', type: DealType, status: DealStatus, completedAt?: any | null, postAId?: string | null, postBId?: string | null, createdAt: any, id: string, userA?: { __typename?: 'User', wallet: string } | null, userB?: { __typename?: 'User', wallet: string } | null, reviews?: Array<{ __typename?: 'Review', rating: number, createdAt: any, comment?: string | null, reviewer?: { __typename?: 'User', wallet: string } | null, reviewee?: { __typename?: 'User', wallet: string } | null }> | null }> | null } };
 
 
 export const LoginWithWalletDocument = gql`
@@ -543,6 +550,51 @@ export function useCreatePostMutation(baseOptions?: Apollo.MutationHookOptions<C
 export type CreatePostMutationHookResult = ReturnType<typeof useCreatePostMutation>;
 export type CreatePostMutationResult = Apollo.MutationResult<CreatePostMutation>;
 export type CreatePostMutationOptions = Apollo.BaseMutationOptions<CreatePostMutation, CreatePostMutationVariables>;
+export const UpdatePostDocument = gql`
+    mutation UpdatePost($input: UpdatePostInput!) {
+  updatePost(input: $input) {
+    id
+    haveSkill
+    wantSkill
+    description
+    type
+    tags {
+      id
+      name
+    }
+    status
+    user {
+      wallet
+    }
+  }
+}
+    `;
+export type UpdatePostMutationFn = Apollo.MutationFunction<UpdatePostMutation, UpdatePostMutationVariables>;
+
+/**
+ * __useUpdatePostMutation__
+ *
+ * To run a mutation, you first call `useUpdatePostMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdatePostMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updatePostMutation, { data, loading, error }] = useUpdatePostMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useUpdatePostMutation(baseOptions?: Apollo.MutationHookOptions<UpdatePostMutation, UpdatePostMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdatePostMutation, UpdatePostMutationVariables>(UpdatePostDocument, options);
+      }
+export type UpdatePostMutationHookResult = ReturnType<typeof useUpdatePostMutation>;
+export type UpdatePostMutationResult = Apollo.MutationResult<UpdatePostMutation>;
+export type UpdatePostMutationOptions = Apollo.BaseMutationOptions<UpdatePostMutation, UpdatePostMutationVariables>;
 export const CreateTagDocument = gql`
     mutation CreateTag($input: CreateTagInput!) {
   createTag(input: $input) {
@@ -584,6 +636,7 @@ export const PostDocument = gql`
     haveSkill
     user {
       wallet
+      id
     }
     type
     tags {

@@ -167,6 +167,7 @@ input UpdatePostInput {
   haveSkill: String
   id: ID!
   status: PostStatus
+  tags: [CreateTagInput!]
   type: PostType
   wantSkill: String
 }

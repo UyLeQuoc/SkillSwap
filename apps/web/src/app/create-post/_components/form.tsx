@@ -41,9 +41,11 @@ export type CreatePostFormValues = z.infer<typeof createPostSchema>
 interface CreatePostFormProps {
   onSubmit: (values: CreatePostFormValues) => Promise<void>
   isLoading: boolean
+  defaultValues?: Partial<CreatePostFormValues>
+  isEdit?: boolean
 }
 
-export function CreatePostForm({ onSubmit, isLoading }: CreatePostFormProps) {
+export function CreatePostForm({ onSubmit, isLoading, defaultValues, isEdit = false }: CreatePostFormProps) {
   const form = useForm<CreatePostFormValues>({
     resolver: zodResolver(createPostSchema),
     defaultValues: {
@@ -52,6 +54,7 @@ export function CreatePostForm({ onSubmit, isLoading }: CreatePostFormProps) {
       description: "",
       type: undefined, // Or PostType.SKILL as default
       tags: [],
+      ...defaultValues,
     },
   })
 
@@ -228,6 +231,8 @@ export function CreatePostForm({ onSubmit, isLoading }: CreatePostFormProps) {
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
               Creating Post...
             </>
+          ) : isEdit ? (
+            "Update Post"
           ) : (
             "Create Post"
           )}

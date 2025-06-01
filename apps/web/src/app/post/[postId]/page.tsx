@@ -1,40 +1,61 @@
 "use client"
-import { useParams } from "next/navigation"
+import { useParams, useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { AlertTriangle, Edit3, PlusCircle } from "lucide-react"
-import { usePostQuery } from "@/graphql/generated/graphql"
+import { usePostQuery, useUpdatePostMutation, useGetCurrentUserQuery } from "@/graphql/generated/graphql"
 import { PostDetails, PostDetailsSkeleton } from "./_components/post-details"
 import { PostMatches, PostMatchesSkeleton } from "./_components/post-matches"
 import { PostDeals, PostDealsSkeleton } from "./_components/post-deals"
 import { DisplayDeal, DisplayMatch, FullPost } from "./_components/types"
 import { Header } from "@/components/header"
+import { toast } from "sonner"
+import { useAccounts } from "@mysten/dapp-kit"
 
 export default function PostPage() {
   const params = useParams()
+  const router = useRouter()
   const postId = params.postId as string
 
-  const { data, loading } = usePostQuery({
+  const { data: postData, loading: postLoading } = usePostQuery({
     variables: {
       postId: postId,
     },
   })
 
-  const post = data?.post as FullPost | undefined
+  const { data: userData } = useGetCurrentUserQuery()
+  const [updatePost, { loading: updateLoading }] = useUpdatePostMutation()
+
+  const accounts = useAccounts()
+  const currentWallet = accounts[0]
+
+  const post = postData?.post as FullPost | undefined
+  const isAuthorized = currentWallet?.address
+  const isOwner = post?.user?.wallet === currentWallet?.address
 
   const handleUpdatePost = () => {
-    // Logic to navigate to an update page or open an edit modal
-    console.log("Update post:", postId)
-    alert("Update post functionality to be implemented.")
+    if (!isAuthorized) {
+      toast.error("You are not authorized to update this post")
+      return
+    }
+    router.push(`/post/${postId}/edit`)
   }
 
   const handleProposeDeal = () => {
+    if (!userData?.getCurrentUser) {
+      toast.error("Please connect your wallet to propose a deal")
+      return
+    }
+    if (isAuthorized) {
+      toast.error("You cannot propose a deal to your own post")
+      return
+    }
     // Logic to initiate a new deal
     console.log("Propose deal for post:", postId)
-    alert("Propose deal functionality to be implemented.")
+    toast.info("Propose deal functionality coming soon!")
   }
 
-  if (loading) {
+  if (postLoading) {
     return (
       <div className="container mx-auto p-4 md:p-6 lg:p-8 max-w-4xl">
         <div className="flex justify-between items-center mb-6">
@@ -109,12 +130,16 @@ export default function PostPage() {
             {post.wantSkill || "Post Details"}
           </h1>
           <div className="flex gap-2 flex-shrink-0">
-            <Button variant="outline" onClick={handleUpdatePost}>
-              <Edit3 className="mr-2 h-4 w-4" /> Update Post
-            </Button>
-            <Button onClick={handleProposeDeal}>
-              <PlusCircle className="mr-2 h-4 w-4" /> Propose Deal
-            </Button>
+            {isAuthorized && isOwner && (
+              <Button variant="outline" onClick={handleUpdatePost} disabled={updateLoading}>
+                <Edit3 className="mr-2 h-4 w-4" /> Update Post
+              </Button>
+            )}
+            {isAuthorized && !isOwner && (
+              <Button onClick={handleProposeDeal}>
+                <PlusCircle className="mr-2 h-4 w-4" /> Propose Deal
+              </Button>
+            )}
           </div>
         </div>
 
