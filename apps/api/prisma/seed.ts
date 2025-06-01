@@ -14,7 +14,7 @@ async function main() {
         },
     })
 
-    // Create regular users
+    // Create 2 regular users
     const users = await Promise.all([
         prisma.user.create({
             data: {
@@ -34,15 +34,6 @@ async function main() {
                 reputationScore: 4.8,
             },
         }),
-        prisma.user.create({
-            data: {
-                wallet: "0x7890abcdef1234567890abcdef1234567890abcdef1234567890abcdef123456",
-                name: "Mike Johnson",
-                bio: "Professional Guitarist and Music Producer",
-                role: Roles.CUSTOMER,
-                reputationScore: 4.2,
-            },
-        }),
     ])
 
     // Create skill tags
@@ -50,14 +41,14 @@ async function main() {
         prisma.postTag.create({ data: { name: "programming" } }),
         prisma.postTag.create({ data: { name: "web-development" } }),
         prisma.postTag.create({ data: { name: "english" } }),
-        prisma.postTag.create({ data: { name: "music" } }),
-        prisma.postTag.create({ data: { name: "guitar" } }),
         prisma.postTag.create({ data: { name: "teaching" } }),
         prisma.postTag.create({ data: { name: "design" } }),
         prisma.postTag.create({ data: { name: "ui-ux" } }),
+        prisma.postTag.create({ data: { name: "typescript" } }),
+        prisma.postTag.create({ data: { name: "react" } }),
     ])
 
-    // Create posts
+    // Create posts - 2 for each user
     const posts = await Promise.all([
         // John's posts
         prisma.post.create({
@@ -72,7 +63,8 @@ async function main() {
                     connect: [
                         { name: "programming" },
                         { name: "web-development" },
-                        { name: "english" },
+                        { name: "typescript" },
+                        { name: "react" },
                     ],
                 },
             },
@@ -81,15 +73,15 @@ async function main() {
             data: {
                 userId: users[0].id,
                 haveSkill: "UI/UX Design",
-                wantSkill: "Guitar Lessons",
-                description: "Professional UI/UX designer offering design lessons in exchange for guitar lessons.",
+                wantSkill: "English Teaching",
+                description: "Professional UI/UX designer offering design lessons in exchange for English teaching.",
                 type: PostType.SKILL,
                 status: PostStatus.ACTIVE,
                 tags: {
                     connect: [
                         { name: "design" },
                         { name: "ui-ux" },
-                        { name: "guitar" },
+                        { name: "teaching" },
                     ],
                 },
             },
@@ -113,29 +105,27 @@ async function main() {
                 },
             },
         }),
-
-        // Mike's posts
         prisma.post.create({
             data: {
-                userId: users[2].id,
-                haveSkill: "Guitar Lessons",
+                userId: users[1].id,
+                haveSkill: "English Speaking",
                 wantSkill: "UI/UX Design",
-                description: "Professional guitarist offering lessons for beginners and intermediate players. Looking to learn UI/UX design.",
+                description: "Native English speaker offering conversation practice. Looking to learn UI/UX design.",
                 type: PostType.SKILL,
                 status: PostStatus.ACTIVE,
                 tags: {
                     connect: [
-                        { name: "music" },
-                        { name: "guitar" },
+                        { name: "english" },
                         { name: "teaching" },
                         { name: "design" },
+                        { name: "ui-ux" },
                     ],
                 },
             },
         }),
     ])
 
-    // Create some deals
+    // Create deals between the users
     const deals = await Promise.all([
         prisma.deal.create({
             data: {
@@ -150,7 +140,7 @@ async function main() {
         prisma.deal.create({
             data: {
                 userAId: users[0].id,
-                userBId: users[2].id,
+                userBId: users[1].id,
                 postAId: posts[1].id,
                 postBId: posts[3].id,
                 status: "AGREED",
@@ -159,29 +149,29 @@ async function main() {
         }),
     ])
 
-    // Create some reviews
+    // Create reviews for completed deals
     const reviews = await Promise.all([
         prisma.review.create({
             data: {
                 dealId: deals[1].id,
                 reviewerId: users[0].id,
-                revieweeId: users[2].id,
+                revieweeId: users[1].id,
                 rating: 5,
-                comment: "Great guitar teacher! Very patient and knowledgeable.",
+                comment: "Excellent English teacher! Very patient and knowledgeable.",
             },
         }),
         prisma.review.create({
             data: {
                 dealId: deals[1].id,
-                reviewerId: users[2].id,
+                reviewerId: users[1].id,
                 revieweeId: users[0].id,
                 rating: 4,
-                comment: "Excellent UI/UX design skills. Learned a lot!",
+                comment: "Great UI/UX design skills. Learned a lot!",
             },
         }),
     ])
 
-    // Create some skill badges
+    // Create skill badges for both users
     const skillBadges = await Promise.all([
         prisma.skillBadge.create({
             data: {
@@ -193,18 +183,46 @@ async function main() {
         }),
         prisma.skillBadge.create({
             data: {
-                userId: users[1].id,
+                userId: users[0].id,
                 verifierId: admin.id,
-                skillName: "English Teaching",
+                skillName: "UI/UX Design",
                 suiObjectId: "0xabcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890",
             },
         }),
         prisma.skillBadge.create({
             data: {
-                userId: users[2].id,
+                userId: users[1].id,
                 verifierId: admin.id,
-                skillName: "Guitar",
+                skillName: "English Teaching",
                 suiObjectId: "0x7890abcdef1234567890abcdef1234567890abcdef1234567890abcdef123456",
+            },
+        }),
+        prisma.skillBadge.create({
+            data: {
+                userId: users[1].id,
+                verifierId: admin.id,
+                skillName: "English Speaking",
+                suiObjectId: "0x4567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef123",
+            },
+        }),
+    ])
+
+    // Create matching suggestions
+    const matchingSuggestions = await Promise.all([
+        prisma.matchingSuggestion.create({
+            data: {
+                sourcePostId: posts[0].id,
+                targetPostId: posts[2].id,
+                method: "EXACT",
+                score: 0.95,
+            },
+        }),
+        prisma.matchingSuggestion.create({
+            data: {
+                sourcePostId: posts[1].id,
+                targetPostId: posts[3].id,
+                method: "EXACT",
+                score: 0.92,
             },
         }),
     ])
@@ -217,6 +235,7 @@ async function main() {
         deals,
         reviews,
         skillBadges,
+        matchingSuggestions,
     })
 }
 
