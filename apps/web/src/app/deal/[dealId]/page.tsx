@@ -196,14 +196,14 @@ export default function DealPage() {
               <CardDescription>Details of the skills being exchanged</CardDescription>
             </CardHeader>
             <CardContent className="grid gap-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 gap-4">
                 <div className="space-y-2">
-                  <h3 className="font-semibold">{deal.userA?.name || "User A"}</h3>
+                  <h3 className="font-semibold">{deal.userA?.wallet}</h3>
                   <p className="text-sm text-muted-foreground">Offering: {deal.postA?.haveSkill}</p>
                   <p className="text-sm text-muted-foreground">Seeking: {deal.postA?.wantSkill}</p>
                 </div>
                 <div className="space-y-2">
-                  <h3 className="font-semibold">{deal.userB?.name || "User B"}</h3>
+                  <h3 className="font-semibold">{deal.userB?.wallet}</h3>
                   {
                     deal.postB?.haveSkill ? (
                       <>
