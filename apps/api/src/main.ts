@@ -6,12 +6,8 @@ async function bootstrap() {
 
     // Configure CORS with specific options
     app.enableCors({
-        origin: [
-            "https://skillswap.uydev.id.vn",
-            "https://api.skillswap.uydev.id.vn",
-            "http://localhost:3000", // For local development
-        ],
-        credentials: false,
+        origin: true, // This allows all origins and will reflect the request origin
+        credentials: true,
         methods: "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS",
         allowedHeaders: [
             "Origin",
@@ -19,20 +15,12 @@ async function bootstrap() {
             "Content-Type",
             "Accept",
             "Authorization",
-            "Access-Control-Allow-Origin",
-            "Access-Control-Allow-Headers",
-            "Access-Control-Allow-Methods",
-            "Access-Control-Allow-Credentials",
-        ],
-        exposedHeaders: [
-            "Access-Control-Allow-Origin",
-            "Access-Control-Allow-Headers",
-            "Access-Control-Allow-Methods",
-            "Access-Control-Allow-Credentials",
+            "Access-Control-Allow-Origin"
         ],
         preflightContinue: false,
-        optionsSuccessStatus: 204,
-    })
+        optionsSuccessStatus: 204
+    });
+
 
     await app.listen(process.env.PORT ?? 4000)
 }
