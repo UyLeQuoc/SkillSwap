@@ -55,3 +55,144 @@ mutation CreateTag($input: CreateTagInput!) {
     name
   }
 }
+
+query Post($postId: ID!) {
+  post(id: $postId) {
+    wantSkill
+    haveSkill
+    user {
+      wallet
+    }
+    type
+    tags {
+      name
+    }
+    status
+    description
+    createdAt
+    matchAsTarget {
+      targetPost {
+        id
+        wantSkill
+        haveSkill
+        description
+        createdAt
+        user {
+          wallet
+        }
+        status
+        tags {
+          name
+        }
+        type
+      }
+      score
+      method
+      createdAt
+      id
+      sourcePost {
+        id
+        wantSkill
+        haveSkill
+        description
+        createdAt
+        user {
+          wallet
+        }
+        status
+        tags {
+          name
+        }
+        type
+      }
+    }
+    matchAsSource {
+      targetPost {
+        id
+        wantSkill
+        haveSkill
+        description
+        createdAt
+        user {
+          wallet
+        }
+        status
+        tags {
+          name
+        }
+        type
+      }
+      score
+      method
+      createdAt
+      id
+      sourcePost {
+        id
+        wantSkill
+        haveSkill
+        description
+        createdAt
+        user {
+          wallet
+        }
+        status
+        tags {
+          name
+        }
+        type
+      }
+    }
+    dealsAsPostA {
+      userA {
+        wallet
+      }
+      userB {
+        wallet
+      }
+      type
+      status
+      reviews {
+        reviewer {
+          wallet
+        }
+        rating
+        reviewee {
+          wallet
+        }
+        createdAt
+        comment
+      }
+      completedAt
+      postAId
+      postBId
+      createdAt
+      id
+    }
+    dealsAsPostB {
+      userA {
+        wallet
+      }
+      userB {
+        wallet
+      }
+      type
+      status
+      reviews {
+        reviewer {
+          wallet
+        }
+        rating
+        reviewee {
+          wallet
+        }
+        createdAt
+        comment
+      }
+      completedAt
+      postAId
+      postBId
+      createdAt
+      id
+    }
+  }
+}

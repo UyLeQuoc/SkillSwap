@@ -3,8 +3,10 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Skeleton } from "@/components/ui/skeleton"
 import type { PostsQuery, PostTag } from "@/graphql/generated/graphql"
-import { Briefcase, CalendarDays, Copy, GraduationCap, TagsIcon, UserCircle } from "lucide-react"
+import { Briefcase, CalendarDays, Copy, GraduationCap, TagsIcon, UserCircle, ArrowRight } from "lucide-react"
 import { toast } from "sonner"
+import { useRouter } from "next/navigation"
+import { cn } from "@/lib/utils"
 
 export function SkillCardSkeleton() {
   return (
@@ -77,10 +79,16 @@ const truncateWalletAddress = (address: string, startChars = 6, endChars = 4) =>
 
 export function SkillCard({ post }: SkillCardProps) {
   if (!post.user) return null
+  const router = useRouter()
+  
   const handleCopyWallet = () => {
     if (!post.user) return
     navigator.clipboard.writeText(post.user.wallet)
     toast.success("Wallet address copied to clipboard.")
+  }
+
+  const handleViewDetails = () => {
+    router.push(`/post/${post.id}`)
   }
 
   return (
@@ -134,9 +142,23 @@ export function SkillCard({ post }: SkillCardProps) {
             </Badge>
           ))}
         </div>
-        <div className="text-xs text-muted-foreground mt-2 self-end flex items-center">
-          <CalendarDays className="h-3.5 w-3.5 mr-1.5" />
-          Posted: {formatDate(post.createdAt)}
+        <div className="flex items-center justify-between w-full mt-2">
+          <div className="text-xs text-muted-foreground flex items-center">
+            <CalendarDays className="h-3.5 w-3.5 mr-1.5" />
+            Posted: {formatDate(post.createdAt)}
+          </div>
+          <Button 
+            variant="ghost" 
+            size="sm" 
+            onClick={handleViewDetails}
+            className={cn(
+              "group transition-all duration-300 hover:bg-primary/10",
+              "hover:translate-x-1 hover:translate-y-[-2px]"
+            )}
+          >
+            View Details
+            <ArrowRight className="h-4 w-4 ml-1 transition-transform duration-300 group-hover:translate-x-1" />
+          </Button>
         </div>
       </CardFooter>
     </Card>

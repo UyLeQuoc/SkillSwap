@@ -18,6 +18,12 @@ export type Scalars = {
   DateTime: { input: any; output: any; }
 };
 
+export type CreateDealInput = {
+  postAId: Scalars['String']['input'];
+  postBId?: InputMaybe<Scalars['String']['input']>;
+  userBId: Scalars['String']['input'];
+};
+
 export type CreatePostInput = {
   description?: InputMaybe<Scalars['String']['input']>;
   haveSkill: Scalars['String']['input'];
@@ -29,6 +35,38 @@ export type CreatePostInput = {
 export type CreateTagInput = {
   name: Scalars['String']['input'];
 };
+
+export type Deal = {
+  __typename?: 'Deal';
+  completedAt?: Maybe<Scalars['DateTime']['output']>;
+  createdAt: Scalars['DateTime']['output'];
+  id: Scalars['String']['output'];
+  postA?: Maybe<Post>;
+  postAId?: Maybe<Scalars['String']['output']>;
+  postB?: Maybe<Post>;
+  postBId?: Maybe<Scalars['String']['output']>;
+  reviews?: Maybe<Array<Review>>;
+  status: DealStatus;
+  type: DealType;
+  userA?: Maybe<User>;
+  userAId: Scalars['String']['output'];
+  userB?: Maybe<User>;
+  userBId: Scalars['String']['output'];
+};
+
+/** The status of the deal */
+export enum DealStatus {
+  Agreed = 'AGREED',
+  Cancelled = 'CANCELLED',
+  Completed = 'COMPLETED',
+  Pending = 'PENDING'
+}
+
+/** The type of the deal */
+export enum DealType {
+  ItemSwap = 'ITEM_SWAP',
+  SkillSwap = 'SKILL_SWAP'
+}
 
 export type LoginInput = {
   message: Scalars['String']['input'];
@@ -43,14 +81,53 @@ export type LoginResponse = {
   user: User;
 };
 
+/** The method used to match posts */
+export enum MatchMethod {
+  Embedding = 'EMBEDDING',
+  Exact = 'EXACT',
+  Gpt = 'GPT',
+  Partial = 'PARTIAL',
+  Tag = 'TAG'
+}
+
+export type MatchingSuggestion = {
+  __typename?: 'MatchingSuggestion';
+  createdAt: Scalars['DateTime']['output'];
+  id: Scalars['String']['output'];
+  method: MatchMethod;
+  score?: Maybe<Scalars['Float']['output']>;
+  sourcePost: Post;
+  sourcePostId: Scalars['String']['output'];
+  targetPost: Post;
+  targetPostId: Scalars['String']['output'];
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
+  completeDeal: Deal;
+  confirmDeal: Deal;
+  createDeal: Deal;
   createPost: Post;
   createTag: PostTag;
   loginWithWallet: LoginResponse;
   refreshTokens: LoginResponse;
   removePost: Post;
   updatePost: Post;
+};
+
+
+export type MutationCompleteDealArgs = {
+  dealId: Scalars['String']['input'];
+};
+
+
+export type MutationConfirmDealArgs = {
+  dealId: Scalars['String']['input'];
+};
+
+
+export type MutationCreateDealArgs = {
+  input: CreateDealInput;
 };
 
 
@@ -86,9 +163,13 @@ export type MutationUpdatePostArgs = {
 export type Post = {
   __typename?: 'Post';
   createdAt: Scalars['DateTime']['output'];
+  dealsAsPostA?: Maybe<Array<Deal>>;
+  dealsAsPostB?: Maybe<Array<Deal>>;
   description?: Maybe<Scalars['String']['output']>;
   haveSkill: Scalars['String']['output'];
   id: Scalars['String']['output'];
+  matchAsSource?: Maybe<Array<MatchingSuggestion>>;
+  matchAsTarget?: Maybe<Array<MatchingSuggestion>>;
   status: PostStatus;
   tags?: Maybe<Array<PostTag>>;
   type: PostType;
@@ -118,12 +199,18 @@ export enum PostType {
 
 export type Query = {
   __typename?: 'Query';
+  deal: Deal;
   getCurrentUser: User;
   hello: Scalars['String']['output'];
   myPosts: Array<Post>;
   post: Post;
   posts: Array<Post>;
   postsByWallet: Array<Post>;
+};
+
+
+export type QueryDealArgs = {
+  dealId: Scalars['String']['input'];
 };
 
 
@@ -138,6 +225,20 @@ export type QueryPostsByWalletArgs = {
 
 export type RefreshTokenInput = {
   refreshToken: Scalars['String']['input'];
+};
+
+export type Review = {
+  __typename?: 'Review';
+  comment?: Maybe<Scalars['String']['output']>;
+  createdAt: Scalars['DateTime']['output'];
+  deal?: Maybe<Deal>;
+  dealId: Scalars['String']['output'];
+  id: Scalars['String']['output'];
+  rating: Scalars['Float']['output'];
+  reviewee?: Maybe<User>;
+  revieweeId: Scalars['String']['output'];
+  reviewer?: Maybe<User>;
+  reviewerId: Scalars['String']['output'];
 };
 
 export type UpdatePostInput = {
@@ -198,6 +299,13 @@ export type CreateTagMutationVariables = Exact<{
 
 
 export type CreateTagMutation = { __typename?: 'Mutation', createTag: { __typename?: 'PostTag', id: string, name: string } };
+
+export type PostQueryVariables = Exact<{
+  postId: Scalars['ID']['input'];
+}>;
+
+
+export type PostQuery = { __typename?: 'Query', post: { __typename?: 'Post', wantSkill: string, haveSkill: string, type: PostType, status: PostStatus, description?: string | null, createdAt: any, user?: { __typename?: 'User', wallet: string } | null, tags?: Array<{ __typename?: 'PostTag', name: string }> | null, matchAsTarget?: Array<{ __typename?: 'MatchingSuggestion', score?: number | null, method: MatchMethod, createdAt: any, id: string, targetPost: { __typename?: 'Post', id: string, wantSkill: string, haveSkill: string, description?: string | null, createdAt: any, status: PostStatus, type: PostType, user?: { __typename?: 'User', wallet: string } | null, tags?: Array<{ __typename?: 'PostTag', name: string }> | null }, sourcePost: { __typename?: 'Post', id: string, wantSkill: string, haveSkill: string, description?: string | null, createdAt: any, status: PostStatus, type: PostType, user?: { __typename?: 'User', wallet: string } | null, tags?: Array<{ __typename?: 'PostTag', name: string }> | null } }> | null, matchAsSource?: Array<{ __typename?: 'MatchingSuggestion', score?: number | null, method: MatchMethod, createdAt: any, id: string, targetPost: { __typename?: 'Post', id: string, wantSkill: string, haveSkill: string, description?: string | null, createdAt: any, status: PostStatus, type: PostType, user?: { __typename?: 'User', wallet: string } | null, tags?: Array<{ __typename?: 'PostTag', name: string }> | null }, sourcePost: { __typename?: 'Post', id: string, wantSkill: string, haveSkill: string, description?: string | null, createdAt: any, status: PostStatus, type: PostType, user?: { __typename?: 'User', wallet: string } | null, tags?: Array<{ __typename?: 'PostTag', name: string }> | null } }> | null, dealsAsPostA?: Array<{ __typename?: 'Deal', type: DealType, status: DealStatus, completedAt?: any | null, postAId?: string | null, postBId?: string | null, createdAt: any, id: string, userA?: { __typename?: 'User', wallet: string } | null, userB?: { __typename?: 'User', wallet: string } | null, reviews?: Array<{ __typename?: 'Review', rating: number, createdAt: any, comment?: string | null, reviewer?: { __typename?: 'User', wallet: string } | null, reviewee?: { __typename?: 'User', wallet: string } | null }> | null }> | null, dealsAsPostB?: Array<{ __typename?: 'Deal', type: DealType, status: DealStatus, completedAt?: any | null, postAId?: string | null, postBId?: string | null, createdAt: any, id: string, userA?: { __typename?: 'User', wallet: string } | null, userB?: { __typename?: 'User', wallet: string } | null, reviews?: Array<{ __typename?: 'Review', rating: number, createdAt: any, comment?: string | null, reviewer?: { __typename?: 'User', wallet: string } | null, reviewee?: { __typename?: 'User', wallet: string } | null }> | null }> | null } };
 
 
 export const LoginWithWalletDocument = gql`
@@ -469,3 +577,178 @@ export function useCreateTagMutation(baseOptions?: Apollo.MutationHookOptions<Cr
 export type CreateTagMutationHookResult = ReturnType<typeof useCreateTagMutation>;
 export type CreateTagMutationResult = Apollo.MutationResult<CreateTagMutation>;
 export type CreateTagMutationOptions = Apollo.BaseMutationOptions<CreateTagMutation, CreateTagMutationVariables>;
+export const PostDocument = gql`
+    query Post($postId: ID!) {
+  post(id: $postId) {
+    wantSkill
+    haveSkill
+    user {
+      wallet
+    }
+    type
+    tags {
+      name
+    }
+    status
+    description
+    createdAt
+    matchAsTarget {
+      targetPost {
+        id
+        wantSkill
+        haveSkill
+        description
+        createdAt
+        user {
+          wallet
+        }
+        status
+        tags {
+          name
+        }
+        type
+      }
+      score
+      method
+      createdAt
+      id
+      sourcePost {
+        id
+        wantSkill
+        haveSkill
+        description
+        createdAt
+        user {
+          wallet
+        }
+        status
+        tags {
+          name
+        }
+        type
+      }
+    }
+    matchAsSource {
+      targetPost {
+        id
+        wantSkill
+        haveSkill
+        description
+        createdAt
+        user {
+          wallet
+        }
+        status
+        tags {
+          name
+        }
+        type
+      }
+      score
+      method
+      createdAt
+      id
+      sourcePost {
+        id
+        wantSkill
+        haveSkill
+        description
+        createdAt
+        user {
+          wallet
+        }
+        status
+        tags {
+          name
+        }
+        type
+      }
+    }
+    dealsAsPostA {
+      userA {
+        wallet
+      }
+      userB {
+        wallet
+      }
+      type
+      status
+      reviews {
+        reviewer {
+          wallet
+        }
+        rating
+        reviewee {
+          wallet
+        }
+        createdAt
+        comment
+      }
+      completedAt
+      postAId
+      postBId
+      createdAt
+      id
+    }
+    dealsAsPostB {
+      userA {
+        wallet
+      }
+      userB {
+        wallet
+      }
+      type
+      status
+      reviews {
+        reviewer {
+          wallet
+        }
+        rating
+        reviewee {
+          wallet
+        }
+        createdAt
+        comment
+      }
+      completedAt
+      postAId
+      postBId
+      createdAt
+      id
+    }
+  }
+}
+    `;
+
+/**
+ * __usePostQuery__
+ *
+ * To run a query within a React component, call `usePostQuery` and pass it any options that fit your needs.
+ * When your component renders, `usePostQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = usePostQuery({
+ *   variables: {
+ *      postId: // value for 'postId'
+ *   },
+ * });
+ */
+export function usePostQuery(baseOptions: Apollo.QueryHookOptions<PostQuery, PostQueryVariables> & ({ variables: PostQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<PostQuery, PostQueryVariables>(PostDocument, options);
+      }
+export function usePostLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<PostQuery, PostQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<PostQuery, PostQueryVariables>(PostDocument, options);
+        }
+export function usePostSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<PostQuery, PostQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<PostQuery, PostQueryVariables>(PostDocument, options);
+        }
+export type PostQueryHookResult = ReturnType<typeof usePostQuery>;
+export type PostLazyQueryHookResult = ReturnType<typeof usePostLazyQuery>;
+export type PostSuspenseQueryHookResult = ReturnType<typeof usePostSuspenseQuery>;
+export type PostQueryResult = Apollo.QueryResult<PostQuery, PostQueryVariables>;
