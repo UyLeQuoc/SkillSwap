@@ -1,37 +1,22 @@
-import { PrismaClient, Roles, PostType, PostStatus } from "@prisma/client"
+import { PrismaClient, PostType, PostStatus } from "@prisma/client"
 
 const prisma = new PrismaClient()
 
 async function main() {
-    // Create admin user
-    const admin = await prisma.user.create({
-        data: {
-            wallet: "0x994845a200c22d021eb08f97136a43fb04ea93fe27b1efbf8fd95f8a3034757b",
-            name: "Admin User",
-            bio: "Platform administrator",
-            role: Roles.ADMIN,
-            reputationScore: 5.0,
-        },
-    })
-
     // Create 2 regular users
     const users = await Promise.all([
-        prisma.user.create({
+        await prisma.user.create({
             data: {
-                wallet: "0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef",
-                name: "John Doe",
-                bio: "Software Developer with 5 years of experience",
-                role: Roles.CUSTOMER,
-                reputationScore: 4.5,
+                wallet: "0x994845a200c22d021eb08f97136a43fb04ea93fe27b1efbf8fd95f8a3034757b",
+                name: "UyDev",
+                bio: "Software Developer",
             },
         }),
         prisma.user.create({
             data: {
-                wallet: "0xabcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890",
-                name: "Jane Smith",
-                bio: "English Teacher and Language Enthusiast",
-                role: Roles.CUSTOMER,
-                reputationScore: 4.8,
+                wallet: "0xf8a4da3a751fba566508deb5166196ec5530602a924b3b0c132963e98188fb04",
+                name: "Uy Slush",
+                bio: "Software Developer with 5 years of experience",
             },
         }),
     ])
@@ -176,7 +161,7 @@ async function main() {
         prisma.skillBadge.create({
             data: {
                 userId: users[0].id,
-                verifierId: admin.id,
+                verifierId: users[0].id,
                 skillName: "Web Development",
                 suiObjectId: "0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef",
             },
@@ -184,7 +169,7 @@ async function main() {
         prisma.skillBadge.create({
             data: {
                 userId: users[0].id,
-                verifierId: admin.id,
+                verifierId: users[0].id,
                 skillName: "UI/UX Design",
                 suiObjectId: "0xabcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890",
             },
@@ -192,7 +177,7 @@ async function main() {
         prisma.skillBadge.create({
             data: {
                 userId: users[1].id,
-                verifierId: admin.id,
+                verifierId: users[0].id,
                 skillName: "English Teaching",
                 suiObjectId: "0x7890abcdef1234567890abcdef1234567890abcdef1234567890abcdef123456",
             },
@@ -200,7 +185,7 @@ async function main() {
         prisma.skillBadge.create({
             data: {
                 userId: users[1].id,
-                verifierId: admin.id,
+                verifierId: users[0].id,
                 skillName: "English Speaking",
                 suiObjectId: "0x4567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef123",
             },
@@ -228,7 +213,6 @@ async function main() {
     ])
 
     console.log("Seed data created:", {
-        admin,
         users,
         tags,
         posts,
