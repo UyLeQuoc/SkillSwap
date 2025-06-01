@@ -16,6 +16,56 @@ export class DealsService {
         postAId: string,
         postBId?: string,
     ) {
+        // Check for existing active deals between these users
+        const existingDeal = await this.prisma.deal.findFirst({
+            where: {
+                OR: [
+                    {
+                        userAId,
+                        userBId,
+                        status: {
+                            in: [DealStatus.PENDING, DealStatus.AGREED],
+                        },
+                    },
+                    {
+                        userAId: userBId,
+                        userBId: userAId,
+                        status: {
+                            in: [DealStatus.PENDING, DealStatus.AGREED],
+                        },
+                    },
+                ],
+            },
+        })
+
+        if (existingDeal) {
+            throw new Error("An active deal already exists between these users")
+        }
+
+        // Check if either post is already part of an active deal
+        const existingPostDeal = await this.prisma.deal.findFirst({
+            where: {
+                OR: [
+                    {
+                        postAId,
+                        status: {
+                            in: [DealStatus.PENDING, DealStatus.AGREED],
+                        },
+                    },
+                    {
+                        postBId,
+                        status: {
+                            in: [DealStatus.PENDING, DealStatus.AGREED],
+                        },
+                    },
+                ],
+            },
+        })
+
+        if (existingPostDeal) {
+            throw new Error("One or both posts are already part of an active deal")
+        }
+
         return this.prisma.deal.create({
             data: {
                 userAId,
@@ -125,15 +175,26 @@ export class DealsService {
     }
 
     async getDealById(dealId: string) {
-        return this.prisma.deal.findUnique({
+        const deal = await this.prisma.deal.findUnique({
             where: { id: dealId },
             include: {
                 userA: true,
                 userB: true,
                 postA: true,
                 postB: true,
-                reviews: true,
+                reviews: {
+                    include: {
+                        reviewer: true,
+                        reviewee: true,
+                    },
+                },
             },
         })
+
+        if (!deal) {
+            throw new Error("Deal not found")
+        }
+
+        return deal
     }
 }

@@ -58,6 +58,18 @@ export default function PostPage() {
       return
     }
 
+    // Check if there's already an active deal for this post
+    const hasActiveDeal = post?.dealsAsPostA?.some(
+      (deal) => deal.status === "PENDING" || deal.status === "AGREED"
+    ) || post?.dealsAsPostB?.some(
+      (deal) => deal.status === "PENDING" || deal.status === "AGREED"
+    )
+
+    if (hasActiveDeal) {
+      toast.error("This post is already part of an active deal")
+      return
+    }
+
     try {
       await createDeal({
         variables: {
@@ -72,9 +84,16 @@ export default function PostPage() {
         },
         onError: (error) => {
           console.error("Error proposing deal:", error)
-          toast.error(error.message || "Error proposing deal. Please try again.")
+          const errorMessage = error.message.toLowerCase()
+          if (errorMessage.includes("already exists")) {
+            toast.error("You already have an active deal with this user")
+          } else if (errorMessage.includes("already part of")) {
+            toast.error("This post is already part of an active deal")
+          } else {
+            toast.error(error.message || "Error proposing deal. Please try again.")
+          }
         },
-        refetchQueries: ["GetCurrentUser", "Post"], 
+        refetchQueries: ["GetCurrentUser", "Post"],
       })
     } catch (error) {
       console.error("Unhandled error in proposeDeal:", error)

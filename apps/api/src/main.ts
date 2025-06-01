@@ -8,6 +8,7 @@ async function bootstrap() {
     app.enableCors({
         origin: [
             "https://skillswap.uydev.id.vn",
+            "https://api.skillswap.uydev.id.vn",
             "http://localhost:3000", // For local development
         ],
         credentials: true,
@@ -19,6 +20,15 @@ async function bootstrap() {
             "Accept",
             "Authorization",
             "Access-Control-Allow-Origin",
+            "Access-Control-Allow-Headers",
+            "Access-Control-Allow-Methods",
+            "Access-Control-Allow-Credentials",
+        ],
+        exposedHeaders: [
+            "Access-Control-Allow-Origin",
+            "Access-Control-Allow-Headers",
+            "Access-Control-Allow-Methods",
+            "Access-Control-Allow-Credentials",
         ],
         preflightContinue: false,
         optionsSuccessStatus: 204,
