@@ -169,7 +169,7 @@ export class DealsService {
             )
             await this.prisma.skillBadge.create({
                 data: {
-                    userId: deal.userAId,
+                    userId: deal.userBId,
                     verifierId: envConfig().sui.verifier,
                     skillName: deal.postA?.wantSkill,
                     suiObjectId: badgeB,
