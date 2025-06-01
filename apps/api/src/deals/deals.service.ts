@@ -78,34 +78,53 @@ export class DealsService {
         })
     }
 
-    async confirmDeal(dealId: string, userId: string) {
+    async acceptDeal(dealId: string, userId: string) {
         const deal = await this.prisma.deal.findUnique({
             where: { id: dealId },
-            include: {
-                reviews: true,
-            },
         })
 
         if (!deal) {
             throw new Error("Deal not found")
         }
 
-        if (deal.userAId !== userId && deal.userBId !== userId) {
-            throw new Error("User is not part of this deal")
+        if (deal.userBId !== userId) {
+            throw new Error("Only the recipient can accept the deal")
         }
 
-        // If both users have confirmed (2 reviews exist), update status to AGREED
-        if (deal.reviews.length === 2) {
-            return this.prisma.deal.update({
-                where: { id: dealId },
-                data: { status: DealStatus.AGREED },
-            })
+        if (deal.status !== DealStatus.PENDING) {
+            throw new Error("Only pending deals can be accepted")
         }
 
-        return deal
+        return this.prisma.deal.update({
+            where: { id: dealId },
+            data: { status: DealStatus.AGREED },
+        })
     }
 
-    async completeDeal(dealId: string) {
+    async rejectDeal(dealId: string, userId: string) {
+        const deal = await this.prisma.deal.findUnique({
+            where: { id: dealId },
+        })
+
+        if (!deal) {
+            throw new Error("Deal not found")
+        }
+
+        if (deal.userBId !== userId) {
+            throw new Error("Only the recipient can reject the deal")
+        }
+
+        if (deal.status !== DealStatus.PENDING) {
+            throw new Error("Only pending deals can be rejected")
+        }
+
+        return this.prisma.deal.update({
+            where: { id: dealId },
+            data: { status: DealStatus.CANCELLED },
+        })
+    }
+
+    async completeDeal(dealId: string, userId: string) {
         const deal = await this.prisma.deal.findUnique({
             where: { id: dealId },
             include: {
@@ -121,18 +140,16 @@ export class DealsService {
             throw new Error("Deal not found")
         }
 
-        if (!deal.postA) {
-            throw new Error("Post A not found")
+        if (deal.userAId !== userId && deal.userBId !== userId) {
+            throw new Error("Only deal participants can complete the deal")
         }
 
         if (deal.status !== DealStatus.AGREED) {
-            throw new Error("Deal must be in AGREED status to complete")
+            throw new Error("Only agreed deals can be completed")
         }
 
         if (deal.reviews.length !== 2) {
-            throw new Error(
-                "Both users must submit reviews before completing the deal",
-            )
+            throw new Error("Both users must submit reviews before completing the deal")
         }
 
         // Mint skill badges for both users
@@ -141,7 +158,7 @@ export class DealsService {
                 deal.userA.wallet,
                 deal.postB?.haveSkill || "",
             ),
-            this.suiService.mintSkillBadge(deal.userB.wallet, deal.postA.haveSkill),
+            this.suiService.mintSkillBadge(deal.userB.wallet, deal.postA?.haveSkill || ""),
         ])
 
         // Create skill badge records
@@ -158,19 +175,41 @@ export class DealsService {
                 data: {
                     userId: deal.userBId,
                     verifierId: deal.userAId,
-                    skillName: deal.postA.haveSkill,
+                    skillName: deal.postA?.haveSkill || "",
                     suiObjectId: badgeB,
                 },
             }),
         ])
 
-        // Update deal status to completed
         return this.prisma.deal.update({
             where: { id: dealId },
             data: {
                 status: DealStatus.COMPLETED,
                 completedAt: new Date(),
             },
+        })
+    }
+
+    async cancelDeal(dealId: string, userId: string) {
+        const deal = await this.prisma.deal.findUnique({
+            where: { id: dealId },
+        })
+
+        if (!deal) {
+            throw new Error("Deal not found")
+        }
+
+        if (deal.userAId !== userId) {
+            throw new Error("Only the proposer can cancel the deal")
+        }
+
+        if (deal.status !== DealStatus.PENDING) {
+            throw new Error("Only pending deals can be cancelled")
+        }
+
+        return this.prisma.deal.update({
+            where: { id: dealId },
+            data: { status: DealStatus.CANCELLED },
         })
     }
 

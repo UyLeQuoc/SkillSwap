@@ -1,0 +1,244 @@
+query Deal($dealId: String!) {
+  deal(dealId: $dealId) {
+    id
+    status
+    type
+    createdAt
+    completedAt
+    userA {
+      id
+      wallet
+      name
+      avatarUrl
+    }
+    userB {
+      id
+      wallet
+      name
+      avatarUrl
+    }
+    postA {
+      id
+      haveSkill
+      wantSkill
+      description
+      type
+      user {
+        wallet
+      }
+    }
+    postB {
+      id
+      haveSkill
+      wantSkill
+      description
+      type
+      user {
+        wallet
+      }
+    }
+    reviews {
+      id
+      rating
+      comment
+      createdAt
+      reviewer {
+        id
+        wallet
+        name
+      }
+      reviewee {
+        id
+        wallet
+        name
+      }
+    }
+  }
+}
+
+query GetDealsByWallet($wallet: String!) {
+  getDealsByWallet(wallet: $wallet) {
+    dealsAsA {
+      id
+      status
+      type
+      createdAt
+      completedAt
+      userA {
+        id
+        wallet
+        name
+        avatarUrl
+      }
+      userB {
+        id
+        wallet
+        name
+        avatarUrl
+      }
+      postA {
+        id
+        haveSkill
+        wantSkill
+        description
+        type
+        user {
+          wallet
+        }
+      }
+      postB {
+        id
+        haveSkill
+        wantSkill
+        description
+        type
+        user {
+          wallet
+        }
+      }
+    }
+    dealsAsB {
+      id
+      status
+      type
+      createdAt
+      completedAt
+      userA {
+        id
+        wallet
+        name
+        avatarUrl
+      }
+      userB {
+        id
+        wallet
+        name
+        avatarUrl
+      }
+      postA {
+        id
+        haveSkill
+        wantSkill
+        description
+        type
+        user {
+          wallet
+        }
+      }
+      postB {
+        id
+        haveSkill
+        wantSkill
+        description
+        type
+        user {
+          wallet
+        }
+      }
+    }
+  }
+}
+
+query GetActiveDeals($wallet: String!) {
+  getActiveDeals(wallet: $wallet) {
+    dealsAsA {
+      id
+      status
+      type
+      createdAt
+      completedAt
+      userA {
+        id
+        wallet
+        name
+        avatarUrl
+      }
+      userB {
+        id
+        wallet
+        name
+        avatarUrl
+      }
+      postA {
+        id
+        haveSkill
+        wantSkill
+        description
+        type
+        user {
+          wallet
+        }
+      }
+      postB {
+        id
+        haveSkill
+        wantSkill
+        description
+        type
+        user {
+          wallet
+        }
+      }
+    }
+    dealsAsB {
+      id
+      status
+      type
+      createdAt
+      completedAt
+      userA {
+        id
+        wallet
+        name
+        avatarUrl
+      }
+      userB {
+        id
+        wallet
+        name
+        avatarUrl
+      }
+      postA {
+        id
+        haveSkill
+        wantSkill
+        description
+        type
+        user {
+          wallet
+        }
+      }
+      postB {
+        id
+        haveSkill
+        wantSkill
+        description
+        type
+        user {
+          wallet
+        }
+      }
+    }
+  }
+}
+
+mutation AcceptDeal($dealId: String!) {
+  acceptDeal(dealId: $dealId) {
+    id
+    status
+  }
+}
+
+mutation RejectDeal($dealId: String!) {
+  rejectDeal(dealId: $dealId) {
+    id
+    status
+  }
+}
+
+mutation CancelDeal($dealId: String!) {
+  cancelDeal(dealId: $dealId) {
+    id
+    status
+  }
+}

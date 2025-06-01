@@ -49,6 +49,7 @@ export const Header = () => {
                 currentWallet?.accounts[0].address && (
                   <>
                     <Link href={"/wallet/"+ currentWallet?.accounts[0].address}>Your Profile</Link>
+                    <Link href="/deal">Your Deals</Link>
                     <Link href="/create-post">Create Post</Link>
                   </>
                 )

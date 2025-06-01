@@ -17,13 +17,75 @@ mutation LoginWithWallet($input: LoginInput!) {
 
 query GetCurrentUser {
   getCurrentUser {
+    id
+    wallet
+    name
     avatarUrl
     bio
-    createdAt
-    id
-    name
     role
+    createdAt
     updatedAt
-    wallet
+    dealsAsA {
+      id
+      status
+      type
+      createdAt
+      completedAt
+      userA {
+        id
+        wallet
+        name
+        avatarUrl
+      }
+      userB {
+        id
+        wallet
+        name
+        avatarUrl
+      }
+      postA {
+        id
+        haveSkill
+        wantSkill
+        description
+      }
+      postB {
+        id
+        haveSkill
+        wantSkill
+        description
+      }
+    }
+    dealsAsB {
+      id
+      status
+      type
+      createdAt
+      completedAt
+      userA {
+        id
+        wallet
+        name
+        avatarUrl
+      }
+      userB {
+        id
+        wallet
+        name
+        avatarUrl
+      }
+      postA {
+        id
+        haveSkill
+        wantSkill
+        description
+      }
+      postB {
+        id
+        haveSkill
+        wantSkill
+        description
+      }
+    }
   }
 }

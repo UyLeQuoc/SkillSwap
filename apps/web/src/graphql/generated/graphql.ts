@@ -18,6 +18,12 @@ export type Scalars = {
   DateTime: { input: any; output: any; }
 };
 
+export type ActiveDealsResponse = {
+  __typename?: 'ActiveDealsResponse';
+  dealsAsA?: Maybe<Array<Deal>>;
+  dealsAsB?: Maybe<Array<Deal>>;
+};
+
 export type CreateDealInput = {
   postAId: Scalars['String']['input'];
   postBId?: InputMaybe<Scalars['String']['input']>;
@@ -68,6 +74,12 @@ export enum DealType {
   SkillSwap = 'SKILL_SWAP'
 }
 
+export type DealsResponse = {
+  __typename?: 'DealsResponse';
+  dealsAsA?: Maybe<Array<Deal>>;
+  dealsAsB?: Maybe<Array<Deal>>;
+};
+
 export type LoginInput = {
   message: Scalars['String']['input'];
   signature: Scalars['String']['input'];
@@ -104,24 +116,26 @@ export type MatchingSuggestion = {
 
 export type Mutation = {
   __typename?: 'Mutation';
-  completeDeal: Deal;
-  confirmDeal: Deal;
+  acceptDeal: Deal;
+  cancelDeal: Deal;
   createDeal: Deal;
   createPost: Post;
   createTag: PostTag;
   loginWithWallet: LoginResponse;
   refreshTokens: LoginResponse;
+  rejectDeal: Deal;
   removePost: Post;
+  updateAvatar: User;
   updatePost: Post;
 };
 
 
-export type MutationCompleteDealArgs = {
+export type MutationAcceptDealArgs = {
   dealId: Scalars['String']['input'];
 };
 
 
-export type MutationConfirmDealArgs = {
+export type MutationCancelDealArgs = {
   dealId: Scalars['String']['input'];
 };
 
@@ -151,8 +165,18 @@ export type MutationRefreshTokensArgs = {
 };
 
 
+export type MutationRejectDealArgs = {
+  dealId: Scalars['String']['input'];
+};
+
+
 export type MutationRemovePostArgs = {
   id: Scalars['ID']['input'];
+};
+
+
+export type MutationUpdateAvatarArgs = {
+  avatarUrl: Scalars['String']['input'];
 };
 
 
@@ -200,17 +224,30 @@ export enum PostType {
 export type Query = {
   __typename?: 'Query';
   deal: Deal;
+  getActiveDeals: ActiveDealsResponse;
   getCurrentUser: User;
+  getDealsByWallet: DealsResponse;
   hello: Scalars['String']['output'];
   myPosts: Array<Post>;
   post: Post;
   posts: Array<Post>;
   postsByWallet: Array<Post>;
+  userByWallet: User;
 };
 
 
 export type QueryDealArgs = {
   dealId: Scalars['String']['input'];
+};
+
+
+export type QueryGetActiveDealsArgs = {
+  wallet: Scalars['String']['input'];
+};
+
+
+export type QueryGetDealsByWalletArgs = {
+  wallet: Scalars['String']['input'];
 };
 
 
@@ -220,6 +257,11 @@ export type QueryPostArgs = {
 
 
 export type QueryPostsByWalletArgs = {
+  wallet: Scalars['String']['input'];
+};
+
+
+export type QueryUserByWalletArgs = {
   wallet: Scalars['String']['input'];
 };
 
@@ -256,8 +298,11 @@ export type User = {
   avatarUrl?: Maybe<Scalars['String']['output']>;
   bio?: Maybe<Scalars['String']['output']>;
   createdAt: Scalars['DateTime']['output'];
+  dealsAsA?: Maybe<Array<Deal>>;
+  dealsAsB?: Maybe<Array<Deal>>;
   id: Scalars['ID']['output'];
   name?: Maybe<Scalars['String']['output']>;
+  posts?: Maybe<Array<Post>>;
   role: Scalars['String']['output'];
   updatedAt: Scalars['DateTime']['output'];
   wallet: Scalars['String']['output'];
@@ -273,7 +318,49 @@ export type LoginWithWalletMutation = { __typename?: 'Mutation', loginWithWallet
 export type GetCurrentUserQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetCurrentUserQuery = { __typename?: 'Query', getCurrentUser: { __typename?: 'User', avatarUrl?: string | null, bio?: string | null, createdAt: any, id: string, name?: string | null, role: string, updatedAt: any, wallet: string } };
+export type GetCurrentUserQuery = { __typename?: 'Query', getCurrentUser: { __typename?: 'User', id: string, wallet: string, name?: string | null, avatarUrl?: string | null, bio?: string | null, role: string, createdAt: any, updatedAt: any, dealsAsA?: Array<{ __typename?: 'Deal', id: string, status: DealStatus, type: DealType, createdAt: any, completedAt?: any | null, userA?: { __typename?: 'User', id: string, wallet: string, name?: string | null, avatarUrl?: string | null } | null, userB?: { __typename?: 'User', id: string, wallet: string, name?: string | null, avatarUrl?: string | null } | null, postA?: { __typename?: 'Post', id: string, haveSkill: string, wantSkill: string, description?: string | null } | null, postB?: { __typename?: 'Post', id: string, haveSkill: string, wantSkill: string, description?: string | null } | null }> | null, dealsAsB?: Array<{ __typename?: 'Deal', id: string, status: DealStatus, type: DealType, createdAt: any, completedAt?: any | null, userA?: { __typename?: 'User', id: string, wallet: string, name?: string | null, avatarUrl?: string | null } | null, userB?: { __typename?: 'User', id: string, wallet: string, name?: string | null, avatarUrl?: string | null } | null, postA?: { __typename?: 'Post', id: string, haveSkill: string, wantSkill: string, description?: string | null } | null, postB?: { __typename?: 'Post', id: string, haveSkill: string, wantSkill: string, description?: string | null } | null }> | null } };
+
+export type DealQueryVariables = Exact<{
+  dealId: Scalars['String']['input'];
+}>;
+
+
+export type DealQuery = { __typename?: 'Query', deal: { __typename?: 'Deal', id: string, status: DealStatus, type: DealType, createdAt: any, completedAt?: any | null, userA?: { __typename?: 'User', id: string, wallet: string, name?: string | null, avatarUrl?: string | null } | null, userB?: { __typename?: 'User', id: string, wallet: string, name?: string | null, avatarUrl?: string | null } | null, postA?: { __typename?: 'Post', id: string, haveSkill: string, wantSkill: string, description?: string | null, type: PostType, user?: { __typename?: 'User', wallet: string } | null } | null, postB?: { __typename?: 'Post', id: string, haveSkill: string, wantSkill: string, description?: string | null, type: PostType, user?: { __typename?: 'User', wallet: string } | null } | null, reviews?: Array<{ __typename?: 'Review', id: string, rating: number, comment?: string | null, createdAt: any, reviewer?: { __typename?: 'User', id: string, wallet: string, name?: string | null } | null, reviewee?: { __typename?: 'User', id: string, wallet: string, name?: string | null } | null }> | null } };
+
+export type GetDealsByWalletQueryVariables = Exact<{
+  wallet: Scalars['String']['input'];
+}>;
+
+
+export type GetDealsByWalletQuery = { __typename?: 'Query', getDealsByWallet: { __typename?: 'DealsResponse', dealsAsA?: Array<{ __typename?: 'Deal', id: string, status: DealStatus, type: DealType, createdAt: any, completedAt?: any | null, userA?: { __typename?: 'User', id: string, wallet: string, name?: string | null, avatarUrl?: string | null } | null, userB?: { __typename?: 'User', id: string, wallet: string, name?: string | null, avatarUrl?: string | null } | null, postA?: { __typename?: 'Post', id: string, haveSkill: string, wantSkill: string, description?: string | null, type: PostType, user?: { __typename?: 'User', wallet: string } | null } | null, postB?: { __typename?: 'Post', id: string, haveSkill: string, wantSkill: string, description?: string | null, type: PostType, user?: { __typename?: 'User', wallet: string } | null } | null }> | null, dealsAsB?: Array<{ __typename?: 'Deal', id: string, status: DealStatus, type: DealType, createdAt: any, completedAt?: any | null, userA?: { __typename?: 'User', id: string, wallet: string, name?: string | null, avatarUrl?: string | null } | null, userB?: { __typename?: 'User', id: string, wallet: string, name?: string | null, avatarUrl?: string | null } | null, postA?: { __typename?: 'Post', id: string, haveSkill: string, wantSkill: string, description?: string | null, type: PostType, user?: { __typename?: 'User', wallet: string } | null } | null, postB?: { __typename?: 'Post', id: string, haveSkill: string, wantSkill: string, description?: string | null, type: PostType, user?: { __typename?: 'User', wallet: string } | null } | null }> | null } };
+
+export type GetActiveDealsQueryVariables = Exact<{
+  wallet: Scalars['String']['input'];
+}>;
+
+
+export type GetActiveDealsQuery = { __typename?: 'Query', getActiveDeals: { __typename?: 'ActiveDealsResponse', dealsAsA?: Array<{ __typename?: 'Deal', id: string, status: DealStatus, type: DealType, createdAt: any, completedAt?: any | null, userA?: { __typename?: 'User', id: string, wallet: string, name?: string | null, avatarUrl?: string | null } | null, userB?: { __typename?: 'User', id: string, wallet: string, name?: string | null, avatarUrl?: string | null } | null, postA?: { __typename?: 'Post', id: string, haveSkill: string, wantSkill: string, description?: string | null, type: PostType, user?: { __typename?: 'User', wallet: string } | null } | null, postB?: { __typename?: 'Post', id: string, haveSkill: string, wantSkill: string, description?: string | null, type: PostType, user?: { __typename?: 'User', wallet: string } | null } | null }> | null, dealsAsB?: Array<{ __typename?: 'Deal', id: string, status: DealStatus, type: DealType, createdAt: any, completedAt?: any | null, userA?: { __typename?: 'User', id: string, wallet: string, name?: string | null, avatarUrl?: string | null } | null, userB?: { __typename?: 'User', id: string, wallet: string, name?: string | null, avatarUrl?: string | null } | null, postA?: { __typename?: 'Post', id: string, haveSkill: string, wantSkill: string, description?: string | null, type: PostType, user?: { __typename?: 'User', wallet: string } | null } | null, postB?: { __typename?: 'Post', id: string, haveSkill: string, wantSkill: string, description?: string | null, type: PostType, user?: { __typename?: 'User', wallet: string } | null } | null }> | null } };
+
+export type AcceptDealMutationVariables = Exact<{
+  dealId: Scalars['String']['input'];
+}>;
+
+
+export type AcceptDealMutation = { __typename?: 'Mutation', acceptDeal: { __typename?: 'Deal', id: string, status: DealStatus } };
+
+export type RejectDealMutationVariables = Exact<{
+  dealId: Scalars['String']['input'];
+}>;
+
+
+export type RejectDealMutation = { __typename?: 'Mutation', rejectDeal: { __typename?: 'Deal', id: string, status: DealStatus } };
+
+export type CancelDealMutationVariables = Exact<{
+  dealId: Scalars['String']['input'];
+}>;
+
+
+export type CancelDealMutation = { __typename?: 'Mutation', cancelDeal: { __typename?: 'Deal', id: string, status: DealStatus } };
 
 export type PostsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -370,14 +457,76 @@ export type LoginWithWalletMutationOptions = Apollo.BaseMutationOptions<LoginWit
 export const GetCurrentUserDocument = gql`
     query GetCurrentUser {
   getCurrentUser {
+    id
+    wallet
+    name
     avatarUrl
     bio
-    createdAt
-    id
-    name
     role
+    createdAt
     updatedAt
-    wallet
+    dealsAsA {
+      id
+      status
+      type
+      createdAt
+      completedAt
+      userA {
+        id
+        wallet
+        name
+        avatarUrl
+      }
+      userB {
+        id
+        wallet
+        name
+        avatarUrl
+      }
+      postA {
+        id
+        haveSkill
+        wantSkill
+        description
+      }
+      postB {
+        id
+        haveSkill
+        wantSkill
+        description
+      }
+    }
+    dealsAsB {
+      id
+      status
+      type
+      createdAt
+      completedAt
+      userA {
+        id
+        wallet
+        name
+        avatarUrl
+      }
+      userB {
+        id
+        wallet
+        name
+        avatarUrl
+      }
+      postA {
+        id
+        haveSkill
+        wantSkill
+        description
+      }
+      postB {
+        id
+        haveSkill
+        wantSkill
+        description
+      }
+    }
   }
 }
     `;
@@ -413,6 +562,434 @@ export type GetCurrentUserQueryHookResult = ReturnType<typeof useGetCurrentUserQ
 export type GetCurrentUserLazyQueryHookResult = ReturnType<typeof useGetCurrentUserLazyQuery>;
 export type GetCurrentUserSuspenseQueryHookResult = ReturnType<typeof useGetCurrentUserSuspenseQuery>;
 export type GetCurrentUserQueryResult = Apollo.QueryResult<GetCurrentUserQuery, GetCurrentUserQueryVariables>;
+export const DealDocument = gql`
+    query Deal($dealId: String!) {
+  deal(dealId: $dealId) {
+    id
+    status
+    type
+    createdAt
+    completedAt
+    userA {
+      id
+      wallet
+      name
+      avatarUrl
+    }
+    userB {
+      id
+      wallet
+      name
+      avatarUrl
+    }
+    postA {
+      id
+      haveSkill
+      wantSkill
+      description
+      type
+      user {
+        wallet
+      }
+    }
+    postB {
+      id
+      haveSkill
+      wantSkill
+      description
+      type
+      user {
+        wallet
+      }
+    }
+    reviews {
+      id
+      rating
+      comment
+      createdAt
+      reviewer {
+        id
+        wallet
+        name
+      }
+      reviewee {
+        id
+        wallet
+        name
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useDealQuery__
+ *
+ * To run a query within a React component, call `useDealQuery` and pass it any options that fit your needs.
+ * When your component renders, `useDealQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useDealQuery({
+ *   variables: {
+ *      dealId: // value for 'dealId'
+ *   },
+ * });
+ */
+export function useDealQuery(baseOptions: Apollo.QueryHookOptions<DealQuery, DealQueryVariables> & ({ variables: DealQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<DealQuery, DealQueryVariables>(DealDocument, options);
+      }
+export function useDealLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<DealQuery, DealQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<DealQuery, DealQueryVariables>(DealDocument, options);
+        }
+export function useDealSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<DealQuery, DealQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<DealQuery, DealQueryVariables>(DealDocument, options);
+        }
+export type DealQueryHookResult = ReturnType<typeof useDealQuery>;
+export type DealLazyQueryHookResult = ReturnType<typeof useDealLazyQuery>;
+export type DealSuspenseQueryHookResult = ReturnType<typeof useDealSuspenseQuery>;
+export type DealQueryResult = Apollo.QueryResult<DealQuery, DealQueryVariables>;
+export const GetDealsByWalletDocument = gql`
+    query GetDealsByWallet($wallet: String!) {
+  getDealsByWallet(wallet: $wallet) {
+    dealsAsA {
+      id
+      status
+      type
+      createdAt
+      completedAt
+      userA {
+        id
+        wallet
+        name
+        avatarUrl
+      }
+      userB {
+        id
+        wallet
+        name
+        avatarUrl
+      }
+      postA {
+        id
+        haveSkill
+        wantSkill
+        description
+        type
+        user {
+          wallet
+        }
+      }
+      postB {
+        id
+        haveSkill
+        wantSkill
+        description
+        type
+        user {
+          wallet
+        }
+      }
+    }
+    dealsAsB {
+      id
+      status
+      type
+      createdAt
+      completedAt
+      userA {
+        id
+        wallet
+        name
+        avatarUrl
+      }
+      userB {
+        id
+        wallet
+        name
+        avatarUrl
+      }
+      postA {
+        id
+        haveSkill
+        wantSkill
+        description
+        type
+        user {
+          wallet
+        }
+      }
+      postB {
+        id
+        haveSkill
+        wantSkill
+        description
+        type
+        user {
+          wallet
+        }
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetDealsByWalletQuery__
+ *
+ * To run a query within a React component, call `useGetDealsByWalletQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetDealsByWalletQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetDealsByWalletQuery({
+ *   variables: {
+ *      wallet: // value for 'wallet'
+ *   },
+ * });
+ */
+export function useGetDealsByWalletQuery(baseOptions: Apollo.QueryHookOptions<GetDealsByWalletQuery, GetDealsByWalletQueryVariables> & ({ variables: GetDealsByWalletQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetDealsByWalletQuery, GetDealsByWalletQueryVariables>(GetDealsByWalletDocument, options);
+      }
+export function useGetDealsByWalletLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetDealsByWalletQuery, GetDealsByWalletQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetDealsByWalletQuery, GetDealsByWalletQueryVariables>(GetDealsByWalletDocument, options);
+        }
+export function useGetDealsByWalletSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetDealsByWalletQuery, GetDealsByWalletQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetDealsByWalletQuery, GetDealsByWalletQueryVariables>(GetDealsByWalletDocument, options);
+        }
+export type GetDealsByWalletQueryHookResult = ReturnType<typeof useGetDealsByWalletQuery>;
+export type GetDealsByWalletLazyQueryHookResult = ReturnType<typeof useGetDealsByWalletLazyQuery>;
+export type GetDealsByWalletSuspenseQueryHookResult = ReturnType<typeof useGetDealsByWalletSuspenseQuery>;
+export type GetDealsByWalletQueryResult = Apollo.QueryResult<GetDealsByWalletQuery, GetDealsByWalletQueryVariables>;
+export const GetActiveDealsDocument = gql`
+    query GetActiveDeals($wallet: String!) {
+  getActiveDeals(wallet: $wallet) {
+    dealsAsA {
+      id
+      status
+      type
+      createdAt
+      completedAt
+      userA {
+        id
+        wallet
+        name
+        avatarUrl
+      }
+      userB {
+        id
+        wallet
+        name
+        avatarUrl
+      }
+      postA {
+        id
+        haveSkill
+        wantSkill
+        description
+        type
+        user {
+          wallet
+        }
+      }
+      postB {
+        id
+        haveSkill
+        wantSkill
+        description
+        type
+        user {
+          wallet
+        }
+      }
+    }
+    dealsAsB {
+      id
+      status
+      type
+      createdAt
+      completedAt
+      userA {
+        id
+        wallet
+        name
+        avatarUrl
+      }
+      userB {
+        id
+        wallet
+        name
+        avatarUrl
+      }
+      postA {
+        id
+        haveSkill
+        wantSkill
+        description
+        type
+        user {
+          wallet
+        }
+      }
+      postB {
+        id
+        haveSkill
+        wantSkill
+        description
+        type
+        user {
+          wallet
+        }
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetActiveDealsQuery__
+ *
+ * To run a query within a React component, call `useGetActiveDealsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetActiveDealsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetActiveDealsQuery({
+ *   variables: {
+ *      wallet: // value for 'wallet'
+ *   },
+ * });
+ */
+export function useGetActiveDealsQuery(baseOptions: Apollo.QueryHookOptions<GetActiveDealsQuery, GetActiveDealsQueryVariables> & ({ variables: GetActiveDealsQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetActiveDealsQuery, GetActiveDealsQueryVariables>(GetActiveDealsDocument, options);
+      }
+export function useGetActiveDealsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetActiveDealsQuery, GetActiveDealsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetActiveDealsQuery, GetActiveDealsQueryVariables>(GetActiveDealsDocument, options);
+        }
+export function useGetActiveDealsSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetActiveDealsQuery, GetActiveDealsQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetActiveDealsQuery, GetActiveDealsQueryVariables>(GetActiveDealsDocument, options);
+        }
+export type GetActiveDealsQueryHookResult = ReturnType<typeof useGetActiveDealsQuery>;
+export type GetActiveDealsLazyQueryHookResult = ReturnType<typeof useGetActiveDealsLazyQuery>;
+export type GetActiveDealsSuspenseQueryHookResult = ReturnType<typeof useGetActiveDealsSuspenseQuery>;
+export type GetActiveDealsQueryResult = Apollo.QueryResult<GetActiveDealsQuery, GetActiveDealsQueryVariables>;
+export const AcceptDealDocument = gql`
+    mutation AcceptDeal($dealId: String!) {
+  acceptDeal(dealId: $dealId) {
+    id
+    status
+  }
+}
+    `;
+export type AcceptDealMutationFn = Apollo.MutationFunction<AcceptDealMutation, AcceptDealMutationVariables>;
+
+/**
+ * __useAcceptDealMutation__
+ *
+ * To run a mutation, you first call `useAcceptDealMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAcceptDealMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [acceptDealMutation, { data, loading, error }] = useAcceptDealMutation({
+ *   variables: {
+ *      dealId: // value for 'dealId'
+ *   },
+ * });
+ */
+export function useAcceptDealMutation(baseOptions?: Apollo.MutationHookOptions<AcceptDealMutation, AcceptDealMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<AcceptDealMutation, AcceptDealMutationVariables>(AcceptDealDocument, options);
+      }
+export type AcceptDealMutationHookResult = ReturnType<typeof useAcceptDealMutation>;
+export type AcceptDealMutationResult = Apollo.MutationResult<AcceptDealMutation>;
+export type AcceptDealMutationOptions = Apollo.BaseMutationOptions<AcceptDealMutation, AcceptDealMutationVariables>;
+export const RejectDealDocument = gql`
+    mutation RejectDeal($dealId: String!) {
+  rejectDeal(dealId: $dealId) {
+    id
+    status
+  }
+}
+    `;
+export type RejectDealMutationFn = Apollo.MutationFunction<RejectDealMutation, RejectDealMutationVariables>;
+
+/**
+ * __useRejectDealMutation__
+ *
+ * To run a mutation, you first call `useRejectDealMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRejectDealMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [rejectDealMutation, { data, loading, error }] = useRejectDealMutation({
+ *   variables: {
+ *      dealId: // value for 'dealId'
+ *   },
+ * });
+ */
+export function useRejectDealMutation(baseOptions?: Apollo.MutationHookOptions<RejectDealMutation, RejectDealMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<RejectDealMutation, RejectDealMutationVariables>(RejectDealDocument, options);
+      }
+export type RejectDealMutationHookResult = ReturnType<typeof useRejectDealMutation>;
+export type RejectDealMutationResult = Apollo.MutationResult<RejectDealMutation>;
+export type RejectDealMutationOptions = Apollo.BaseMutationOptions<RejectDealMutation, RejectDealMutationVariables>;
+export const CancelDealDocument = gql`
+    mutation CancelDeal($dealId: String!) {
+  cancelDeal(dealId: $dealId) {
+    id
+    status
+  }
+}
+    `;
+export type CancelDealMutationFn = Apollo.MutationFunction<CancelDealMutation, CancelDealMutationVariables>;
+
+/**
+ * __useCancelDealMutation__
+ *
+ * To run a mutation, you first call `useCancelDealMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCancelDealMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [cancelDealMutation, { data, loading, error }] = useCancelDealMutation({
+ *   variables: {
+ *      dealId: // value for 'dealId'
+ *   },
+ * });
+ */
+export function useCancelDealMutation(baseOptions?: Apollo.MutationHookOptions<CancelDealMutation, CancelDealMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CancelDealMutation, CancelDealMutationVariables>(CancelDealDocument, options);
+      }
+export type CancelDealMutationHookResult = ReturnType<typeof useCancelDealMutation>;
+export type CancelDealMutationResult = Apollo.MutationResult<CancelDealMutation>;
+export type CancelDealMutationOptions = Apollo.BaseMutationOptions<CancelDealMutation, CancelDealMutationVariables>;
 export const PostsDocument = gql`
     query Posts {
   posts {

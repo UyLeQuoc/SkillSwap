@@ -1,6 +1,9 @@
-import { Args, Mutation, Query, Resolver, ID } from "@nestjs/graphql"
+import { Args, Mutation, Query, Resolver } from "@nestjs/graphql"
 import { UsersService } from "./users.service"
-import { User } from "./entities/user.entity"
+import { User, DealsResponse, ActiveDealsResponse } from "./entities/user.entity"
+import { UseGuards } from "@nestjs/common"
+import { JwtAuthGuard } from "../auth/guards/jwt-auth.guard"
+import { CurrentUser } from "../auth/decorators/current-user.decorator"
 
 @Resolver(() => User)
 export class UsersResolver {
@@ -11,26 +14,42 @@ export class UsersResolver {
     //     return this.usersService.findAll()
     // }
 
-    // @Query(() => User)
-    // @UseGuards(JwtAuthGuard)
-    // async me(@CurrentUser() user: User) {
-    //     return this.usersService.findOne(user.id)
-    // }
+    @Query(() => User)
+    @UseGuards(JwtAuthGuard)
+    async getCurrentUser(@CurrentUser() user: User) {
+        return this.usersService.findOne(user.id)
+    }
 
-    // @Query(() => User)
-    // @UseGuards(JwtAuthGuard)
-    // async user(@Args("id", { type: () => ID }) id: string) {
-    //     return this.usersService.findOne(id)
-    // }
+    @Query(() => User)
+    @UseGuards(JwtAuthGuard)
+    async userByWallet(@Args("wallet") wallet: string) {
+        return this.usersService.findByWallet(wallet)
+    }
 
-    // @Mutation(() => User)
-    // @UseGuards(JwtAuthGuard)
-    // async updateAvatar(
-    //     @CurrentUser() user: User,
-    //     @Args("avatarUrl") avatarUrl: string
-    // ) {
-    //     return this.usersService.updateAvatar(user.id, avatarUrl)
-    // }
+    @Query(() => DealsResponse)
+    @UseGuards(JwtAuthGuard)
+    async getDealsByWallet(@Args("wallet") wallet: string) {
+        const user = await this.usersService.findByWallet(wallet)
+        const dealsAsA = await this.usersService.getDealsAsA(user.id)
+        const dealsAsB = await this.usersService.getDealsAsB(user.id)
+        return { dealsAsA, dealsAsB }
+    }
+
+    @Query(() => ActiveDealsResponse)
+    @UseGuards(JwtAuthGuard)
+    async getActiveDeals(@Args("wallet") wallet: string) {
+        const user = await this.usersService.findByWallet(wallet)
+        return this.usersService.getActiveDeals(user.id)
+    }
+
+    @Mutation(() => User)
+    @UseGuards(JwtAuthGuard)
+    async updateAvatar(
+        @CurrentUser() user: User,
+        @Args("avatarUrl") avatarUrl: string
+    ) {
+        return this.usersService.updateAvatar(user.id, avatarUrl)
+    }
 
     // @Mutation(() => User)
     // removeUser(@Args("id") id: string) {

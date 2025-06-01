@@ -23,28 +23,35 @@ export class DealsResolver {
             input.postBId,
         )
     }
-
-  @Mutation(() => Deal)
-  async confirmDeal(
-    @CurrentUser() user: { id: string },
-    @Args("dealId") dealId: string,
-  ) {
-      return this.dealsService.confirmDeal(dealId, user.id)
-  }
-
-  @Mutation(() => Deal)
-  async completeDeal(
-    @CurrentUser() user: { id: string },
-    @Args("dealId") dealId: string,
-  ) {
-      return this.dealsService.completeDeal(dealId)
-  }
-
   @Query(() => Deal)
   async deal(
     @CurrentUser() user: { id: string },
     @Args("dealId") dealId: string,
   ) {
       return this.dealsService.getDealById(dealId)
+  }
+
+  @Mutation(() => Deal)
+  async acceptDeal(
+    @Args("dealId") dealId: string,
+    @CurrentUser() user: { id: string },
+  ) {
+      return this.dealsService.acceptDeal(dealId, user.id)
+  }
+
+  @Mutation(() => Deal)
+  async rejectDeal(
+    @Args("dealId") dealId: string,
+    @CurrentUser() user: { id: string },
+  ) {
+      return this.dealsService.rejectDeal(dealId, user.id)
+  }
+
+  @Mutation(() => Deal)
+  async cancelDeal(
+    @Args("dealId") dealId: string,
+    @CurrentUser() user: { id: string },
+  ) {
+      return this.dealsService.cancelDeal(dealId, user.id)
   }
 }

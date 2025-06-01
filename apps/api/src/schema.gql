@@ -2,6 +2,11 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type ActiveDealsResponse {
+  dealsAsA: [Deal!]
+  dealsAsB: [Deal!]
+}
+
 input CreateDealInput {
   postAId: String!
   postBId: String
@@ -56,6 +61,11 @@ enum DealType {
   SKILL_SWAP
 }
 
+type DealsResponse {
+  dealsAsA: [Deal!]
+  dealsAsB: [Deal!]
+}
+
 input LoginInput {
   message: String!
   signature: String!
@@ -89,14 +99,16 @@ type MatchingSuggestion {
 }
 
 type Mutation {
-  completeDeal(dealId: String!): Deal!
-  confirmDeal(dealId: String!): Deal!
+  acceptDeal(dealId: String!): Deal!
+  cancelDeal(dealId: String!): Deal!
   createDeal(input: CreateDealInput!): Deal!
   createPost(input: CreatePostInput!): Post!
   createTag(input: CreateTagInput!): PostTag!
   loginWithWallet(input: LoginInput!): LoginResponse!
   refreshTokens(input: RefreshTokenInput!): LoginResponse!
+  rejectDeal(dealId: String!): Deal!
   removePost(id: ID!): Post!
+  updateAvatar(avatarUrl: String!): User!
   updatePost(input: UpdatePostInput!): Post!
 }
 
@@ -137,12 +149,15 @@ enum PostType {
 
 type Query {
   deal(dealId: String!): Deal!
+  getActiveDeals(wallet: String!): ActiveDealsResponse!
   getCurrentUser: User!
+  getDealsByWallet(wallet: String!): DealsResponse!
   hello: String!
   myPosts: [Post!]!
   post(id: ID!): Post!
   posts: [Post!]!
   postsByWallet(wallet: String!): [Post!]!
+  userByWallet(wallet: String!): User!
 }
 
 input RefreshTokenInput {
@@ -176,8 +191,11 @@ type User {
   avatarUrl: String
   bio: String
   createdAt: DateTime!
+  dealsAsA: [Deal!]
+  dealsAsB: [Deal!]
   id: ID!
   name: String
+  posts: [Post!]
   role: String!
   updatedAt: DateTime!
   wallet: String!

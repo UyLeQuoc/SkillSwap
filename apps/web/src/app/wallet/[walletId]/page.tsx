@@ -15,7 +15,7 @@ export default function Page() {
 
   return (
     <div className="bg-muted/20 min-h-screen">
-      <Header />
+        <Header />
       <div className="container mx-auto py-8 px-4 md:px-6 lg:px-8">
         <header className="mb-10 text-center">
           <h1 className="text-4xl font-extrabold tracking-tight lg:text-5xl bg-clip-text text-transparent bg-gradient-to-r from-primary to-blue-600 dark:from-primary dark:to-blue-100">

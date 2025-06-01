@@ -10,6 +10,7 @@ import { HelloModule } from "./hello/hello.module"
 import { PrismaModule } from "./prisma/prisma.module"
 import { PostsModule } from "./posts/posts.module"
 import { DealsModule } from "./deals/deals.module"
+import { UsersModule } from "./users/users.module"
 
 @Module({
     imports: [
@@ -32,6 +33,7 @@ import { DealsModule } from "./deals/deals.module"
         SuiModule,
         PostsModule,
         DealsModule,
+        UsersModule
     ],
 })
 export class AppModule {}
