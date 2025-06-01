@@ -16,12 +16,13 @@ A Web3 peer-to-peer skill and item exchange platform built for people in Ho Chi 
 ## Tech Stack
 
 ### Frontend
-- Next.js 15
-- Shadcn UI
+- Next.js 15.3.3
+- React 19.0.0
 - TypeScript
-- React Query
+- Shadcn UI
 - GraphQL Code Generator
-- Tailwind CSS
+- Apollo Client 3.13.8
+- Tailwind CSS 4
 - WalletKit for Sui
 - Sui SDK
 
@@ -117,7 +118,7 @@ skillswap/
 │       │   └── deal_tests.move # Deal contract tests
 │       └── Move.toml # Contract configuration
 ├── package.json      # Root package configuration
-└── memory-bank/      # Project documentation
+└── memory-bank/      # Project documentation for Cursor
 ```
 
 ## Development Workflow
@@ -128,9 +129,6 @@ skillswap/
 - `npm run dev:api`: Run backend only
 - `npm run dev:web`: Run frontend only
 - `npm run codegen`: Generate GraphQL types and operations
-- `npm run deploy:contracts`: Deploy smart contracts to Sui network
-- `npm run test:contracts`: Run Move contract tests
-- `npm run verify:contracts`: Verify contract code
 
 ### Database Management
 

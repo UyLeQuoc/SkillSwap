@@ -84,95 +84,111 @@
    - Contract monitoring system
 
 ## Current Status
-- Planning phase for Post and Deal system implementation
-- Analyzing existing codebase structure
-- Preparing for NFT integration
+- Project Initialization Phase
+- Basic Setup Complete
+- Development Environment Ready
+- Core Features Pending
+- Web3 Integration Pending
 
 ## What Works
 - Basic project structure
+- Development environment
 - GraphQL setup
-- Prisma schema
-- Existing deal system
-- Sui integration foundation
+- Docker configuration
+- CI/CD pipeline
+- Basic UI components
+- Move contract structure
 
 ## Implementation Plan
 
-### Phase 1: Post System
-1. Create Post Module
-   - GraphQL resolvers
-   - Service implementation
-   - DTOs and entities
-   - Input validation
+### Phase 1: Web3 Integration
+1. Sui Wallet Integration
+   - Wallet connection
+   - Authentication
+   - Transaction handling
+   - Error recovery
 
-2. Post Features
-   - Create post
-   - Update post
-   - Delete post
-   - List posts
-   - Search posts
+2. Smart Contracts
+   - NFT contract
+   - Deal verification
+   - User reputation
+   - Contract testing
 
-### Phase 2: Deal System
-1. Deal Module Integration
-   - Extend existing deal system
-   - Add NFT minting triggers
-   - Implement deal status updates
+### Phase 2: Core Features
+1. User System
+   - Profile management
+   - Wallet integration
+   - Authentication
+   - Authorization
 
-2. Deal Features
-   - Request deal
-   - Accept deal
-   - Complete deal
-   - Cancel deal
-   - List deals
+2. Listing System
+   - Skill listings
+   - Item listings
+   - Search functionality
+   - Filtering system
 
-### Phase 3: NFT Integration
-1. NFT Minting
-   - Integrate with Sui SDK
-   - Implement minting service
-   - Handle transaction states
-   - Store NFT metadata
+### Phase 3: Enhanced Features
+1. Messaging System
+   - Real-time chat
+   - Notifications
+   - Message history
+   - File sharing
 
-2. NFT Display
-   - Create frontend components
-   - Implement NFT listing
-   - Add NFT details view
-   - Handle wallet connection
+2. Location Services
+   - HCMC integration
+   - Distance calculation
+   - Location filtering
+   - Map integration
 
 ## What's Left to Build
-1. Post Module
-   - [ ] Module structure
-   - [ ] GraphQL resolvers
-   - [ ] Service implementation
-   - [ ] DTOs and entities
-   - [ ] Input validation
+1. Web3 Integration
+   - [ ] Sui wallet connection
+   - [ ] Smart contract deployment
+   - [ ] NFT contract implementation
+   - [ ] Contract testing framework
 
-2. Deal System
-   - [ ] Deal request flow
-   - [ ] Deal acceptance flow
-   - [ ] NFT minting integration
-   - [ ] Deal status management
+2. Core Features
+   - [ ] User profiles
+   - [ ] Skill/Item listings
+   - [ ] Search functionality
+   - [ ] Basic messaging
 
-3. NFT Features
-   - [ ] Minting service
-   - [ ] Transaction handling
-   - [ ] Frontend components
-   - [ ] Wallet integration
+3. Enhanced Features
+   - [ ] Location services
+   - [ ] Review system
+   - [ ] NFT marketplace
+   - [ ] Deal verification
 
 ## Known Issues
-- Need to define validation rules for Post skills
-- Need to determine NFT minting transaction handling
-- Need to establish frontend component requirements
-- Need to plan GraphQL schema extensions
+- Need to implement proper validation
+- Need to handle blockchain transactions
+- Need to ensure proper security
+- Need to optimize performance
+- Need to implement testing
+- Need to complete documentation
 
 ## Next Steps
-1. Create Post module structure
-2. Implement basic Post CRUD operations
-3. Integrate with existing deal system
-4. Add NFT minting functionality
-5. Build frontend components
-6. Test and deploy features
+1. Complete Sui wallet integration
+2. Implement smart contracts
+3. Set up database schema
+4. Continue UI development
+5. Develop GraphQL API
+6. Configure deployment
+7. Implement testing
+8. Optimize performance
+9. Enhance security
+10. Complete documentation
 
 ## Recent Updates
-- Created implementation plan
-- Analyzed existing codebase
-- Identified integration points
-- Documented requirements 
+- Initialized project structure
+- Set up development environment
+- Configured GraphQL Code Generator
+- Integrated Apollo Client
+- Set up basic package dependencies
+- Configured GitHub Actions CI/CD
+- Set up Docker configuration
+- Configured database migration automation
+- Planned Web3 architecture
+- Designed NFT contract structure
+- Set up basic Move contract structure
+- Integrated basic UI components with Shadcn UI 
