@@ -55,6 +55,26 @@ export class PostsService {
             include: {
                 user: true,
                 tags: true,
+                dealsAsPostA: {
+                    include: {
+                        reviews: {
+                            include: {
+                                reviewer: true,
+                                reviewee: true,
+                            }
+                        }
+                    }
+                },
+                dealsAsPostB: {
+                    include: {
+                        reviews: {
+                            include: {
+                                reviewer: true,
+                                reviewee: true,
+                            }
+                        }
+                    }
+                }
             },
         });
         if (!post) {

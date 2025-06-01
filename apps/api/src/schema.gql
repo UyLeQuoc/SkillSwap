@@ -29,15 +29,20 @@ type Deal {
   completedAt: DateTime
   createdAt: DateTime!
   id: String!
+  postA: Post
   postAId: String
+  postB: Post
   postBId: String
+  reviews: [Review!]
   status: DealStatus!
   type: DealType!
+  userA: User
   userAId: String!
+  userB: User
   userBId: String!
 }
 
-"""The status of a deal"""
+"""The status of the deal"""
 enum DealStatus {
   AGREED
   CANCELLED
@@ -45,7 +50,7 @@ enum DealStatus {
   PENDING
 }
 
-"""The type of a deal"""
+"""The type of the deal"""
 enum DealType {
   ITEM_SWAP
   SKILL_SWAP
@@ -63,6 +68,26 @@ type LoginResponse {
   user: User!
 }
 
+"""The method used to match posts"""
+enum MatchMethod {
+  EMBEDDING
+  EXACT
+  GPT
+  PARTIAL
+  TAG
+}
+
+type MatchingSuggestion {
+  createdAt: DateTime!
+  id: String!
+  method: MatchMethod!
+  score: Float
+  sourcePost: Post!
+  sourcePostId: String!
+  targetPost: Post!
+  targetPostId: String!
+}
+
 type Mutation {
   completeDeal(dealId: String!): Deal!
   confirmDeal(dealId: String!): Deal!
@@ -77,9 +102,13 @@ type Mutation {
 
 type Post {
   createdAt: DateTime!
+  dealsAsPostA: [Deal!]
+  dealsAsPostB: [Deal!]
   description: String
   haveSkill: String!
   id: String!
+  matchAsSource: [MatchingSuggestion!]
+  matchAsTarget: [MatchingSuggestion!]
   status: PostStatus!
   tags: [PostTag!]
   type: PostType!
@@ -118,6 +147,19 @@ type Query {
 
 input RefreshTokenInput {
   refreshToken: String!
+}
+
+type Review {
+  comment: String
+  createdAt: DateTime!
+  deal: Deal
+  dealId: String!
+  id: String!
+  rating: Float!
+  reviewee: User
+  revieweeId: String!
+  reviewer: User
+  reviewerId: String!
 }
 
 input UpdatePostInput {
